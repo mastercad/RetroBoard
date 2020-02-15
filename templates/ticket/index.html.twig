@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TicketController!{% endblock %}
+
+{% block body %}
+{% for ticket in tickets %}
+    <p>
+        {{ ticket.content }}
+    </p>
+    <p>
+        {{ ticket.creator.name }}
+    </p>
+    <p>
+        {% if null != ticket.modifier %}
+            {{ ticket.modifier.name }}
+        {% endif %}
+    </p>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="de" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="error_occurred_please_repeat" resname="error_occurred_please_repeat">
+        <source>An error has occurred, please repeat the process!</source>
+        <target>Es ist ein Fehler aufgetreten, bitte wiederholen sie den Vorgang!</target>
+      </trans-unit>
+      <trans-unit id="your_text_here" resname="your_text_here">
+        <source>Your text here ...</source>
+        <target>Dein Text hier ...</target>
+      </trans-unit>
+      <trans-unit id="question_inverse_invitation" resname="question_inverse_invitation">
+        <source>Should the invitation really be reversed?</source>
+        <target>Soll die Einladung wirklich rückgängig gemacht werden?</target>
+      </trans-unit>
+      <trans-unit id="question_remove_member_from_board" resname="question_remove_member_from_board">
+        <source>Should the member really be removed from the board?</source>
+        <target>Soll der Benutzer wirklich vom Board entfernt werden?</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

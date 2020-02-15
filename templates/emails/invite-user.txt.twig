@@ -1,0 +1,15 @@
+<h3>You were invited to the board "{{ board.name }}"!</h3>
+<img src="https://retro.byte-artist.de/images/logo.png" id="icon" alt="User Icon" />
+
+<p>
+    To accept this invitation and participate actively on the board, please open the following link:
+</p>
+
+<p>
+    {{ absolute_url(path('board_member', { 'token': token })) }}
+</p>
+
+<p>
+    Yours sincerely<br />
+    the team of retro.byte-artist.de
+</p>

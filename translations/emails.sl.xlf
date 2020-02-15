@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="sl" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="salutation" resname="salutation">
+        <source>Hello %invitationUsername%</source>
+        <target>Pozdravljeni %invitationUsername%</target>
+      </trans-unit>
+      <trans-unit id="ending" resname="ending">
+        <source><![CDATA[Yours sincerely<br />
+    the team of retro.byte-artist.de]]></source>
+        <target><![CDATA[S spoštovanjem<br />
+     ekipa retro.byte-artist.de]]></target>
+      </trans-unit>
+      <trans-unit id="new_ticket_information_html" resname="new_ticket_information_html">
+        <source><![CDATA[User %creatorName% created a new entry on %createDate% on <a href="https://retro.byte-artist.de/board/%boardId%">%boardName%</a>.]]></source>
+        <target><![CDATA[Uporabnik%creatorName% je ustvaril nov vnos v%createDate% na <a href="https://retro.byte-artist.de/board/%boardId%">%boardName%</a>.]]></target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

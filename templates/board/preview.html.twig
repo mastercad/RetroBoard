@@ -1,0 +1,55 @@
+
+{% set ticketCount = 0 %}
+{% set archivedTicketCount = 0 %}
+{% for column in board.columns %}
+    {% for ticket in column.tickets %}
+        {% if 0 == ticket.isArchived %}
+            {% set ticketCount = ticketCount + 1 %}
+        {% else %}
+            {% set archivedTicketCount = archivedTicketCount + 1 %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+<div class="preview col-sm-6 col-md-5 col-xs-5 m-5 p-2 border rounded">
+    {% if is_granted('edit', board) %}
+        <a href="/board/create/{{ board.id }}" class="btn-edit-board">
+            <icon class="fas fa-edit"></icon>
+        </a>
+    {% endif %}
+    <a href="/board/{{ board.id }}">
+        <div class="row mr-2">
+            <div class="col-sm-12 colm-md-12 col-xs-12 h3">
+                {{ board.name }} ({{ board.columns|join(', ') }})
+            </div>
+        {% for column in board.columns %}
+            <div class="column-wrapper no-float col-md-{{ (12 / board.columns|length)|round }}" data-id="{{ column.id }}">
+                <div class="row ml-1">
+                    <div class="header col-12 p-2 color-primary-1 bg-color-primary-3" data-id="{{ column.id }}">
+                        {{ column.name }}
+                    </div>
+                </div>
+                <div class="row ml-1" data-id="{{ column.id }}">
+                    <div class="body bg-color-primary-1 col-md-12 column-content">
+                        {% if tickets[column.id] is defined %}
+                            {% for ticket in tickets[column.id] %}
+                                {{ include('/ticket/show.html.twig', { 'ticket': ticket }) }}
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="row p-3">
+            <div class="col-md-12">
+                {{ 'members'|trans({}, 'labels') }}: {{ board.boardMembers|length }}
+            </div>
+            <div class="col-md-12">
+                {{ 'tickets'|trans({}, 'labels') }}: {{ ticketCount }}
+            </div>
+            <div class="col-md-12">
+                {{ 'archived_tickets'|trans({}, 'labels') }}: {{ archivedTicketCount }}
+            </div>
+        </div>
+    </a>
+</div>

@@ -1,0 +1,645 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% if 1 == archived %}{{ 'archive_of'|trans({}, 'titles') }}{% endif %} {{ board.name }} ({{ board.columns|join(', ') }}){% endblock %}
+{% block navigation_title %}{% if 1 == archived %}{{ 'archive_of'|trans({}, 'titles') }} {% endif %}{{ board.name }} ({{ board.columns|join(', ') }}){% endblock %}
+
+{% if app.user.name is defined %}
+    {% set subscribed = false %}
+    {% set live_notify = true %}
+
+    {% for boardSubscriber in board.boardSubscribers %}
+        {% if boardSubscriber.subscriber.id == app.user.id %}
+            {% set subscribed = true %}
+        {% endif %}
+    {% endfor %}
+    {% block navigation_additions_user_options %}
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input ml-1" id="board_subscribe" {% if subscribed %} checked="checked" {% endif %}>
+            <label class="board-subscribe dropdown-item form-check-label" for="board_subscribe">{{ 'subscribe'|trans({}, 'labels') }}</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input ml-1" id="board_live_notify" {% if live_notify %} checked="checked" {% endif %}>
+            <label class="board-live-notify dropdown-item form-check-label" for="board_live_notify">{{ 'live_notify'|trans({}, 'labels') }}</label>
+        </div>
+
+        </a>
+        {{ parent() }}
+    {% endblock %}
+{% endif %}
+
+{% block navigation_additions %}
+
+    {% if 0 == archived %}
+        <a href="/board/archive/{{ board.id }}" class="m-2 btn-archive-board">
+            <icon class="fas fa-archive"></icon>
+        {# <button class="btn m-0"><icon class="fas fa-archive"></icon></button> #}
+        </a>
+    {% else %}
+        <a href="/board/{{ board.id }}" class="m-2 btn-archive-board">
+            <icon class="fas fa-chalkboard"></icon>
+        {# <button class="btn m-0"><icon class="fas fa-archive"></icon></button> #}
+        </a>
+    {% endif %}
+
+    {% if is_granted('edit', board) %}
+        <a href="/board/create/{{ board.id }}" class="m-2 btn-edit-board">
+            <icon class="fas fa-edit"></icon>
+        </a>
+    {% endif %}
+
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                {{ 'order'|trans({}, 'labels') }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item order-by-date" href="#">{{ 'date'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-user" href="#">{{ 'user'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-votes" href="#">{{ 'votes'|trans({}, 'labels') }}</a>
+            </div>
+        </li>
+    </ul>
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+<div class="board-content container-fluid h-100 mt-3">
+    <div class="row h-100">
+    {% for column in board.columns %}
+        <div class="column-wrapper no-float col-md-{{ (12 / board.columns|length)|round }}" data-id="{{ column.id }}">
+            <div class="row ml-1">
+                <div class="header col-12 p-2 color-primary-1 bg-color-primary-3" data-id="{{ column.id }}">
+                    {{ column.name }}
+                    {# prüfung der rechte auf create_ticket erstmal weg gelassen, weil jeder der für das board registriert ist, auch
+                       tickets erstellen soll und wer nicht registriert ist, sieht das board auch nicht #}
+                    {% if 0 == archived %}
+                        <div class="add">
+                            <i class="fas fa-plus-circle"></i>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="column row ml-1" data-id="{{ column.id }}">
+                <div class="column bg-color-primary-1 col-md-12 column-content">
+                {% for ticket in column.tickets %}
+                    {% if ticket and ticket.isArchived == archived %}
+                        {{ include('ticket/show.html.twig', { 'ticket': ticket, 'archived': archived }) }}
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+
+<div id="ticket_remove_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    Should this ticket really be removed from the board?
+                </div>
+                <div class="error alert alert-danger" style="display: none;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Remove</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" language="javascript">
+        let current_user_id = parseInt("{{ app.user.id }}");
+        let ticketDeleteId = undefined;
+        let sort_type = undefined;
+        let sort_direction = undefined;
+        let live_notify = (true == {{ live_notify }});
+        let prevClicked = undefined;
+        let sameClicked = 0;
+
+        const SORT_DIRECTION_ASC = 'asc';
+        const SORT_DIRECTION_DESC = 'desc';
+
+        const SORT_TYPE_VOTINGS = 'votings';
+        const SORT_TYPE_DATE = 'date';
+        const SORT_TYPE_NAME = 'name';
+
+        $(document).ready(function() {
+            connect();
+
+            {% if 0 == archived %}
+                init_ticket_add();
+                init_voting();
+                init_options();
+            {% endif %}
+
+            init_sorting();
+        });
+
+        {% if 0 == archived %}
+            function init_ticket_add() {
+                $('.column-wrapper .header .add').unbind('click').on('click', function() {
+                    let column_id = $(this).parent().data('id');
+                    $.get('/ticket/load_edit_template', function(response) {
+                        var editFormContainer = $(response);
+                        let buttonSubmit = $(editFormContainer).find('.btn-primary');
+                        var editForm = $(editFormContainer).find('form[name=ticket_form]');
+                        editForm.on('submit', function() {
+                            return false;
+                        });
+                        buttonSubmit.unbind('click').on('click', function() {
+                            jQuery.validator.setDefaults({
+                                debug: false,
+                                success: "valid"
+                            });
+
+                            $(editForm).validate();
+                            if ($(editForm).valid()) {
+                                $(this).prop('disabled', true);
+                                $.post('/ticket/save', {
+                                        'ticket_form[content]': $(editForm).find('#ticket_form_content').val(),
+                                        'ticket_form[_token]': $(editForm).find('#ticket_form__token').val(),
+                                        'column_id': column_id,
+                                        'board_id': 1
+                                    }, function(response) {
+                                        if (true === response.success) {
+                                            $(editFormContainer).modal('hide');
+                                        }
+                                    }
+                                );
+                            }
+                        });
+                        $(editFormContainer).on('hidden.bs.modal', function () {
+                            $(editFormContainer).remove();
+                        });
+
+                        $(editFormContainer).find('#ticket_form_content').textareaAutoSize();
+                        $(editFormContainer).modal('show');
+                        $(editFormContainer).find('#ticket_form_content').focus();
+                    });
+                });
+            }
+        {% endif %}
+
+        {% if 0 == archived %}
+            function init_voting() {
+                $('.btn-vote').unbind('click').on('click', function() {
+                    if (undefined === prevClicked
+                        || prevClicked != this
+                        || (prevClicked === this
+                            && sameClicked < 2)
+                    ) {
+                        if (prevClicked === this) {
+                            ++sameClicked;
+                        } else {
+                            sameClicked = 1;
+                        }
+                        prevClicked = this;
+
+                        let self = this;
+                        let ticket_id = $(this).data('id');
+
+                        $.post('/vote', {
+                            'ticket_id': ticket_id,
+                            'value': $(this).data('value')
+                        }, function(response) {
+                        });
+                    }
+                });
+            }
+        {% endif %}
+
+        function init_sorting() {
+
+            $('.order-by-date').unbind('click').on('click', function() {
+                sort_type = SORT_TYPE_DATE;
+                sort_direction = SORT_DIRECTION_ASC;
+                considerCurrentSortConditions();
+            });
+
+            $('.order-by-user').unbind('click').on('click', function() {
+                sort_type = SORT_TYPE_NAME;
+                sort_direction = SORT_DIRECTION_ASC;
+                considerCurrentSortConditions();
+            });
+
+            $('.order-by-votes').unbind('click').on('click', function() {
+                sort_type = SORT_TYPE_VOTINGS;
+                sort_direction = SORT_DIRECTION_ASC;
+                considerCurrentSortConditions();
+            });
+        }
+
+        function considerCurrentSortConditions() {
+            switch (sort_type) {
+                case SORT_TYPE_DATE:
+                    sort_by_date();
+                    break;
+                case SORT_TYPE_NAME:
+                    sort_by_user();
+                    break;
+                case SORT_TYPE_VOTINGS:
+                    sort_by_votes();
+                    break;
+            }
+        }
+
+        function sort_by_date() {
+            $('.column-content').each(function(count, column) {
+                var tickets = $(column).children('.ticket');
+                tickets.detach().sort(function(a, b) {
+                    var astts = a.dataset.date;
+                    var bstts = b.dataset.date;
+                    return (astts > bstts) ? (astts > bstts) ? -1 : 0 : 1;
+                });
+
+                $(tickets).each(function(key, ticket) {
+                    column.append(ticket);
+                })
+            });
+        }
+
+        function sort_by_user() {
+            $('.column-content').each(function(count, column) {
+                var tickets = $(column).children('.ticket');
+                tickets.detach().sort(function(a, b) {
+                    var astts = a.dataset.creator;
+                    var bstts = b.dataset.creator;
+                    var asttsDate = a.dataset.date;
+                    var bsttsDate = b.dataset.date;
+
+                    if (astts == bstts) {
+                        return (asttsDate > bsttsDate) ? (asttsDate > bsttsDate) ? -1 : 0 : 1;
+                    }
+                    return (astts > bstts) ? (astts > bstts) ? -1 : 0 : 1;
+                });
+
+                $(tickets).each(function(key, ticket) {
+                    column.append(ticket);
+                })
+            });
+        }
+
+        function sort_by_votes() {
+            $('.column-content').each(function(count, column) {
+                var tickets = $(column).children('.ticket');
+                tickets.detach().sort(function(a, b) {
+                    var astts = count_votings_in_ticket(a);
+                    var bstts = count_votings_in_ticket(b);
+                    var asttsDate = a.dataset.date;
+                    var bsttsDate = b.dataset.date;
+
+                    if (astts == bstts) {
+                        return (asttsDate > bsttsDate) ? (asttsDate > bsttsDate) ? -1 : 0 : 1;
+                    }
+//                    return (astts > bstts || asttsDate > bsttsDate) ? (astts == bstts || asttsDate > bsttsDate) ? -1 : 0 : 1;
+                    return (astts > bstts) ? (astts > bstts) ? -1 : 0 : 1;
+                });
+
+                $(tickets).each(function(key, ticket) {
+                    column.append(ticket);
+                })
+            });
+        }
+
+        function count_votings_in_ticket(ticket) {
+            let votings = 0;
+            $('.vote-count', ticket).each(function() {
+                let value = parseInt($(this).text());
+                votings += isNaN(value) ? 0 : value;
+            })
+            return votings;
+        }
+
+        {% if 0 == archived %}
+            function init_options() {
+                $('.board-subscribe, #board_subscribe').unbind('click').click(function(event) {
+                    $.get('/board/subscribe/{{ board.id }}', function(response) {
+                    });
+                });
+
+                $('.board-live-notify, #board_live_notify').unbind('click').click(function(event) {
+                    live_notify = !live_notify;
+                });
+
+                $('.ticket').unbind('mouseleave').bind('mouseleave', function() {
+                    $('.dropdown-menu.show').removeClass('show');
+                });
+
+                $('.ticket .options .btn-ticket-delete').unbind('click').on('click', function() {
+                    ticketDeleteId = $(this).closest(".ticket").data('id');
+                    let inivitationModal = $('#ticket_remove_modal');
+                    $(inivitationModal).modal();
+
+                    $(inivitationModal).on('hidden.bs.modal', function () {
+                        $(inivitationModal).find('.error').html("").css({"display": "none"});
+                    });
+                });
+
+                $('#ticket_remove_modal .btn-primary').unbind('click').on('click', function() {
+                    $('#ticket_remove_modal .btn-primary').attr("disabled", true);
+                    $.ajax({
+                        url: '/ticket/delete/'+ticketDeleteId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (true == response.success) {
+                                $('#ticket_remove_modal').modal('hide');
+                                $('.ticket[data-id="'+ticketDeleteId+'"]').fadeOut(500, function() {
+                                    ticketDeleteId = undefined;
+                                    $(this).remove();
+                                });
+                            }
+                        }
+                    })
+                });
+
+                $('.ticket .options .btn-ticket-archive').unbind('click').on('click', function() {
+                    let self = $(this);
+                    $.ajax({
+                        url: '/ticket/archive/'+$(this).closest(".ticket").data('id'),
+                        type: 'POST',
+                        success: function(response) {
+                            if (true == response.success) {
+                                self.closest(".ticket").fadeOut(500, function() {
+                                    $(this).remove();
+                                });
+                            } else {
+                                alert(response.content);
+                            }
+                        }
+                    })
+                });
+
+                $('.ticket .options .btn-ticket-edit').unbind('click').on('click', function() {
+                    let ticketContainer = $(this).closest('.ticket');
+                    let contentContainer = $(ticketContainer).find('.content');
+                    let content = contentContainer.text().trim();
+                    let editContainer = $('<div class="col-md-12 col-sm-12 textarea-container">'+
+                        '<textarea rows="3" data-min-rows="3" placeholder="Your text here..." class="form-control textarea-custom autoExpand">'+
+                        content+
+                        '</textarea>'+
+                        '<button class="btn btn-primary btn-save float-right">Save</button>'+
+                        '</div>'
+                    );
+
+                    contentContainer.replaceWith(editContainer);
+                    let newConententContainer = $(ticketContainer).find('.textarea-container');
+                    $(newConententContainer).find('textarea').textareaAutoSize();
+                    $(newConententContainer).find('textarea').focus();
+
+                    $(newConententContainer).find('textarea').on('blur focusout keyup', function(event) {
+                        if ("Escape" === event.key
+                            || (
+                                (
+                                    "focusout" === event.type
+                                    || "blur" === event.type
+                                )
+                                && event.relatedTarget != $(ticketContainer).find('.btn-save')[0]
+                            )
+                        ) {
+                            newConententContainer.replaceWith('<div class="col-md-12 content" style="overflow-wrap: break-word;">'+content+'</div>');
+                        }
+                    });
+
+                    $(ticketContainer).find('.btn-save').on('click', function() {
+                        let ticketId = $(ticketContainer).data('id');
+                        let ticketContent = $(ticketContainer).find('textarea').val();
+                        // set the new content before send and replace to prevent wierd behaviour of set old content and seconds later new content in ticket
+                        newConententContainer.replaceWith('<div class="col-md-12 content" style="overflow-wrap: break-word;">'+nl2br(ticketContent)+'</div>');
+                        $.post('/ticket/save/'+ticketId, {
+                                'content': Base64.encode(ticketContent)
+                            }, function(response) {
+                                if (true === response.success) {
+                                    newConententContainer.replaceWith('<div class="col-md-12 content" style="overflow-wrap: break-word;">'+content+'</div>');
+                                }
+                            }
+                        );
+                    });
+                });
+            }
+        {% endif %}
+/*
+        var keepAliveTimer = null;
+
+        function gotActivity(){
+            if(null != keepAliveTimer) {
+                clearTimeout(keepAliveTimer);
+            }
+            keepAliveTimer = setTimeout(connect, 30 * 1000);
+        }
+*/
+        let eventSource = undefined;
+
+        function connect() {
+//            gotActivity();
+            const url = new URL('https://mercure-hub.byte-artist.de/hub');
+            {% if 0 == archived %}
+                /** MERCURE **/
+                /** iam interested in votings and ticket changes */
+                url.searchParams.append('topic', 'https://retro.byte-artist.de/voting/{id}');
+                url.searchParams.append('topic', 'https://retro.byte-artist.de/ticket/{id}');
+            {% else %}
+                // properly later only listen on archive relevant items
+                url.searchParams.append('topic', 'https://retro.byte-artist.de/voting/{id}');
+                url.searchParams.append('topic', 'https://retro.byte-artist.de/ticket/{id}');
+            {% endif %}
+
+            eventSource = new EventSource(url);
+            eventSource.onmessage = eventMessage => handleEventMessage(eventMessage); // do something with the payload
+
+            eventSource.addEventListener('error', function(event) {
+                console.log(event);
+                eventSource.close();
+                connect();
+            });
+        }
+
+        function handleEventMessage(eventMessage) {
+            let eventMessageDataContent = $.parseJSON(eventMessage.data);
+            $.each(eventMessageDataContent, function(key, eventMessagePart) {
+                if ('ticket' == key) {
+                    handleTicketEvent(eventMessagePart);
+                } else if ('voting' == key) {
+                    handleVotingEvent(eventMessagePart);
+                }
+            });
+        }
+
+        function handleTicketEvent(eventMessagePart) {
+            // create pushed
+            if (eventMessagePart.create != undefined) {
+                handleTicketCreateEvent(eventMessagePart);
+            } else if (eventMessagePart.update != undefined) {
+                handleTicketUpdateEvent(eventMessagePart);
+            } else if (eventMessagePart.archive != undefined) {
+                handleTicketArchivedEvent(eventMessagePart);
+            } else if (eventMessagePart.delete != undefined) {
+                handleTicketDeleteEvent(eventMessagePart);
+            }
+            if (SORT_TYPE_DATE === sort_type
+                || SORT_TYPE_NAME === sort_type
+            ) {
+                considerCurrentSortConditions();
+            }
+        }
+
+        function handleTicketCreateEvent(eventMessagePart) {
+            let column_id = eventMessagePart.create.columnId;
+            let ticket_id = eventMessagePart.create.ticketId;
+            $.get('/ticket/'+ticket_id, function(response) {
+                let ticket_content = $(response);
+                ticket_content.hide()
+                    .prependTo('.column[data-id="'+column_id+'"] .column-content')
+                    .fadeIn();
+                init_voting();
+                init_options();
+            });
+
+            if (true === live_notify
+                && eventMessagePart.ownerId != current_user_id
+            ) {
+                $.notify({
+                    // options
+                    message: 'New Ticket created!'
+                },{
+                    // settings
+                    type: 'info'
+                });
+            }
+        }
+
+        function handleTicketUpdateEvent(eventMessagePart) {
+            let column_id = eventMessagePart.update.columnId;
+            let ticket_id = eventMessagePart.update.ticketId;
+            $.get('/ticket/'+ticket_id, function(response) {
+                let ticket_content = $(response);
+                $('.ticket[data-id="'+ticket_id+'"]').hide()
+                    .replaceWith(ticket_content)
+                    .fadeIn();
+                init_voting();
+                init_options();
+            });
+
+            if (true === live_notify
+                && eventMessagePart.ownerId != current_user_id
+            ) {
+                $.notify({
+                    // options
+                    message: 'Ticket updated!'
+                },{
+                    // settings
+                    type: 'info'
+                });
+            }
+        }
+
+        function handleTicketDeleteEvent(eventMessagePart) {
+            $('.ticket[data-id="'+eventMessagePart.delete+'"]').remove();
+
+            if (true === live_notify
+                && eventMessagePart.ownerId != current_user_id
+            ) {
+                $.notify({
+                    // options
+                    message: 'Ticket deleted!'
+                },{
+                    // settings
+                    type: 'info'
+                });
+            }
+        }
+
+        function handleTicketArchivedEvent(eventMessagePart) {
+            $('.ticket[data-id="'+eventMessagePart.archive+'"]').remove();
+
+            if (true === live_notify
+                && eventMessagePart.ownerId != current_user_id
+            ) {
+                $.notify({
+                    // options
+                    message: 'Ticket archived!'
+                },{
+                    // settings
+                    type: 'info'
+                });
+            }
+        }
+
+        /** keep votings that have already been delivered, but their ticket may not yet exist */
+        let votings = [];
+
+        function handleVotingEvent(eventMessagePart) {
+            let ticket_id = eventMessagePart.ticketId;
+            let owner_id = eventMessagePart.ownerId;
+
+            $.each(eventMessagePart.votingContent, function(key, value) {
+                let span = $("span.vote-count[data-id='"+ticket_id+"'][data-value='"+key+"']")
+                let current_points = parseInt(span.text());
+                if (isNaN(current_points)) {
+                    current_points = 0;
+                }
+                if (current_user_id == owner_id
+                    && 0 < value
+                ) {
+                    $("span.btn-vote[data-id='"+ticket_id+"'][data-value='"+key+"']").addClass("color-heightligth");
+                } else if (current_user_id == owner_id) {
+                    $("span.btn-vote[data-id='"+ticket_id+"'][data-value='"+key+"']").removeClass("color-heightligth");
+                }
+                result = current_points + value;
+                if (0 < result) {
+                    span.html(result);
+                } else {
+                    span.html("");
+                }
+            });
+
+            if (SORT_TYPE_VOTINGS === sort_type) {
+                considerCurrentSortConditions();
+                if (true === live_notify
+                    && current_user_id != owner_id
+                ) {
+                    $.notify({
+                        // options
+                        message: 'Votings changed, View reordered!' 
+                    },{
+                        // settings
+                        type: 'info'
+                    });
+                }
+            } else if (true === live_notify
+                && current_user_id != owner_id
+            ) {
+                $.notify({
+                    // options
+                    message: 'Votings changed'
+                },{
+                    // settings
+                    type: 'info'
+                });
+            }
+        }
+
+        function nl2br(str, is_xhtml) {
+            var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br/>' : '<br>';
+            return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1'+ breakTag +'$2');
+        }
+
+        /** autosize for textarea */
+        !function(t,e,i,n){function s(e,i){this.element=e,this.$element=t(e),this.init()}var h="textareaAutoSize",o="plugin_"+h,r=function(t){return t.replace(/\s/g,"").length>0};s.prototype={init:function(){var i=parseInt(this.$element.css("paddingBottom"))+parseInt(this.$element.css("paddingTop"))+parseInt(this.$element.css("borderTopWidth"))+parseInt(this.$element.css("borderBottomWidth"))||0;r(this.element.value)&&this.$element.height(this.element.scrollHeight-i),this.$element.on("input keyup",function(n){var s=t(e),h=s.scrollTop();t(this).height(0).height(this.scrollHeight-i),s.scrollTop(h)})}},t.fn[h]=function(e){return this.each(function(){t.data(this,o)||t.data(this,o,new s(this,e))}),this}}(jQuery,window,document);
+
+    </script>
+{% endblock %}

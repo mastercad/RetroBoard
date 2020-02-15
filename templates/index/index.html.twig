@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent()}}{% endblock %}
+
+{% block navigation_title %}
+{#    {% trans from "titles" %}board_overview{% endtrans %} #}
+    {{ 'board_overview'|trans({}, 'titles') }}
+{% endblock %}
+
+{% block body %}
+    {% set boardCount = 2 %}
+    <div class="container-fluid">
+        {% for boardMember in boardMembers %}
+            {% if boardCount is divisible by(2) %}
+                <div class="row">
+            {% endif %}
+
+            {% include '/board/preview.html.twig' with {'board': boardMember.board, 'boardCount': boardCount} only %}
+
+            {% if boardCount is not divisible by(2) %}
+                </div>
+            {% endif %}
+            {% set boardCount = boardCount + 1 %}
+        {% endfor %}
+            {% if boardCount is divisible by(2) %}
+                <div class="row">
+            {% endif %}
+                    <div class="preview col-sm-6 col-md-5 col-xs-5 m-5 p-2 border rounded">
+                        <a href="/board/create">
+                            <div class="row mr-2">
+                                <div class="col-sm-12 colm-md-12 col-xs-12 h3">
+                                    {{ 'add_new_board'|trans({}, 'labels') }}
+                                </div>
+                                <div class="col-sm-12 colm-md-12 col-xs-12">
+                                    <icon class="fas fa-plus-circle display-2 w-100 p-2"></icon>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+            {% if boardCount is divisible by(2) %}
+                </div>
+            {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,496 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create New Board{% endblock %}
+
+{% block navigation_additions %}
+    <a href="/board/{{ board.id }}" class="m-2 btn-archive-board">
+        <icon class="fas fa-chalkboard"></icon>
+    </a>
+    {{ parent() }}
+{% endblock %}
+
+{% block navigation_title %}{% if 0 < board.id %}{{ 'edit_board'|trans({}, 'labels') }} "{{ board.name }}" {% else %} {{ 'create_new_board'|trans({}, 'labels') }} {% endif %}{% endblock %}
+
+{% block body %}
+{% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}
+
+<div class="container mt-5">
+    {% if errors is defined %}
+        {% for error in errors %}
+            {{ error.message }}
+        {% endfor %}
+    {% endif %}
+    <div id="board">
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2 required" for="board_name">{{ 'name'|trans({}, 'labels') }}</label>
+            <div class="col-sm-10">
+                <input id="board_name" class="form-control" type="text" name="board[name]" required="required" maxlength="250" value="{{ board.name }}" >
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-form-label col-sm-2 required">
+                {{ 'columns'|trans({}, 'labels') }}
+                <span class="btn-add btn-column-add"><icon class="fas fa-plus-circle ml-2"></icon></span>
+            </label>
+            <div class="col-sm-10">
+                <div class="d-flex columns-container">
+                    {% for column in board.columns %}
+                    <div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="{{ column.id }}">
+                        <span class="board-column-name">{{ column.name }}</span>
+                        <span class="btn-remove btn-column-remove"><icon class="fas fa-minus-circle ml-2"></icon></span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {{ form_row(form._token) }}
+            {{ form_row(form.id) }}
+        </div>
+
+        {% if 0 < board.id %}
+            {% set boardMemberUsers = [] %}
+            {% set boardMemberAdmins = [] %}
+            {% for boardMember in board.boardMembers %}
+                {% if "ROLE_ADMIN" in boardMember.roles %}
+                    {% set boardMemberAdmins = boardMemberAdmins|merge([boardMember]) %}
+                {% else %}
+                    {% set boardMemberUsers = boardMemberUsers|merge([boardMember]) %}
+                {% endif %}
+            {% endfor %}
+
+            {% set boardMemberAdminCount = boardMemberAdmins|length %}
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    {{ 'members'|trans({}, 'labels') }}:
+                </div>
+                <div class="col-1"></div>
+                <div class="col-11">
+                    <div class="row">
+                        <p>
+                            {{ 'admins'|trans({}, 'labels') }}:
+                        </p>
+                        <ul class="col-12 member-container board-admins-container" data-role="ROLE_ADMIN">
+                        {% for boardMember in boardMemberAdmins %}
+                            <li class="board-member small" data-id="{{ boardMember.id }}">
+                                {{ boardMember.user.name }}
+                                {% if 1 < boardMemberAdminCount %}
+                                    <span class="btn-remove btn-member-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-11">
+                    <div class="row">
+                        <p>
+                            {{ 'users'|trans({}, 'labels') }}:
+                        </p>
+                        <ul class="col-12 member-container board-users-container" data-role="ROLE_USER">
+                        {% for boardMember in boardMemberUsers %}
+                            <li class="board-member small" data-id="{{ boardMember.id }}">
+                                {{ boardMember.user.name }}
+                                <span class="btn-remove btn-member-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    Einladungen:
+                    <span class="btn-add btn-invitation-add">
+                        <icon class="fas fa-plus-circle"></icon>
+                    </span>
+                </div>
+                <div class="col-sm-12 col-md-12 col-xs-12 bord-invitations-container">
+                    <ul>
+                    {% for boardInvitation in board.boardInvitations %}
+                        <li class="small">
+                            {{ boardInvitation.email }}
+                            <span class="btn-remove btn-invitation-remove" data-id="{{ boardInvitation.id }}">
+                                <icon class="fas fa-minus-circle"></icon>
+                            </span>
+                            <span class="btn-resend btn-invitation-resend" data-id="{{ boardInvitation.id }}" >
+                                <icon class="fas fa-sync-alt"></icon>
+                            </span>
+                            <span class="btn-copy btn-invitation-link-copy" data-token="{{ boardInvitation.token }}" data-tooltip="">
+                                <icon class="fas fa-copy"></icon>
+                            </span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+        <button class="btn btn-primary btn-save" type="submit">{{ 'save'|trans({}, 'labels') }}</button>
+    </div>
+</div>
+
+<div id="invitation_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'invite_member'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>{{ 'email'|trans({}, 'labels') }}</label>
+                    <input id="invitation_email" name="invitation-email" type="email" class="form-control" value="" >
+                </div>
+                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{ 'invite'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="invitation_remove_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'reverse_invitation'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    {{ 'question_inverse_invitation'|trans({}, 'messages') }}
+                </div>
+                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="membership_remove_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'remove_member'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    {{ 'question_remove_member_from_board'|trans({}, 'messages') }}
+                </div>
+                <div class="error alert alert-danger" style="display: none;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            init();
+        });
+
+        var invitationDeleteId = undefined;
+        var membershipDeleteId = undefined;
+
+        function save() {
+            let formData = [];
+            formData.push({name: "board[id]", value: $('#board_id').val()});
+            formData.push({name: "board[name]", value: $('#board_name').val()});
+
+            let columnsCount = 0;
+            let priority = 0;
+            $('.columns-container .board-column').each(function() {
+                if (true !== $(this).data('deleted')) {
+                    formData.push({name: "board[columns]["+columnsCount+"][name]", value: $(this).find('.board-column-name').text()});
+                    formData.push({name: "board[columns]["+columnsCount+"][priority]", value: priority});
+                    formData.push({name: "board[columns]["+columnsCount+"][id]", value: $(this).attr('data-id')});
+                    ++priority;
+                }
+                ++columnsCount;
+            });
+
+            formData.push({name: "board[_token]", value: $('#board__token').val()});
+
+            $.post("{{ path('board_save') }}", formData, function(response) {
+                if (true == response.success) {
+                    window.location.href="/board/"+response.id;
+                }
+            });
+        }
+
+        function addInvitation(email, id, token) {
+            let invitationRow = $(
+                '<li class="small">'+email+'\
+                    <span class="btn-remove btn-invitation-remove" data-id="'+id+'">\
+                    <icon class="fas fa-minus-circle"></icon></span>\
+                    <span class="btn-resend btn-invitation-resend" data-id="'+id+'">\
+                    <icon class="fas fa-sync-alt"></icon></span>\
+                    <span class="btn-copy btn-invitation-link-copy" data-token="'+token+'">\
+                    <icon class="fas fa-copy"></icon></span>\
+                </li>'
+            );
+
+            $('.bord-invitations-container ul').append(invitationRow);
+        }
+
+        function removeColumn(target) {
+            $(target).parent().data('deleted', true);
+            $(target).parent().fadeOut();
+        }
+
+        function init() {
+            $('.columns-container').sortable({
+                axis: "x",
+                cancel: 'input',
+                start: function(event, ui) {
+                    ui.item.blur();
+                }
+            }).disableSelection();
+
+            $(function() {
+                var oldList, newList, item;
+                $('.member-container').sortable({
+                    connectWith: ".member-container",
+                    axis: "y",
+                    start: function(event, ui) {
+                        item = ui.item;
+                        newList = oldList = ui.item.parent();
+                    },
+                    over: function(event,ui){
+                        //will add class .hover to list
+                        $('.ui-sortable-placeholder').parents('.member-container').addClass('hover');
+                    },
+                    out: function(event,ui){
+                        $('.ui-sortable-placeholder').parents('.member-container').removeClass('hover');
+                    },
+                    receive: function(event, ui) {
+                    },
+                    stop: function(event, ui) {
+                        $('.member-container').removeClass('hover');
+                        if (0 < $(oldList).find('li').length || "ROLE_ADMIN" != oldList.attr('data-role')) {
+
+                            $.ajax({
+                                url: '/board-member/role',
+                                type: 'PUT',
+                                data: {
+                                    id: item.data('id'),
+                                    newRole: newList.attr('data-role'),
+                                    oldRole: oldList.attr('data-role')
+                                },
+                                success: function(response) {
+                                }
+                            });
+                        } else {
+                            console.log("Letzter Admin, geht nicht!");
+                            $(this).sortable('cancel');
+                        }
+                    },
+                    change: function(event, ui) {
+                        if(ui.sender) {
+                            newList = ui.placeholder.parent();
+                        }
+                        $('.ui-sortable-placeholder').css({
+                            visibility: 'visible',
+                            background: '#EEE'
+                        });
+                    }
+                }).disableSelection();
+            });
+
+            $('.btn-save').unbind('click').on('click', function() {
+                save();
+            });
+
+            $('.btn-copy').unbind('click').on('click', function() {
+                 /* Get the text field */
+                var copyText = $(this).data('token');
+                const el = document.createElement('textarea');
+                el.value = "https://retro.byte-artist.de/board/member/"+copyText;
+                el.setAttribute('readonly', '');
+                el.style.position = 'absolute';
+                el.style.left = '-9999px';
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            });
+
+            $('.btn-resend').unbind('click').on('click', function() {
+                let email = $(this).data('email');
+                let boardId = $('#board_id').val();
+                let invitationId = $(this).data('id');
+                let self = this;
+
+                $.post("{{ path('board_invite') }}", {email: email, id: boardId, invitationId: invitationId}, function(response) {
+                    if (200 === response.code) {
+                        $(self).parent().find('.btn-copy').attr('data-token', response.token);
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            });
+
+            $('.btn-column-add').unbind('click').on('click', function() {
+                let newColumn = $(
+                    '<div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="">\
+                        <span class="board-column-name" style="display: inline-block; min-height: 1em; min-width: 50px;"></span>\
+                        <span class="btn-remove btn-column-remove"><icon class="fas fa-minus-circle ml-2"></icon></span>\
+                    </div>');
+
+                $('.columns-container').append(newColumn);
+                init();
+            });
+
+            $('.columns-container .btn-column-remove').unbind('click').on('click', function() {
+                removeColumn($(this));
+            });
+
+            $('.columns-container .board-column-name').unbind('click').on('click', function() {
+                if (!$(this).is('input')) {
+                    let currentValue = $(this).text();
+                    let inputElement = $('<input type="text" class="form-control board-column-name edit-mode" value="'+currentValue+'">')
+                    $(this).replaceWith(inputElement);
+                    $(inputElement).focus();
+
+                    $(inputElement).on('blur mouseexit', function() {
+                        let currentValue = $(this).val().trim();
+                        if (0 === currentValue.length) {
+                            $(this).replaceWith('<span class="board-column-name" style="display: inline-block; min-height: 1em; min-width: 50px;">'+currentValue+'</span>');
+                        } else {
+                            $(this).replaceWith('<span class="board-column-name">'+currentValue+'</span>');
+                        }
+                        init();
+                    });
+
+                    $(inputElement).keydown(function (event) {
+                        if (9 === event.which) {
+                            let next = $(this).parent().next();
+                            if (0 < next.length) {
+                                $(next).find('.board-column-name').click();
+                            } else {
+                                $(this).parent().parent().find('.board-column').first().find('.board-column-name').click();
+                            }
+                            event.preventDefault();
+                        }
+                    });
+                }
+                init();
+            });
+
+            $('.btn-invitation-add').unbind('click').on('click', function() {
+                let inivitationModal = $('#invitation_modal');
+                $(inivitationModal).modal();
+
+                $(inivitationModal).on('shown.bs.modal', function () {
+                    $(inivitationModal).find('#invitation_email').trigger('focus');
+                });
+
+                $(inivitationModal).on('hidden.bs.modal', function () {
+                    $(inivitationModal).find('#invitation_email').val("");
+                    $(inivitationModal).find('.error').html("").css({"display": "none"});
+                });
+            });
+
+            $('.btn-invitation-remove').unbind('click').on('click', function() {
+                let invitationRemoveModal = $('#invitation_remove_modal');
+                invitationDeleteId = $(this).data('id');
+                $(invitationRemoveModal).modal();
+
+                $(invitationRemoveModal).on('hidden.bs.modal', function () {
+                    $(invitationRemoveModal).find('.error').html("").css({"display": "none"});
+                });
+            });
+
+            $('.btn-member-remove').unbind('click').on('click', function() {
+                let membershipRemoveModal = $('#membership_remove_modal');
+                membershipDeleteId = $(this).data('id');
+                $(membershipRemoveModal).modal();
+
+                $(membershipRemoveModal).on('hidden.bs.modal', function () {
+                    $(membershipRemoveModal).find('.error').html("").css({"display": "none"});
+                });
+            });
+
+            $('#invitation_remove_modal .btn-primary').unbind('click').on('click', function() {
+//                if ($('#invitation_modal #invitation_email').val().valid()) {
+                    $.ajax({
+                        url: '/board/invitation/'+invitationDeleteId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (true == response.success) {
+                                $('span.btn-invitation-remove[data-id="'+invitationDeleteId+'"]').closest('li').fadeOut(500, function() {
+                                    $('span.btn-invitation-remove[data-id="'+invitationDeleteId+'"]').closest('li').remove();
+                                    $('#invitation_remove_modal').modal('hide');
+                                    invitationDeleteId = undefined;
+                                });
+                            } else {
+                                $('#invitation_remove_modal .error').html(response.message).fadeIn();
+                            }
+                        }
+                    });
+//                }
+            });
+
+            $('#membership_remove_modal .btn-primary').unbind('click').on('click', function() {
+                if (1 < $('.member-container.board-admins-container li').length || "ROLE_ADMIN" != $('.board-member[data-id="'+membershipDeleteId+'"]').closest('.member-container').attr('data-role')) {
+                    $.ajax({
+                        url: '/board/member/'+membershipDeleteId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (true == response.success) {
+                                $('span.btn-member-remove[data-id="'+membershipDeleteId+'"]').closest('li').fadeOut(500, function() {
+                                    $('span.btn-member-remove[data-id="'+membershipDeleteId+'"]').closest('li').remove();
+                                    $('#membership_remove_modal').modal('hide');
+                                    membershipDeleteId = undefined;
+                                });
+                            } else {
+                                $('#membership_remove_modal .error').html(response.message).fadeIn();
+                            }
+                        }
+                    })
+                } else {
+                    $('#membership_remove_modal .error').html("Only one admin left, deletion rejected!").fadeIn();
+                }
+            });
+
+            $('#invitation_modal .btn-primary').unbind('click').on('click', function() {
+//                if ($('#invitation_modal #invitation_email').val().valid()) {
+                    let email = $('#invitation_modal #invitation_email').val().trim();
+                    let boardId = $('#board_id').val();
+
+                    $.post("{{ path('board_invite') }}", {email: email, id: boardId}, function(response) {
+                        if (200 === response.code) {
+                            addInvitation(email, response.id, response.token);
+                            $('#invitation_modal').modal('hide');
+                            init();
+                        } else {
+                            $('#invitation_modal .error').html(response.message).fadeIn();
+                        }
+                    });
+//                }
+            });
+        }
+    </script>
+{% endblock %}

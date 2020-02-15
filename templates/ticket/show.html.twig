@@ -1,0 +1,92 @@
+{% set neg_voter = 0 %}
+{% set pos_voter = 0 %}
+{% set neg_owner = false %}
+{% set pos_owner = false %}
+{% for voting in ticket.votings %} 
+    {% if -1 == voting.points %}
+        {% if voting.creator == app.user %} 
+            {% set neg_owner = true %}
+        {% endif %}
+        {% set neg_voter = neg_voter + 1 %}
+    {% elseif 1 == voting.points %}
+        {% if voting.creator == app.user %} 
+            {% set pos_owner = true %}
+        {% endif %}
+        {% set pos_voter = pos_voter + 1%}
+    {% endif %}
+{% endfor %}
+
+<div class="row ticket rounded m-1 p-1" data-date="{{ ticket.created.timestamp }}" data-creator="{{ ticket.creator.name }}" data-id="{{ ticket.id }}">
+    <div class="col-md-12 name">
+    {% if ticket.creator.avatarPath %}
+        <img src="{{ ticket.creator.avatarPath }}" style="width: 10%;" />
+    {% else %}
+        <span class="fas fa-user {% if ticket.creator.color is empty %} color-primary-0 {% endif %}" {% if ticket.creator.color %} style="color: {{ ticket.creator.color }};" {% endif %}>
+        </span>
+    {% endif %}
+        <span class="color-inactive">
+            {{ ticket.creator.name }}
+        </span>
+    </div>
+    <div class="col-md-12 content dont-break-out">
+        {{ ticket.content|nl2br }}
+    </div>
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="{% if 0 == archived %} btn-vote {% if true == neg_owner %} color-heightligth {% endif %}{% endif %}" data-value="-1" data-id="{{ ticket.id }}">
+                    <i class="fas fa-thumbs-down"></i>
+                </span>
+                <span class="vote-count" data-value="-1" data-id="{{ ticket.id }}">
+                {% if 0 < neg_voter %}
+                    {{ neg_voter }}
+                {% endif %}
+                </span>
+                <span class="{% if 0 == archived %} btn-vote {% if true == pos_owner %} color-heightligth {% endif %}{% endif %}" data-value="1" data-id="{{ ticket.id }}">
+                    <i class="fas fa-thumbs-up"></i>
+                </span>
+                <span class="vote-count" data-value="1" data-id="{{ ticket.id }}">
+                {% if 0 < pos_voter %}
+                    {{ pos_voter }}
+                {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 date text-right color-inactive">
+        {{ ticket.created|date('F jS \\a\\t g:ia') }}
+    </div>
+
+    {% if 0 == archived and (app.user.id == ticket.creator.id or is_granted('archive', ticket) or is_granted('edit', ticket) or is_granted('delete', ticket)) %}
+        <ul class="options navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    <icon class="fas fa-ellipsis-h color-inactive"></icon>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    {% if is_granted('delete', ticket) %}
+                        <span class="dropdown-item btn-ticket-delete" href="#"><icon class="fas fa-trash mr-1"></icon>{{ 'delete'|trans({}, 'labels') }}</span>
+                    {% endif %}
+                    {% if is_granted('edit', ticket) %}
+                        <span class="dropdown-item btn-ticket-edit" href="#"><icon class="fas fa-edit mr-1"></icon>{{ 'edit'|trans({}, 'labels') }}</span>
+                    {% endif %}
+                    {% if is_granted('archive', ticket) %}
+                        <span class="dropdown-item btn-ticket-archive" href="#"><icon class="fas fa-archive mr-1"></icon>{{ 'archive'|trans({}, 'labels') }}</span>
+                    {% endif %}
+                </div>
+            </li>
+        </ul>
+        {#
+        <div class="options-content rounded bg-white">
+            <ul >
+                {% if app.user.id == ticket.creator.id %}
+                    <li class="btn-ticket-delete">Delete</li>
+                    <li class="btn-ticket-edit">Edit</li>
+                {% endif %}
+                <li class="btn-ticket-comment">Comment</li>
+            </ul>
+        </div>
+        #}
+    {% endif %}
+</div>

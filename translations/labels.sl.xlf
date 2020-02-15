@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="sl" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="add_new_board" resname="add_new_board">
+        <source>Add new board</source>
+        <target>Dodajte novo tablo</target>
+      </trans-unit>
+      <trans-unit id="logout" resname="logout">
+        <source>Logout</source>
+        <target>Odjavite</target>
+      </trans-unit>
+      <trans-unit id="order" resname="order">
+        <source>Order</source>
+        <target>Sortiranje</target>
+      </trans-unit>
+      <trans-unit id="date" resname="date">
+        <source>Date</source>
+        <target>Datum</target>
+      </trans-unit>
+      <trans-unit id="user" resname="user">
+        <source>User</source>
+        <target>Uporabnik</target>
+      </trans-unit>
+      <trans-unit id="votes" resname="votes">
+        <source>Votes</source>
+        <target>Glasovi</target>
+      </trans-unit>
+      <trans-unit id="delete" resname="delete">
+        <source>Delete</source>
+        <target>Izbriši</target>
+      </trans-unit>
+      <trans-unit id="edit" resname="edit">
+        <source>Edit</source>
+        <target>Uredi</target>
+      </trans-unit>
+      <trans-unit id="subscribe" resname="subscribe">
+        <source>Subscribe</source>
+        <target>Naročite se</target>
+      </trans-unit>
+      <trans-unit id="archive" resname="archive">
+        <source>Archive</source>
+        <target>Arhiv</target>
+      </trans-unit>
+      <trans-unit id="save" resname="save">
+        <source>Save</source>
+        <target>Shrani</target>
+      </trans-unit>
+      <trans-unit id="close" resname="close">
+        <source>Close</source>
+        <target>Zapri</target>
+      </trans-unit>
+      <trans-unit id="members" resname="members">
+        <source>Members</source>
+        <target>Člani</target>
+      </trans-unit>
+      <trans-unit id="tickets" resname="tickets">
+        <source>Tickets</source>
+        <target>Vstopnice</target>
+      </trans-unit>
+      <trans-unit id="archived_tickets" resname="archived_tickets">
+        <source>Archived Tickets</source>
+        <target>Arhivirane vozovnice</target>
+      </trans-unit>
+      <trans-unit id="users" resname="users">
+        <source>Users</source>
+        <target>Uporabniki</target>
+      </trans-unit>
+      <trans-unit id="name" resname="name">
+        <source>Name</source>
+        <target>Ime</target>
+      </trans-unit>
+      <trans-unit id="columns" resname="columns">
+        <source>Columns</source>
+        <target>Stolpci</target>
+      </trans-unit>
+      <trans-unit id="admins" resname="admins">
+        <source>Admins</source>
+        <target>Administratorji</target>
+      </trans-unit>
+      <trans-unit id="edit_board" resname="edit_board">
+        <source>Edit Board</source>
+        <target>Uredi odbor</target>
+      </trans-unit>
+      <trans-unit id="create_new_board" resname="create_new_board">
+        <source>Create new Board</source>
+        <target>Ustvari nov odbor</target>
+      </trans-unit>
+      <trans-unit id="email" resname="email">
+        <source>E-Mail</source>
+        <target>E-naslov</target>
+      </trans-unit>
+      <trans-unit id="invite" resname="invite">
+        <source>Invite</source>
+        <target>Povabi</target>
+      </trans-unit>
+      <trans-unit id="remove" resname="remove">
+        <source>Remove</source>
+        <target>Odstraniti</target>
+      </trans-unit>
+      <trans-unit id="live_notify" resname="live_notify">
+        <source>Live Notifications</source>
+        <target>Obvestila v živo</target>
+      </trans-unit>
+      <trans-unit id="profile" resname="profile">
+        <source>Profile</source>
+        <target>Profil</target>
+      </trans-unit>
+      <trans-unit id="user_profile" resname="user_profile">
+        <source>User Profile</source>
+        <target>uporabniški profil</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

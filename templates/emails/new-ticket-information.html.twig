@@ -1,0 +1,10 @@
+<h3>
+    Dear user,
+</h3>
+
+User {{ ticket.creator.name }} created a new entry on {{ ticket.created|date("Y-m-d H:i:s") }} on <a href="https://retro.byte-artist.de/board/{{ board.id }}">{{ board.name }}</a>.
+
+<p>
+    Yours sincerely<br />
+    the team of retro.byte-artist.de
+</p>

@@ -1,0 +1,11 @@
+<h3>
+    Hallo Mitglied,
+</h3>
+
+<p>
+    Von Benutzer {{ ticket.creator.name }} wurde am {{ ticket.created|date("d.m.Y H:i:s") }} auf <a href="https://retro.byte-artist.de/board/{{ board.id }}">{{ board.name }}</a> ein neuer Eintrag angelegt.
+</p>
+<p>
+    mit freundlichen Grüßen<br />
+    das Team von retro.byte-artist.de
+</p>

@@ -1,0 +1,220 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'user_profile'|trans({}, 'labels') }} {{ user.name }}{% endblock %}
+
+{#
+{% block navigation_additions %}
+    <a href="/board/{{ board.id }}" class="m-2 btn-archive-board">
+        <icon class="fas fa-chalkboard"></icon>
+    </a>
+    {{ parent() }}
+{% endblock %}
+#}
+
+{% block navigation_title %}{{ 'user_profile'|trans({}, 'labels') }} {{ user.name }} {% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+    <form id="user_profile_form" method="post" action="/user/edit">
+        <div class="row">
+            <div id="avatar_container" class="col-md-3" style="position: relative;">
+                <span class="btn-remove-avatar" style="z-index: 3; position: absolute; top: 10px; right: 10px; {% if user.avatarPath is empty %} opacity: 0;{% endif %}">
+                    <i class="fas fa-minus-circle"></i>
+                </span>
+                <img id="avatar_picture" src="{{ user.avatarPath }}" style="position: absolute; top: 0; left: 0; width: 100%; {% if user.avatarPath is empty %} opacity: 0;{% endif %}" />
+                <span id="avatar" class="fas fa-user" style="font-size: 250px; color: {{ user.color|default('#0298E9') }}; {% if user.avatarPath %} opacity: 0; {% endif %}"></span>
+                <div class="avatar-dropzone" style="z-index: 2; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; background-color: #c8dadf; padding: 10px; outline: 2px dashed #92b0b3; outline-offset: -10px; transition: outline-offset .15s ease-in-out, background-color .15s linear;">
+                    <div class="dropzone-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+<!--                    <div id="upload_file" >or upload file</div>
+                    <input type="file" name="avatar_upload" id="avatar_upload">-->
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="text" id="name" name="user[name]" value="{{ user.name }}" />
+                    </div>
+                    <div class="col-md-12">
+                        <input type="email" id="email" name="user[email]" value="{{ user.email }}" />
+                    </div>
+                    <div class="col-md-12" style="position: relative;">
+                        <input type="color" id="color" style="width: 85%;" name="user[color]" value="{{ user.color|default('#0298E9') }}" />
+                        <span class="btn-remove-color" style="position: absolute; right: 0; top: 0; z-index: 100;">
+                            <i class="fas fa-undo-alt"></i>
+                        </span>
+                    </div>
+                    <div class="col-md-12" style="margin-top: 25px;">
+                        <span class="btn btn-primary btn-save">{{ 'save'|trans({}, 'labels') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="user[id]" value="{{ user.id }}" />
+        <input type="hidden" id="avatar_path" name="user[avatar_path]" value="{{ user.avatarPath }}" />
+    </form>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            init();
+        });
+
+        function init() {
+            $('#color').unbind('change').on('change', function() {
+                $('#avatar').css({'color': $(this).val()});
+            });
+
+            $('.btn-save').unbind('click').on('click', function() {
+                let form = $('#user_profile_form');
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                });
+            });
+
+            $('.btn-remove-color').unbind('click').on('click', function() {
+                $('#color').val('#0298E9');
+                $('#avatar').css({'color': '#0298E9'});
+            });
+
+            $('.btn-remove-avatar').unbind('click').on('click', function() {
+                $('#avatar_container').find('#avatar_picture').remove();
+//                $('#avatar').show();
+                $('#avatar').css({opacity: 1});
+                $('#avatar_path').val('');
+                $(this).css({opacity: 0});
+            });
+
+            $('html, body, .container, .avatar-container, .avatar-dropzone, #avatar_picture, #avatar').unbind('dragover dragenter').on("dragover dragenter", function(e) {
+                e.preventDefault();
+//                e.stopPropagation();
+//                $('.avatar-dropzone').show();
+                $('.avatar-dropzone').css({opacity: 1});
+//                init();
+                $(".dropzone-text").text("Drag here");
+            });
+
+            $('html, body, .container, .avatar-container').unbind('drop').on("drop", function(e) {
+                e.preventDefault();
+//                e.stopPropagation();
+//                $('.avatar-dropzone').hide();
+                $('.avatar-dropzone').css({opacity: 0});
+                $(".dropzone-text").text("");
+            });
+
+            $('body').unbind('dragleave').on("dragleave", function(e) {
+                e.preventDefault();
+//                e.stopPropagation();
+//                $('.avatar-dropzone').hide();
+                $('.avatar-dropzone').css({opacity: 0});
+                $(".dropzone-text").text("");
+            });
+
+            $('.avatar-dropzone').unbind('dragover').on('dragover',function(event){
+                event.preventDefault();
+            });
+
+            $(".avatar-dropzone").unbind('drop').unbind('dragdrop').on('drop dragdrop', function(e) {
+//                e.preventDefault();
+//                e.stopPropagation();
+
+                var validExtensions = ['jpg','png','jpeg', 'gif'];
+                let files = e.originalEvent.dataTransfer.files;
+
+                if (0 == files.length) {
+//                    $('.avatar-dropzone').hide();
+                    $('.avatar-dropzone').css({opacity: 0});
+                    $(".dropzone-text").text("");
+                    return false;
+                }
+
+                let file = files[0];
+                let fileName = file.name;
+                let fileNameExt = fileName.substr(fileName.lastIndexOf('.') + 1);
+
+                if ($.inArray(fileNameExt, validExtensions) == -1) {
+//                    $('.avatar-dropzone').hide();
+                    $('.avatar-dropzone').css({opacity: 0});
+                    $(".dropzone-text").text("");
+                    alert("Only these file types are accepted : "+validExtensions.join(', '));
+                    return false;
+                }
+
+                if (file.size > 1024000) {
+//                    $('.avatar-dropzone').hide();
+                    $('.avatar-dropzone').css({opacity: 0});
+                    $(".dropzone-text").text("");
+                    alert('Max Upload size is 1MB only');
+                    return false;
+                }
+
+                var image = new Image();
+
+                image.onload = function() {
+                    // image has width, properly its a real image
+                    if (this.width) {
+                        let formData = new FormData();
+
+                        formData.append('file', file);
+                        formData.append('id', '{{ user.id }}');
+
+                        uploadData(formData);
+                        return true;
+                    }
+                };
+                image.src = URL.createObjectURL(file);
+
+//                $('.avatar-dropzone').hide();
+                    $('.avatar-dropzone').css({opacity: 0});
+                $(".dropzone-text").text("");
+            });
+
+            $("html").on("drop", function(e) { e.preventDefault(); e.stopPropagation(); });
+        }
+
+        function uploadData(formdata){
+            $.ajax({
+                url: '{{ path('user_avatar_upload') }}',
+                type: 'post',
+                data: formdata,
+                contentType: false,
+                processData: false,
+                dataType: 'json',
+                success: function(response){
+                    addThumbnail(response);
+                }
+            });
+        }
+
+        // Added thumbnail
+        function addThumbnail(data){
+            console.log($('#avatar_container #avatar_picture'));
+            $('#avatar_container #avatar_picture').remove();
+
+            let image = $('<img id="avatar_picture" style="position: absolute; opacity: 1; top: 0; left: 0; width: 100%;" src="'+data.src+'?'+microtime()+'" />');
+            $('#avatar_path').val(data.src);
+            $('#avatar_container').append(image);
+//            $('.btn-remove-avatar').show();
+            $('.btn-remove-avatar').css({opacity: 1});
+//            $('#avatar').hide();
+            $('#avatar').css({opacity: 0});
+//            $('.avatar-dropzone').hide();
+            $('.avatar-dropzone').css({opacity: 0});
+            init();
+        }
+
+        function microtime(get_as_float) {
+            var now = new Date().getTime() / 1000;
+            var seconds = parseInt(now);
+
+            return (get_as_float) ? now : (Math.round((now - seconds) * 1000) / 1000) + ' ' + seconds;
+        }
+    </script>
+{% endblock %}

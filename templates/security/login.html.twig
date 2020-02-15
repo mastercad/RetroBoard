@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row wrapper fadeInDown">
+        <div class="col-md-12" id="formContent">
+            <div class="fadeIn first">
+                <img src="/images/logo.png" id="icon" alt="User Icon" />
+            </div>
+
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                <?php if ($logout_setup): ?>
+                    {% if app.user %}
+                        <div class="checkbox mb-3">You are logged in as {{ app.user.name }}, 
+                        <a href="{{ path('app_logout') }}">Logout</a>
+                    {% endif %}
+                <?php endif; ?>
+
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <label for="inputEmail" class="sr-only">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="fadeIn second" placeholder="E-Mail" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" name="password" id="inputPassword" class="fadeIn third" placeholder="Password" required>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                {#
+                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                    See https://symfony.com/doc/current/security/remember_me.html
+
+                    <div class="checkbox mb-3">
+                        <label>
+                            <input type="checkbox" name="_remember_me"> Remember me
+                        </label>
+                    </div>
+                #}
+
+                <button class="fadeIn fourth" type="submit">
+                    Sign in
+                </button>
+            </form>
+
+            <div class="row" id="formFooter">
+                <div class="col-md-6 col-sm-6 col-xl-6">
+                    <a class="underlineHover" href="{{ path('app_forgot_password') }}">Forgot Password?</a>
+                </div>
+                <div class="col-md-6 col-xl-6">
+                    <a class="underlineHover" href="{{ path('app_register') }}">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

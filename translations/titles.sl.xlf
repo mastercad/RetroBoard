@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="sl" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="board_overview" resname="board_overview">
+        <source>Board Overview</source>
+        <target>Pregled odbora</target>
+      </trans-unit>
+      <trans-unit id="welcome" resname="welcome">
+        <source>Welcome on Retro Board!</source>
+        <target>Dobrodošli v Retro Boardu!</target>
+      </trans-unit>
+      <trans-unit id="create_new_ticket" resname="create_new_ticket">
+        <source>Create new ticket</source>
+        <target>Ustvari novo vozovnico</target>
+      </trans-unit>
+      <trans-unit id="invite_member" resname="invite_member">
+        <source>Invite Member</source>
+        <target>Povabite člana</target>
+      </trans-unit>
+      <trans-unit id="reverse_invitation" resname="reverse_invitation">
+        <source>Reverse Invitation</source>
+        <target>Povratno povabilo</target>
+      </trans-unit>
+      <trans-unit id="remove_member" resname="remove_member">
+        <source>Remove Member</source>
+        <target>Odstrani člana</target>
+      </trans-unit>
+      <trans-unit id="archive_of" resname="archive_of">
+        <source>Archive of</source>
+        <target>Arhiv</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
