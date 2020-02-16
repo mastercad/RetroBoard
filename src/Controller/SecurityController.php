@@ -17,10 +17,14 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/login", name="app_login", options={"permanent"=true, "keepRequestMethod"=true})
      */
-    public function login(LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
+    public function login(Request $request, LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
     {
+        $redirectUri = null;
+        if (preg_match('/sf_redirect=(.*)/', $_SERVER['HTTP_COOKIE'], $matches)) {
+            $redirectUri = $matches[1];
+        }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -29,7 +33,11 @@ class SecurityController extends AbstractController
 
         $logger->debug($authenticationUtils->getLastUsername());
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+            'redirect_uri' => $redirectUri
+        ]);
     }
 
     /**

@@ -20,6 +20,7 @@ security:
                 username_parameter: email
                 password_parameter: password
                 post_only: true
+                use_referer: true
             guard:
                 authenticators:
                     - App\Security\Authenticator

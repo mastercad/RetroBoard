@@ -32,7 +32,6 @@ class VotingController extends AbstractController
     {
         $ticketId = $request->get('ticket_id');
         $value = $request->get('value');
-//        $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($ticketId);
         $votingContent = [];
 
@@ -61,10 +60,10 @@ class VotingController extends AbstractController
             $voting->setModified(new \DateTime())
                 ->setModifier($this->getUser())
                 ->setPoints($value);
-            
+
             $votingContent[$value] = 1;
             $votingContent[$currentPoints] = -1;
-            
+
             $entityManager->persist($voting);
             $entityManager->flush();
         /* remove voting */
@@ -90,7 +89,7 @@ class VotingController extends AbstractController
                 $additions['owner'] = $voting->getPoints();
             }
         }
-        */        
+        */
         $update = new Update(
             'https://retro.byte-artist.de/ticket/1',
             json_encode(
@@ -107,6 +106,11 @@ class VotingController extends AbstractController
         $publisher($update);
 
 //        return new JsonResponse(['success' => true, 'votings' => $summary, 'additions' => $additions]);
-        return new JsonResponse(['success' => true]);
+        return new JsonResponse([
+            'success' => true,
+            'votingContent' => $votingContent,
+            'ownerId' => $this->getUser()->getId(),
+            'ticketId' => $ticketId
+        ]);
     }
 }

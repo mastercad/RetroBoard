@@ -121,7 +121,7 @@ class TicketController extends AbstractController
         $ticket->setCreator($user)
             ->setCreated(new \DateTime())
             ->setColumn($column);
-        
+
         $form = $this->createForm(TicketFormType::class, $ticket);
         $form->submit($request->request->get('ticket_form'));
         $result = false;
@@ -130,7 +130,7 @@ class TicketController extends AbstractController
             $entityManager->persist($ticket);
             $entityManager->flush($ticket);
             $result = true;
-        
+
             $update = new Update(
                 'https://retro.byte-artist.de/ticket/1',
                 json_encode(
@@ -166,7 +166,7 @@ class TicketController extends AbstractController
      * @Route("/ticket/save/{id}", name="app_ticket_update", methods={"POST"}, requirements={"id"="\d+"})
      *
      * @param Request $request
-     * 
+     *
      * @return JsonResponse
      */
     public function updateTicket(Publisher $publisher, EntityManagerInterface $entityManager, Request $request, int $id)
@@ -175,7 +175,7 @@ class TicketController extends AbstractController
 
         $ticket->setModifier($this->getUser())
             ->setModified(new \DateTime());
-        
+
         $form = $this->createForm(TicketFormType::class, $ticket);
         $form->submit(
             [
@@ -189,7 +189,7 @@ class TicketController extends AbstractController
             $entityManager->persist($ticket);
             $entityManager->flush($ticket);
             $result = true;
-        
+
             $update = new Update(
                 'https://retro.byte-artist.de/ticket/1',
                 json_encode(
@@ -235,7 +235,7 @@ class TicketController extends AbstractController
         if ($ticket->getCreator() != $this->getUser()) {
             return new JsonResponse(['success' => 'false', 'content' => 'you are not allowed to delete this ticket!']);
         }
-        
+
         $entityManager->remove($ticket);
         $entityManager->flush($ticket);
 
@@ -257,9 +257,9 @@ class TicketController extends AbstractController
     }
 
     /**
-     * 
+     *
      * @Route("/ticket/archive/{id}", name="app_ticket_archive", methods={"POST"}, requirements={"id"="\d+"})
-     * 
+     *
      * @return JsonResponse
      */
     public function archiveTicket(Publisher $publisher, EntityManagerInterface $entityManger, int $id)

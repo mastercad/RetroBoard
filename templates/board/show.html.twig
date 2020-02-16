@@ -139,7 +139,9 @@
         const SORT_TYPE_NAME = 'name';
 
         $(document).ready(function() {
-            connect();
+            if (checkEventSourceSupported()) {
+                connect();
+            }
 
             {% if 0 == archived %}
                 init_ticket_add();
@@ -198,6 +200,7 @@
         {% if 0 == archived %}
             function init_voting() {
                 $('.btn-vote').unbind('click').on('click', function() {
+                    // prevent multi click on came item
                     if (undefined === prevClicked
                         || prevClicked != this
                         || (prevClicked === this
@@ -210,13 +213,14 @@
                         }
                         prevClicked = this;
 
-                        let self = this;
-                        let ticket_id = $(this).data('id');
-
                         $.post('/vote', {
-                            'ticket_id': ticket_id,
+                            'ticket_id': $(this).data('id'),
                             'value': $(this).data('value')
                         }, function(response) {
+                            // falback for IE and Edge because EventSourcing is not known there...
+                            if (!checkEventSourceSupported()) {
+                                handleVotingEvent(response);
+                            }
                         });
                     }
                 });
@@ -442,30 +446,38 @@
             keepAliveTimer = setTimeout(connect, 30 * 1000);
         }
 */
+        function checkEventSourceSupported() {
+            return (undefined !== "EvenSource"
+                || "EventSource" in document.createElement('div')
+                || (undefined !== global && ("EventSource" in global)));
+        }
+
         let eventSource = undefined;
 
-        function connect() {
-//            gotActivity();
-            const url = new URL('https://mercure-hub.byte-artist.de/hub');
-            {% if 0 == archived %}
-                /** MERCURE **/
-                /** iam interested in votings and ticket changes */
-                url.searchParams.append('topic', 'https://retro.byte-artist.de/voting/{id}');
-                url.searchParams.append('topic', 'https://retro.byte-artist.de/ticket/{id}');
-            {% else %}
-                // properly later only listen on archive relevant items
-                url.searchParams.append('topic', 'https://retro.byte-artist.de/voting/{id}');
-                url.searchParams.append('topic', 'https://retro.byte-artist.de/ticket/{id}');
-            {% endif %}
+        if (checkEventSourceSupported()) {
+            function connect() {
+    //            gotActivity();
+                const url = new URL('https://mercure-hub.byte-artist.de/hub');
+                {% if 0 == archived %}
+                    /** MERCURE **/
+                    /** iam interested in votings and ticket changes */
+                    url.searchParams.append('topic', 'https://retro.byte-artist.de/voting/{id}');
+                    url.searchParams.append('topic', 'https://retro.byte-artist.de/ticket/{id}');
+                {% else %}
+                    // properly later only listen on archive relevant items
+                    url.searchParams.append('topic', 'https://retro.byte-artist.de/voting/{id}');
+                    url.searchParams.append('topic', 'https://retro.byte-artist.de/ticket/{id}');
+                {% endif %}
 
-            eventSource = new EventSource(url);
-            eventSource.onmessage = eventMessage => handleEventMessage(eventMessage); // do something with the payload
+                eventSource = new EventSource(url);
+                eventSource.onmessage = eventMessage => handleEventMessage(eventMessage); // do something with the payload
 
-            eventSource.addEventListener('error', function(event) {
-                console.log(event);
-                eventSource.close();
-                connect();
-            });
+                eventSource.addEventListener('error', function(event) {
+                    console.log(event);
+                    eventSource.close();
+                    connect();
+                });
+            }
         }
 
         function handleEventMessage(eventMessage) {
@@ -614,7 +626,7 @@
                 ) {
                     $.notify({
                         // options
-                        message: 'Votings changed, View reordered!' 
+                        message: 'Votings changed, View reordered!'
                     },{
                         // settings
                         type: 'info'

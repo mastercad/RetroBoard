@@ -1,8 +1,9 @@
 {% extends 'base.html.twig' %}
-
+{# http://172.19.2.1/board/member/2684d45705094162edf989e7f870973d507ec340 #}
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+
 <div class="container">
     <div class="row wrapper fadeInDown">
         <div class="col-md-12" id="formContent">
@@ -17,7 +18,7 @@
 
                 <?php if ($logout_setup): ?>
                     {% if app.user %}
-                        <div class="checkbox mb-3">You are logged in as {{ app.user.name }}, 
+                        <div class="checkbox mb-3">You are logged in as {{ app.user.name }},
                         <a href="{{ path('app_logout') }}">Logout</a>
                     {% endif %}
                 <?php endif; ?>
@@ -29,6 +30,7 @@
                 <input type="password" name="password" id="inputPassword" class="fadeIn third" placeholder="Password" required>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+{#                <input type="hidden" name="_target_path" value="{{ path('account') }}"/> #}
 
                 {#
                     Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
@@ -51,6 +53,7 @@
                     <a class="underlineHover" href="{{ path('app_forgot_password') }}">Forgot Password?</a>
                 </div>
                 <div class="col-md-6 col-xl-6">
+<!--                    <a class="underlineHover" href="{{ path('app_register') }}{% if redirect_uri %}?redirect={{ redirect_uri }}{% endif %}">Register</a>-->
                     <a class="underlineHover" href="{{ path('app_register') }}">Register</a>
                 </div>
             </div>
