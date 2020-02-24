@@ -149,8 +149,25 @@
                 init_options();
             {% endif %}
 
+            init_tickets();
             init_sorting();
         });
+
+        function init_tickets() {
+            $('.ticket').unbind('click').on('click', function(ui) {
+
+                if (ui.target == $(this)
+                    || $(ui.target).hasClass('content')
+                ) {
+                    let isActive = $(this).hasClass('active');
+                    $('.ticket').removeClass('active');
+
+                    if (!isActive) {
+                        $(this).addClass('active');
+                    }
+                }
+            });
+        }
 
         {% if 0 == archived %}
             function init_ticket_add() {
@@ -519,6 +536,7 @@
                     .fadeIn();
                 init_voting();
                 init_options();
+                init_tickets();
             });
 
             if (true === live_notify

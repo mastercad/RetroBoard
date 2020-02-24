@@ -12,7 +12,7 @@
 .color-primary-3 { color: #015C8C }
 .color-primary-4 { color: #00334E }
 .color-heightligth { color: #47CF47}
-.color-inactive { color: gainsboro }
+.color-inactive { color: rgb(185, 185, 185) }
 
 .bg-color-primary-0 { background-color: #0298E9 }	/* Main Primary color */
 .bg-color-primary-1 { background-color: #8DC4E2 }
@@ -20,7 +20,7 @@
 .bg-color-primary-3 { background-color: #015C8C }
 .bg-color-primary-4 { background-color: #00334E }
 .bg-color-heightligth { background-color: #47CF47}
-.bg-color-inactive { background-color: gainsboro }
+.bg-color-inactive { background-color: rgb(185, 185, 185) }
 
 .bg-rgba-primary-0 { background-color: rgba(  2,152,233,1) }	/* Main Primary color */
 .bg-rgba-primary-1 { background-color: rgba(141,196,226,1) }
@@ -382,10 +382,12 @@ input[type=password]:placeholder {
   font-size: 85%;
 }
 
+/*
 .ticket .name,
 .ticket .date {
   color: gainsboro;
 }
+*/
 
 .ticket .options {
   position: absolute;
@@ -483,10 +485,6 @@ input[type=password]:placeholder {
 }
 
 .preview:hover {
-  box-shadow: 15px 15px #015C8C;
-  -webkit-box-shadow: 10px 10px 29px 0px #015C8C;
-  -moz-box-shadow: 10px 10px 29px 0px #015C8C;
-  box-shadow: 10px 10px 29px 0px #015C8C;
 }
 
 .preview a:hover {
@@ -500,6 +498,10 @@ input[type=password]:placeholder {
 
 .highlight {
   border: 1px solid red;
+  box-shadow: 15px 15px #015C8C;
+  -webkit-box-shadow: 10px 10px 29px 0px #015C8C;
+  -moz-box-shadow: 10px 10px 29px 0px #015C8C;
+  box-shadow: 10px 10px 29px 0px #015C8C;
   background-color: lightblue;
 }
 
@@ -576,4 +578,11 @@ ul.navbar-nav.user {
 .btn-remove-avatar  {
   cursor: pointer;
   cursor: url('/images/press_white.png'), pointer !important;
+}
+
+.ticket.active {
+  box-shadow: 15px 15px #015C8C;
+  -webkit-box-shadow: 10px 10px 29px 0px #015C8C;
+  -moz-box-shadow: 10px 10px 29px 0px #015C8C;
+  box-shadow: 10px 10px 29px 0px #015C8C;
 }
