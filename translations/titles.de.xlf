@@ -9,6 +9,10 @@
         <source>Board Overview</source>
         <target>Board Übersicht</target>
       </trans-unit>
+      <trans-unit id="team_overview" resname="team_overview">
+        <source>Team Overview</source>
+        <target>Gruppen Übersicht</target>
+      </trans-unit>
       <trans-unit id="welcome" resname="welcome">
         <source>Welcome on Retro Board!</source>
         <target>Willkommen auf dem Retro Board!</target>

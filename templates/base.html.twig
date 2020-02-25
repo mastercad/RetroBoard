@@ -59,6 +59,20 @@
         </nav>
         {% endblock %}
 
+        {% block sidebar %}
+        <div class="sidebar">
+            <a href="/boards" >
+                <i class="fas fa-fw fa-chalkboard"></i>
+                {{ 'boards'|trans({}, 'labels') }}
+            </a>
+            <a href="/teams" >
+                <i class="fas fa-fw fa-user-friends"></i>
+                {{ 'teams'|trans({}, 'labels') }}
+            </a>
+        </div>
+        <div class="btn-sidebar"><i class="fas fa-arrow-right"></i></div>
+        {% endblock %}
+
         {% block body %}{% endblock %}
 
         {% block javascripts %}
@@ -86,6 +100,24 @@
 
             <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
             <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.btn-sidebar').unbind('click').on('click', function() {
+                        if (0 == parseInt($('.sidebar').css('left'))) {
+                            $('.sidebar').css('left', '0').stop().animate({left: "-200px", opacity: 0}, 1000);
+                            $('.btn-sidebar').css('left', '200px').stop().animate({left: 0}, 1000, function() {
+                                $(this).find('svg').toggleClass('fa-arrow-right');
+                            });
+                        } else {
+                            $('.sidebar').css('left', '-200px').stop().animate({left: '0', opacity: 1}, 1000);
+                            $('.btn-sidebar').css('left', '0').stop().animate({left: '200px'}, 1000, function() {
+                                $(this).find('svg').toggleClass('fa-arrow-left');
+                            });
+                        }
+                    });
+                });
+            </script>
         {% endblock %}
     </body>
 </html>

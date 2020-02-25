@@ -113,6 +113,14 @@
         <source>User Profile</source>
         <target>uporabniški profil</target>
       </trans-unit>
+      <trans-unit id="boards" resname="boards">
+        <source>Boards</source>
+        <target>Miza</target>
+      </trans-unit>
+      <trans-unit id="teams" resname="teams">
+        <source>Teams</source>
+        <target>Skupine</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

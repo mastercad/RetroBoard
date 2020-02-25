@@ -113,6 +113,14 @@
         <source>User Profile</source>
         <target>User Profile</target>
       </trans-unit>
+      <trans-unit id="boards" resname="boards">
+        <source>Boards</source>
+        <target>Boards</target>
+      </trans-unit>
+      <trans-unit id="teams" resname="teams">
+        <source>Teams</source>
+        <target>Teams</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

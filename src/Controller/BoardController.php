@@ -19,13 +19,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class BoardController extends AbstractController
 {
     /**
-     * @Route("/board", name="board", methods={"GET"})
+     * @Route("/boards", name="boards", methods={"GET"})
      */
     public function index(EntityManagerInterface $entityManager)
     {
         $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy([
             'user' => $this->getUser()
         ]);
+
+        if (empty($boardMembers)) {
+            $boardMembers[]['board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
+        }
 
         return $this->render(
             'board/index.html.twig',
@@ -34,7 +38,7 @@ class BoardController extends AbstractController
             ]
         );
     }
-    
+
     /**
      * @Route("/board/{id}", name="board_show", methods={"GET"}, requirements={"id"="\d+"})
      */

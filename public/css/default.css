@@ -11,7 +11,7 @@
 .color-primary-2 { color: #29a5e8 }
 .color-primary-3 { color: #015C8C }
 .color-primary-4 { color: #00334E }
-.color-heightligth { color: #47CF47}
+.color-highlight { color: #47CF47}
 .color-inactive { color: rgb(185, 185, 185) }
 
 .bg-color-primary-0 { background-color: #0298E9 }	/* Main Primary color */
@@ -19,7 +19,7 @@
 .bg-color-primary-2 { background-color: #29a5e8 }
 .bg-color-primary-3 { background-color: #015C8C }
 .bg-color-primary-4 { background-color: #00334E }
-.bg-color-heightligth { background-color: #47CF47}
+.bg-color-highlight { background-color: #47CF47}
 .bg-color-inactive { background-color: rgb(185, 185, 185) }
 
 .bg-rgba-primary-0 { background-color: rgba(  2,152,233,1) }	/* Main Primary color */
@@ -27,9 +27,10 @@
 .bg-rgba-primary-2 { background-color: rgba( 41,165,232,1) }
 .bg-rgba-primary-3 { background-color: rgba(  1, 92,140,1) }
 .bg-rgba-primary-4 { background-color: rgba(  0, 51, 78,1) }
-.bg-rgba-heighligth { background-color: rgba(71, 207, 71, 1)}
+.bg-rgba-highlight { background-color: rgba(71, 207, 71, 1)}
 
 html, body {
+  height: 100%;
   cursor: auto;
   cursor: url("/images/cursor_white.png"), default;
 }
@@ -68,7 +69,7 @@ h2 {
   font-weight: 600;
   text-transform: uppercase;
   display:inline-block;
-  margin: 40px 8px 10px 8px; 
+  margin: 40px 8px 10px 8px;
   color: #00334E;
 }
 
@@ -76,7 +77,7 @@ h2 {
 .wrapper {
   display: flex;
   align-items: center;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   width: 100%;
   min-height: 100%;
@@ -566,6 +567,10 @@ button.close {
   margin: -15px -5px;
 }
 
+.navbar {
+  z-index: 11;
+}
+
 ul.navbar-nav.user {
   z-index: 9999;
 }
@@ -574,8 +579,10 @@ ul.navbar-nav.user {
 .btn-copy,
 .btn-save,
 .dropdown-item,
+.sidebar-item,
 .btn-remove-color,
-.btn-remove-avatar  {
+.btn-remove-avatar,
+.btn-sidebar  {
   cursor: pointer;
   cursor: url('/images/press_white.png'), pointer !important;
 }
@@ -585,4 +592,64 @@ ul.navbar-nav.user {
   -webkit-box-shadow: 10px 10px 29px 0px #015C8C;
   -moz-box-shadow: 10px 10px 29px 0px #015C8C;
   box-shadow: 10px 10px 29px 0px #015C8C;
+}
+
+.sidebar {
+  z-index: 10;
+  padding: 15px;
+  padding-top: 70px;
+  position: fixed;
+  opacity: 0;
+  width: 200px;
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  top: 0;
+  left: -200px;
+/*  display: none;*/
+  overflow-x: hidden;
+/*  transition: 0.5s; *//* 0.5 second transition effect to slide in the sidenav */
+  background-color: rgba(41, 165, 232, .9);
+}
+
+.sidebar a {
+  display: block;
+  font-weight: bold;
+}
+
+.sidebar a:hover {
+  color: #8DC4E2;
+}
+
+.btn-sidebar {
+  background: -webkit-linear-gradient(#C7D3DC,#5B798E);
+  background: -moz-linear-gradient(#C7D3DC,#5B798E);
+  background: -o-linear-gradient(#C7D3DC,#5B798E);
+  background: linear-gradient(#C7D3DC,#5B798E);
+
+  -webkit-transition: background 1s ease-out;
+  -moz-transition: background 1s ease-out;
+  -o-transition: background 1s ease-out;
+  transition: background 1s ease-out;
+
+  background-size: 1px 85px;
+  color: #5B798E;
+  border: 1px solid #839DB0;
+  position: fixed;
+  padding: 5px;
+  left: 0;
+  bottom: 0;
+  z-index: 11;
+}
+
+.btn-sidebar:hover {
+  color: #C7D3DC;
+  background-position: 10px;
+}
+
+.sidebar .btn-sidebar:active {
+  -webkit-transition: left 2s ease-in-out;
+  -moz-transition: left 2s ease-in-out;
+  -o-transition: left 2s ease-in-out;
+  transition: left 2s ease-in-out;
 }
