@@ -27,9 +27,9 @@
     </head>
     <body>
         {% block navigation %}
-        <nav class="navbar navbar-expand-md bg-color-primary-2 color-primary-1">
+        <nav class="navbar navbar-expand-md bg-color-primary-3 color-primary-1">
             <a class="navbar-brand" href="/">
-                <img src="/images/logo.png" alt="Logo" />
+                <img src="/images/logo_white.png" alt="Logo" />
             </a>
 
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
@@ -60,17 +60,24 @@
         {% endblock %}
 
         {% block sidebar %}
-        <div class="sidebar">
-            <a href="/boards" >
-                <i class="fas fa-fw fa-chalkboard"></i>
-                {{ 'boards'|trans({}, 'labels') }}
-            </a>
-            <a href="/teams" >
-                <i class="fas fa-fw fa-user-friends"></i>
-                {{ 'teams'|trans({}, 'labels') }}
-            </a>
-        </div>
-        <div class="btn-sidebar"><i class="fas fa-arrow-right"></i></div>
+            {# only logged in user can see content like this #}
+            {% if app.user.name is defined %}
+            <div class="sidebar">
+                <a href="/boards" >
+                    <i class="fas fa-fw fa-chalkboard"></i>
+                    <span>
+                        {{ 'boards'|trans({}, 'labels') }}
+                    </span>
+                </a>
+                <a href="/teams" >
+                    <i class="fas fa-fw fa-user-friends"></i>
+                    <span>
+                        {{ 'teams'|trans({}, 'labels') }}
+                    </span>
+                </a>
+                <div class="btn-sidebar"><i class="fas fa-arrow-right"></i></div>
+            </div>
+            {% endif %}
         {% endblock %}
 
         {% block body %}{% endblock %}
@@ -105,14 +112,13 @@
                 $(document).ready(function() {
                     $('.btn-sidebar').unbind('click').on('click', function() {
                         if (0 == parseInt($('.sidebar').css('left'))) {
-                            $('.sidebar').css('left', '0').stop().animate({left: "-200px", opacity: 0}, 1000);
-                            $('.btn-sidebar').css('left', '200px').stop().animate({left: 0}, 1000, function() {
-                                $(this).find('svg').toggleClass('fa-arrow-right');
+                            $('.sidebar').css('left', '0').stop().animate({left: "-150px", backgroundColor: "#FFFFFF"}, 1000, function() {
+                                $(this).removeClass('visible');
+                                $(this).find('.btn-sidebar svg').toggleClass('fa-arrow-right');
                             });
                         } else {
-                            $('.sidebar').css('left', '-200px').stop().animate({left: '0', opacity: 1}, 1000);
-                            $('.btn-sidebar').css('left', '0').stop().animate({left: '200px'}, 1000, function() {
-                                $(this).find('svg').toggleClass('fa-arrow-left');
+                            $('.sidebar').addClass('visible').css('left', '-150px').stop().animate({left: '0', backgroundColor: "#015C8C"}, 1000, function() {
+                                $(this).find('.btn-sidebar svg').toggleClass('fa-arrow-left');
                             });
                         }
                     });

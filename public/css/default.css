@@ -7,7 +7,8 @@
 @import url(https://fonts.googleapis.com/css?family=Pontano+Sans);
 
 .color-primary-0 { color: #0298E9 }	/* Main Primary color */
-.color-primary-1 { color: #8DC4E2 }
+.color-primary-1 { color: #FFFFFF }
+/*.color-primary-1 { color: #8DC4E2 }*/
 .color-primary-2 { color: #29a5e8 }
 .color-primary-3 { color: #015C8C }
 .color-primary-4 { color: #00334E }
@@ -33,6 +34,10 @@ html, body {
   height: 100%;
   cursor: auto;
   cursor: url("/images/cursor_white.png"), default;
+}
+
+.container-fluid {
+  padding-left: 60px;
 }
 
 :any-link,
@@ -575,6 +580,15 @@ ul.navbar-nav.user {
   z-index: 9999;
 }
 
+ul.navbar-nav a {
+  color: #FFFFFF;
+}
+
+ul.navbar-nav .dropdown-menu a,
+ul.navbar-nav .dropdown-menu label {
+  color: #015C8C;
+}
+
 .btn-resend,
 .btn-copy,
 .btn-save,
@@ -585,6 +599,10 @@ ul.navbar-nav.user {
 .btn-sidebar  {
   cursor: pointer;
   cursor: url('/images/press_white.png'), pointer !important;
+}
+
+.dropdown-item {
+  color: #015C8C;
 }
 
 .ticket.active {
@@ -599,22 +617,44 @@ ul.navbar-nav.user {
   padding: 15px;
   padding-top: 70px;
   position: fixed;
-  opacity: 0;
+  opacity: 1;
   width: 200px;
   min-height: 100%;
   height: auto !important;
   height: 100%;
   top: 0;
-  left: -200px;
+  left: -150px;
 /*  display: none;*/
   overflow-x: hidden;
 /*  transition: 0.5s; *//* 0.5 second transition effect to slide in the sidenav */
-  background-color: rgba(41, 165, 232, .9);
+#  background-color: rgba(1, 92, 140, .9);
+  background-color: #FFFFFF;
+}
+
+.sidebar.visible a {
+  color: #FFFFFF;
+  left: 0;
+}
+
+.sidebar.visible a span {
+  visibility: visible;
 }
 
 .sidebar a {
+  position: relative;
+  left: 150px;
+  color: #015C8C;
   display: block;
   font-weight: bold;
+  font-size: 26px;
+}
+
+.sidebar a svg {
+  text-decoration: none;
+}
+
+.sidebar a span {
+  visibility: hidden;
 }
 
 .sidebar a:hover {
@@ -633,11 +673,13 @@ ul.navbar-nav.user {
   transition: background 1s ease-out;
 
   background-size: 1px 85px;
-  color: #5B798E;
+  color: #FFFFFF;
   border: 1px solid #839DB0;
-  position: fixed;
+  position: absolute;
   padding: 5px;
-  left: 0;
+  width: 50px;
+  text-align: center;
+  right: 0;
   bottom: 0;
   z-index: 11;
 }
