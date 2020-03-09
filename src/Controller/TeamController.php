@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Team;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,6 +14,7 @@ class TeamController extends AbstractController
      */
     public function index(EntityManagerInterface $entityManager)
     {
+        $teams = $entityManager->getRepository(Team::class);
         /*
         $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy([
             'user' => $this->getUser()
@@ -30,7 +32,10 @@ class TeamController extends AbstractController
         );
         */
         return $this->render(
-            'team/index.html.twig'
+            'team/index.html.twig',
+            [
+                'teams' => $teams
+            ]
         );
     }
 }

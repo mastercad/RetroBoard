@@ -627,8 +627,8 @@ ul.navbar-nav .dropdown-menu label {
 /*  display: none;*/
   overflow-x: hidden;
 /*  transition: 0.5s; *//* 0.5 second transition effect to slide in the sidenav */
-#  background-color: rgba(1, 92, 140, .9);
-  background-color: #FFFFFF;
+/*  background-color: rgba(1, 92, 140, .9); */
+  background-color: #015C8C;
 }
 
 .sidebar.visible a {
@@ -642,8 +642,8 @@ ul.navbar-nav .dropdown-menu label {
 
 .sidebar a {
   position: relative;
-  left: 150px;
-  color: #015C8C;
+  left: 145px;
+  color: #FFFFFF;
   display: block;
   font-weight: bold;
   font-size: 26px;
@@ -662,6 +662,7 @@ ul.navbar-nav .dropdown-menu label {
 }
 
 .btn-sidebar {
+  /*
   background: -webkit-linear-gradient(#C7D3DC,#5B798E);
   background: -moz-linear-gradient(#C7D3DC,#5B798E);
   background: -o-linear-gradient(#C7D3DC,#5B798E);
@@ -673,6 +674,7 @@ ul.navbar-nav .dropdown-menu label {
   transition: background 1s ease-out;
 
   background-size: 1px 85px;
+   */
   color: #FFFFFF;
   border: 1px solid #839DB0;
   position: absolute;
