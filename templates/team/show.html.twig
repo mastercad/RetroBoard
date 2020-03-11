@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ team.name }}{% endblock %}
+{% block navigation_title %}{{ team.name }}{% endblock %}
+
+{% block navigation_additions %}
+
+    {% if is_granted('edit', team) %}
+        <a href="/team/create/{{ team.id }}" class="m-2 btn-edit-team">
+            <icon class="fas fa-edit"></icon>
+        </a>
+    {% endif %}
+
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                {{ 'order'|trans({}, 'labels') }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a class="dropdown-item order-by-date" href="#">{{ 'date'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-user" href="#">{{ 'user'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-votes" href="#">{{ 'votes'|trans({}, 'labels') }}</a>
+            </div>
+        </li>
+    </ul>
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+<div class="team-content container-fluid h-100 mt-3">
+    <div class="row h-100">
+    </div>
+</div>
+
+<div id="ticket_remove_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Ticket</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    Should this ticket really be removed from the board?
+                </div>
+                <div class="error alert alert-danger" style="display: none;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Remove</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

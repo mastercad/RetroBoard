@@ -156,7 +156,7 @@
         function init_tickets() {
             $('.ticket').unbind('click').on('click', function(ui) {
 
-                if (ui.target == $(this)
+                if (ui.target === $(this)
                     || $(ui.target).hasClass('content')
                 ) {
                     let isActive = $(this).hasClass('active');
@@ -219,7 +219,7 @@
                 $('.btn-vote').unbind('click').on('click', function() {
                     // prevent multi click on came item
                     if (undefined === prevClicked
-                        || prevClicked != this
+                        || prevClicked !== this
                         || (prevClicked === this
                             && sameClicked < 2)
                     ) {
@@ -303,7 +303,7 @@
                     var asttsDate = a.dataset.date;
                     var bsttsDate = b.dataset.date;
 
-                    if (astts == bstts) {
+                    if (astts === bstts) {
                         return (asttsDate > bsttsDate) ? (asttsDate > bsttsDate) ? -1 : 0 : 1;
                     }
                     return (astts > bstts) ? (astts > bstts) ? -1 : 0 : 1;
@@ -324,7 +324,7 @@
                     var asttsDate = a.dataset.date;
                     var bsttsDate = b.dataset.date;
 
-                    if (astts == bstts) {
+                    if (astts === bstts) {
                         return (asttsDate > bsttsDate) ? (asttsDate > bsttsDate) ? -1 : 0 : 1;
                     }
 //                    return (astts > bstts || asttsDate > bsttsDate) ? (astts == bstts || asttsDate > bsttsDate) ? -1 : 0 : 1;
@@ -342,7 +342,7 @@
             $('.vote-count', ticket).each(function() {
                 let value = parseInt($(this).text());
                 votings += isNaN(value) ? 0 : value;
-            })
+            });
             return votings;
         }
 
@@ -377,7 +377,7 @@
                         url: '/ticket/delete/'+ticketDeleteId,
                         type: 'DELETE',
                         success: function(response) {
-                            if (true == response.success) {
+                            if (true === response.success) {
                                 $('#ticket_remove_modal').modal('hide');
                                 $('.ticket[data-id="'+ticketDeleteId+'"]').fadeOut(500, function() {
                                     ticketDeleteId = undefined;
@@ -394,7 +394,7 @@
                         url: '/ticket/archive/'+$(this).closest(".ticket").data('id'),
                         type: 'POST',
                         success: function(response) {
-                            if (true == response.success) {
+                            if (true === response.success) {
                                 self.closest(".ticket").fadeOut(500, function() {
                                     $(this).remove();
                                 });
@@ -429,7 +429,7 @@
                                     "focusout" === event.type
                                     || "blur" === event.type
                                 )
-                                && event.relatedTarget != $(ticketContainer).find('.btn-save')[0]
+                                && event.relatedTarget !== $(ticketContainer).find('.btn-save')[0]
                             )
                         ) {
                             newConententContainer.replaceWith('<div class="col-md-12 content" style="overflow-wrap: break-word;">'+content+'</div>');
@@ -500,9 +500,9 @@
         function handleEventMessage(eventMessage) {
             let eventMessageDataContent = $.parseJSON(eventMessage.data);
             $.each(eventMessageDataContent, function(key, eventMessagePart) {
-                if ('ticket' == key) {
+                if ('ticket' === key) {
                     handleTicketEvent(eventMessagePart);
-                } else if ('voting' == key) {
+                } else if ('voting' === key) {
                     handleVotingEvent(eventMessagePart);
                 }
             });
@@ -510,13 +510,13 @@
 
         function handleTicketEvent(eventMessagePart) {
             // create pushed
-            if (eventMessagePart.create != undefined) {
+            if (eventMessagePart.create !== undefined) {
                 handleTicketCreateEvent(eventMessagePart);
-            } else if (eventMessagePart.update != undefined) {
+            } else if (eventMessagePart.update !== undefined) {
                 handleTicketUpdateEvent(eventMessagePart);
-            } else if (eventMessagePart.archive != undefined) {
+            } else if (eventMessagePart.archive !== undefined) {
                 handleTicketArchivedEvent(eventMessagePart);
-            } else if (eventMessagePart.delete != undefined) {
+            } else if (eventMessagePart.delete !== undefined) {
                 handleTicketDeleteEvent(eventMessagePart);
             }
             if (SORT_TYPE_DATE === sort_type
@@ -540,7 +540,7 @@
             });
 
             if (true === live_notify
-                && eventMessagePart.ownerId != current_user_id
+                && eventMessagePart.ownerId !== current_user_id
             ) {
                 $.notify({
                     // options
@@ -565,7 +565,7 @@
             });
 
             if (true === live_notify
-                && eventMessagePart.ownerId != current_user_id
+                && eventMessagePart.ownerId !== current_user_id
             ) {
                 $.notify({
                     // options
@@ -581,7 +581,7 @@
             $('.ticket[data-id="'+eventMessagePart.delete+'"]').remove();
 
             if (true === live_notify
-                && eventMessagePart.ownerId != current_user_id
+                && eventMessagePart.ownerId !== current_user_id
             ) {
                 $.notify({
                     // options
@@ -597,7 +597,7 @@
             $('.ticket[data-id="'+eventMessagePart.archive+'"]').remove();
 
             if (true === live_notify
-                && eventMessagePart.ownerId != current_user_id
+                && eventMessagePart.ownerId !== current_user_id
             ) {
                 $.notify({
                     // options
@@ -622,11 +622,11 @@
                 if (isNaN(current_points)) {
                     current_points = 0;
                 }
-                if (current_user_id == owner_id
+                if (current_user_id === owner_id
                     && 0 < value
                 ) {
                     $("span.btn-vote[data-id='"+ticket_id+"'][data-value='"+key+"']").addClass("color-heightligth");
-                } else if (current_user_id == owner_id) {
+                } else if (current_user_id === owner_id) {
                     $("span.btn-vote[data-id='"+ticket_id+"'][data-value='"+key+"']").removeClass("color-heightligth");
                 }
                 result = current_points + value;
@@ -640,7 +640,7 @@
             if (SORT_TYPE_VOTINGS === sort_type) {
                 considerCurrentSortConditions();
                 if (true === live_notify
-                    && current_user_id != owner_id
+                    && current_user_id !== owner_id
                 ) {
                     $.notify({
                         // options
@@ -651,7 +651,7 @@
                     });
                 }
             } else if (true === live_notify
-                && current_user_id != owner_id
+                && current_user_id !== owner_id
             ) {
                 $.notify({
                     // options

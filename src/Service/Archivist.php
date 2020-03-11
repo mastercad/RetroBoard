@@ -12,13 +12,10 @@ use App\Entity\Voting;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class Archivist
 {
-    use ControllerTrait;
-    
     private $user = null;
     private $entityManager = null;
 
@@ -60,11 +57,11 @@ class Archivist
                 $votings = $ticket->getVotings();
 
                 $archiveVotings = new ArrayCollection();
-
+php deptrac.phar analyze depfile.yml
                 foreach ($votings as $voting) {
                     $archiveVoting = new ArchiveVoting();
                     $archiveVoting->setCreator($voting->getCreator());
-                    $archiveVoting->setCreated($voting->getCreated());
+                    $archiveVoting->setCreatephp deptrac.phar analyze depfile.ymld($voting->getCreated());
 
                 }
             }

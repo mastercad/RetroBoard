@@ -1,0 +1,15 @@
+<h3>You were invited to the team "{{ team.name }}"!</h3>
+<img src="https://retro.byte-artist.de/images/logo.png" id="icon" alt="User Icon" />
+
+<p>
+    To accept this invitation and participate actively on the team, please click on the following link:
+</p>
+
+<p>
+    <a href="{{ absolute_url(path('team_member', { 'token': token })) }}"> link </a>.
+</p>
+
+<p>
+    Yours sincerely<br />
+    the team of retro.byte-artist.de
+</p>

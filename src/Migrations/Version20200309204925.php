@@ -38,8 +38,10 @@ final class Version20200309204925 extends AbstractMigration
         $this->addSql('CREATE TABLE `team_members` (
               `id` int unsigned NOT NULL AUTO_INCREMENT,
               `member` int unsigned NOT NULL,
+              `team` int unsigned NOT NULL,
+              `roles` json NOT NULL,
               `creator` int unsigned NOT NULL,
-              `created` int unsigned NOT NULL,
+              `created` datetime NOT NULL,
               `modifier` int unsigned DEFAULT NULL,
               `modified` datetime DEFAULT NULL,
               PRIMARY KEY (`id`),
@@ -48,14 +50,38 @@ final class Version20200309204925 extends AbstractMigration
               KEY `team_members_member_IDX` (`member`) USING BTREE,
               KEY `team_members_creator_IDX` (`creator`) USING BTREE,
               KEY `team_members_modifier_IDX` (`modifier`) USING BTREE,
+              KEY `team_members_FK_3` (`team`),
               CONSTRAINT `team_members_FK` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `team_members_FK_1` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+              CONSTRAINT `team_members_FK_1` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `team_members_FK_2` FOREIGN KEY (`member`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `team_members_FK_3` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
+                    );
+
+        $this->addSql('CREATE TABLE `team_invitations` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `team` int unsigned NOT NULL,
+              `email` varchar(250) NOT NULL,
+              `token` varchar(250) NOT NULL,
+              `creator` int unsigned NOT NULL,
+              `created` datetime NOT NULL,
+              `modifier` int unsigned DEFAULT NULL,
+              `modified` datetime DEFAULT NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `un_email_team` (`team`,`email`),
+              KEY `team_invitations_team_IDX` (`team`) USING BTREE,
+              KEY `team_invitations_creator_fk` (`creator`) USING BTREE,
+              KEY `team_invitations_modifier_fk` (`modifier`) USING BTREE,
+              CONSTRAINT `team_invitations_team_fk` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `team_invitations_creator_fk` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `team_invitations_modifier_fk` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
         );
     }
 
     public function down(Schema $schema) : void
     {
+        $this->addSql("DROP TABLE team_invitations");
         $this->addSql("DROP TABLE team_members");
         $this->addSql("DROP TABLE teams");
     }

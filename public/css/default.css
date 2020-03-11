@@ -484,7 +484,8 @@ input[type=password]:placeholder {
   cursor: text;
 }
 
-.preview .btn-edit-board {
+.preview .btn-edit-board,
+.preview .btn-edit-team {
   top: 0;
   right: 0;
   position: absolute;
@@ -625,39 +626,41 @@ ul.navbar-nav .dropdown-menu label {
   top: 0;
   left: -150px;
 /*  display: none;*/
-  overflow-x: hidden;
+/*  overflow-x: hidden;*/
 /*  transition: 0.5s; *//* 0.5 second transition effect to slide in the sidenav */
 /*  background-color: rgba(1, 92, 140, .9); */
   background-color: #015C8C;
 }
 
-.sidebar.visible a {
+.sidebar.visible>li>a {
   color: #FFFFFF;
   left: 0;
 }
 
-.sidebar.visible a span {
+.sidebar.visible>li>a span {
   visibility: visible;
+  display: inline-block;
 }
 
-.sidebar a {
+.sidebar>li>a {
   position: relative;
   left: 145px;
   color: #FFFFFF;
-  display: block;
+  display: inline-block;
   font-weight: bold;
   font-size: 26px;
 }
 
-.sidebar a svg {
+.sidebar>li>a svg {
   text-decoration: none;
 }
 
-.sidebar a span {
+.sidebar>li>a span {
   visibility: hidden;
+  display: none;
 }
 
-.sidebar a:hover {
+.sidebar>li>a:hover {
   color: #8DC4E2;
 }
 
@@ -696,4 +699,8 @@ ul.navbar-nav .dropdown-menu label {
   -moz-transition: left 2s ease-in-out;
   -o-transition: left 2s ease-in-out;
   transition: left 2s ease-in-out;
+}
+
+.btn-adds .dropdown-toggle::after {
+  display:none !important;
 }

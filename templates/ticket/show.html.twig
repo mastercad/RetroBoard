@@ -77,16 +77,5 @@
                 </div>
             </li>
         </ul>
-        {#
-        <div class="options-content rounded bg-white">
-            <ul >
-                {% if app.user.id == ticket.creator.id %}
-                    <li class="btn-ticket-delete">Delete</li>
-                    <li class="btn-ticket-edit">Edit</li>
-                {% endif %}
-                <li class="btn-ticket-comment">Comment</li>
-            </ul>
-        </div>
-        #}
     {% endif %}
 </div>

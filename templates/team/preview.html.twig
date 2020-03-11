@@ -1,0 +1,19 @@
+<div class="preview col-sm-6 col-md-5 col-xs-5 m-5 p-2 border rounded">
+    {% if is_granted('edit', team) %}
+        <a href="/team/create/{{ team.id }}" class="btn-edit-team">
+            <icon class="fas fa-edit"></icon>
+        </a>
+    {% endif %}
+    <a href="/team/{{ team.id }}">
+        <div class="row mr-2">
+            <div class="col-sm-12 colm-md-12 col-xs-12 h3">
+                {{ team.name }}
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col-md-12">
+                {{ 'members'|trans({}, 'labels') }}: {{ team.teamMembers|length }}
+            </div>
+        </div>
+    </a>
+</div>
