@@ -8,17 +8,17 @@ use Doctrine\ORM\Mapping as ORM;
  * BoardMember
  *
  * @ORM\Table(
- *  name="board_members",
+ *  name="board_teams",
  *  indexes={
- *      @ORM\Index(name="board_member_board_fk", columns={"board"}),
- *      @ORM\Index(name="board_member_user_fk", columns={"user"}),
- *      @ORM\Index(name="board_member_modifier_fk", columns={"modifier"}),
- *      @ORM\Index(name="board_member_creator_fk", columns={"creator"})
+ *      @ORM\Index(name="board_teams_team_fk", columns={"team"}),
+ *      @ORM\Index(name="board_teams_board_fk", columns={"board"}),
+ *      @ORM\Index(name="board_teams_modifier_fk", columns={"modifier"}),
+ *      @ORM\Index(name="board_teams_creator_fk", columns={"creator"})
  *  }
  * )
  * @ORM\Entity(repositoryClass="App\Repository\BoardMemberRepository"))
  */
-class BoardMember
+class BoardTeam
 {
     /**
      * @var int
@@ -30,21 +30,14 @@ class BoardMember
     private $id;
 
     /**
-     * @var User
+     * @var Team
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="Team", inversedBy="teams")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="team", referencedColumnName="id", nullable=false)
      * })
      */
-    private $user;
-
-    /**
-     * @var json
-     *
-     * @ORM\Column(name="roles", type="json", length=250, nullable=false)
-     */
-    private $roles;
+    private $team;
 
     /**
      * @var Board
@@ -90,9 +83,7 @@ class BoardMember
      */
     private $modified;
 
-    public function __construct()
-    {
-        $this->roles = ['ROLE_USER'];
+    public function __construct() {
     }
 
     /**
@@ -120,25 +111,25 @@ class BoardMember
     }
 
     /**
-     * Get the value of User
+     * Get the value of Team
      *
-     * @return User
+     * @return Team
      */ 
-    public function getUser()
+    public function getTeam()
     {
-        return $this->user;
+        return $this->team;
     }
 
     /**
-     * Set the value of user
+     * Set the value of team
      *
-     * @param User  $user
+     * @param Team  $team
      *
      * @return  self
      */ 
-    public function setUser(User $user)
+    public function setTeam(Team $team)
     {
-        $this->user = $user;
+        $this->team = $team;
 
         return $this;
     }
@@ -164,37 +155,6 @@ class BoardMember
     {
         $this->board = $board;
 
-        return $this;
-    }
-
-    public function getRoles()
-    {
-        /** @var array $roles */
-        $roles = $this->roles;
-        // damit mindestens eine Rolle gesetzt wird
-        $roles[] = 'ROLE_USER';
-    
-        return array_unique($roles);
-    }
-
-    public function setRoles($roles)
-    {
-        $this->roles = $roles;
-        return $this;
-    }
-
-    public function addRole(string $role)
-    {
-        $this->roles[] = $role;
-        return $this;
-    }
-
-    public function removeRole(string $role)
-    {
-        if (in_array($role, $this->roles)) {
-            $index = array_search($role, $this->roles);
-            unset($this->roles[$index]);
-        }
         return $this;
     }
 

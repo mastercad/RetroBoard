@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -13,7 +12,10 @@ use Serializable;
 /**
  * User
  *
- * @ORM\Table(name="users", indexes={@ORM\Index(name="retro_modifier_fk", columns={"modifier"}), @ORM\Index(name="retro_creator_fk", columns={"creator"})})
+ * @ORM\Table(name="users", indexes={
+ *     @ORM\Index(name="retro_modifier_fk", columns={"modifier"}),
+ *     @ORM\Index(name="retro_creator_fk", columns={"creator"})}
+ * )
  * @ORM\Entity
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
@@ -121,6 +123,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function __construct()
     {
         $this->boards = new ArrayCollection();
+        $this->teams = new ArrayCollection();
         $this->roles = ['ROLE_USER'];
     }
 

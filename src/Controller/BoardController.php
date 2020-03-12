@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\BoardTeam;
+use App\Entity\Team;
+use App\Entity\TeamMember;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -95,11 +98,16 @@ class BoardController extends AbstractController
 
         $this->denyAccessUnlessGranted('create', $board);
 
+        $knownMembers = $this->getDoctrine()->getRepository(BoardMember::class)->findAllKnownMembers($this->getUser());
+        $knownTeams = $this->getDoctrine()->getRepository(TeamMember::class)->findAllKnownMembers($this->getUser());
+
         return $this->render(
             'board/create.html.twig',
             [
                 'form' => $form->createView(),
-                'board' => $board
+                'board' => $board,
+                'knownMembers' => $knownMembers,
+                'knownTeams' => $knownTeams
             ]
         );
     }
@@ -107,7 +115,7 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/create/{id}", name="board_edit", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function editAction($id)
+    public function editAction(int $id)
     {
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
 
@@ -117,13 +125,23 @@ class BoardController extends AbstractController
 
         $this->denyAccessUnlessGranted('edit', $board);
 
+        $boardMembers = $this->getDoctrine()->getRepository(BoardMember::class)->findBy(['board' => $board->getId()]);
+        $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findBy(['board' => $board->getId()]);
+        $knownMembers = $this->getDoctrine()->getRepository(BoardMember::class)->findAllKnownMembers($this->getUser());
+        $knownTeams = $this->getDoctrine()->getRepository(TeamMember::class)->findAllKnownTeams($this->getUser());
+        $knownTeams = $this->getDoctrine()->getRepository(TeamMember::class)->findAllKnownMembers($this->getUser());
+
         $form = $this->createForm(BoardType::class, $board, ['action' => $this->generateUrl('board_save')]);
 
         return $this->render(
             'board/create.html.twig',
             [
                 'form' => $form->createView(),
-                'board' => $board
+                'board' => $board,
+                'boardMembers' => $boardMembers,
+                'boardTeams' => $boardTeams,
+                'knownMembers' => $knownMembers,
+                'knownTeams' => $knownTeams
             ]
         );
     }

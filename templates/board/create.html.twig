@@ -62,22 +62,25 @@
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-xs-12">
                     {{ 'members'|trans({}, 'labels') }}:
+                    <span class="btn-add btn-membership-add">
+                        <icon class="fas fa-plus-circle"></icon>
+                    </span>
                 </div>
                 <div class="col-1"></div>
-                <div class="col-11">
+                <div class="col-11 board-membership-container">
                     <div class="row">
                         <p>
                             {{ 'admins'|trans({}, 'labels') }}:
                         </p>
                         <ul class="col-12 member-container board-admins-container" data-role="ROLE_ADMIN">
-                        {% for boardMember in boardMemberAdmins %}
-                            <li class="board-member small" data-id="{{ boardMember.id }}">
-                                {{ boardMember.user.name }}
-                                {% if 1 < boardMemberAdminCount %}
-                                    <span class="btn-remove btn-member-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
+                            {% for boardMember in boardMemberAdmins %}
+                                <li class="board-member small" data-id="{{ boardMember.id }}">
+                                    {{ boardMember.user.name }}
+                                    {% if 1 < boardMemberAdminCount %}
+                                        <span class="btn-remove btn-member-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
@@ -88,19 +91,41 @@
                             {{ 'users'|trans({}, 'labels') }}:
                         </p>
                         <ul class="col-12 member-container board-users-container" data-role="ROLE_USER">
-                        {% for boardMember in boardMemberUsers %}
-                            <li class="board-member small" data-id="{{ boardMember.id }}">
-                                {{ boardMember.user.name }}
-                                <span class="btn-remove btn-member-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
-                            </li>
-                        {% endfor %}
+                            {% for boardMember in boardMemberUsers %}
+                                <li class="board-member small" data-id="{{ boardMember.id }}">
+                                    {{ boardMember.user.name }}
+                                    <span class="btn-remove btn-member-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-sm-12 col-md-12 col-xs-12">
-                    Einladungen:
+                    {{ 'teams'|trans({}, 'labels') }}:
+                    <span class="btn-add btn-team-add">
+                        <icon class="fas fa-plus-circle"></icon>
+                    </span>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-11 board-team-container">
+                    <div class="row">
+                        <ul class="col-12 team-container board-team-container" data-role="ROLE_ADMIN">
+                            {% for boardTeam in boardTeams %}
+                                <li class="board-team small" data-id="{{ boardMember.id }}">
+                                    {{ boardTeam.team.name }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    {{ 'invitations'|trans({}, 'labels') }}:
                     <span class="btn-add btn-invitation-add">
                         <icon class="fas fa-plus-circle"></icon>
                     </span>
@@ -126,6 +151,58 @@
             </div>
         {% endif %}
         <button class="btn btn-primary btn-save" type="submit">{{ 'save'|trans({}, 'labels') }}</button>
+    </div>
+</div>
+
+<div id="membership_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'add_membership'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>{{ 'Name'|trans({}, 'labels') }}</label>
+                    <input id="membership_name" name="membership-name" type="text" class="form-control" value="" >
+                    <input id="membership_type" name="membership-type" type="hidden" class="form-control" value="" >
+                </div>
+                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{ 'invite'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="team_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'add_team'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>{{ 'Name'|trans({}, 'labels') }}</label>
+                    <input id="team_name" name="team-name" type="text" class="form-control" value="" >
+                    <input id="team_id" name="team-id" type="hidden" class="form-control" value="" >
+                </div>
+                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{ 'invite'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -202,6 +279,30 @@
     </div>
 </div>
 
+<div id="team_remove_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'remove_team'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    {{ 'question_remove_team_from_board'|trans({}, 'messages') }}
+                </div>
+                <div class="error alert alert-danger" style="display: none;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -212,6 +313,7 @@
         });
 
         var invitationDeleteId = undefined;
+        var teamDeleteId = undefined;
         var membershipDeleteId = undefined;
 
         function save() {
@@ -238,6 +340,28 @@
                     window.location.href="/board/"+response.id;
                 }
             });
+        }
+
+        function addMembership(email, id, token) {
+            let membershipRow = $(
+                '<li class="small">'+email+'\
+                    <span class="btn-remove btn-invitation-remove" data-id="'+id+'">\
+                    <icon class="fas fa-minus-circle"></icon></span>\
+                </li>'
+            );
+
+            $('.bord-membership-container ul').append(membershipRow);
+        }
+
+        function addTeam(name, id, token) {
+            let teamRow = $(
+                '<li class="small">'+name+'\
+                    <span class="btn-remove btn-team-remove" data-id="'+id+'">\
+                    <icon class="fas fa-minus-circle"></icon></span>\
+                </li>'
+            );
+
+            $('.bord-team-container ul').append(teamRow);
         }
 
         function addInvitation(email, id, token) {
@@ -323,11 +447,11 @@
                 save();
             });
 
-            $('.btn-copy').unbind('click').on('click', function() {
-                 /* Get the text field */
+            $('.btn-invitation-link-copy').unbind('click').on('click', function() {
+                /* Get the text field */
                 var copyText = $(this).data('token');
                 const el = document.createElement('textarea');
-                el.value = "https://retro.byte-artist.de/board/member/"+copyText;
+                el.value = "https://retro.byte-artist.de/team/member/"+copyText;
                 el.setAttribute('readonly', '');
                 el.style.position = 'absolute';
                 el.style.left = '-9999px';
@@ -337,7 +461,7 @@
                 document.body.removeChild(el);
             });
 
-            $('.btn-resend').unbind('click').on('click', function() {
+            $('.btn-invitation-resend').unbind('click').on('click', function() {
                 let email = $(this).data('email');
                 let boardId = $('#board_id').val();
                 let invitationId = $(this).data('id');
@@ -413,6 +537,34 @@
                 });
             });
 
+            $('.btn-membership-add').unbind('click').on('click', function() {
+                let membershipModal = $('#membership_modal');
+                $(membershipModal).modal();
+
+                $(membershipModal).on('shown.bs.modal', function () {
+                    $(membershipModal).find('#membership_name').trigger('focus');
+                });
+
+                $(membershipModal).on('hidden.bs.modal', function () {
+                    $(membershipModal).find('#membership_name').val("");
+                    $(membershipModal).find('.error').html("").css({"display": "none"});
+                });
+            });
+
+            $('.btn-team-add').unbind('click').on('click', function() {
+                let membershipModal = $('#team_modal');
+                $(membershipModal).modal();
+
+                $(membershipModal).on('shown.bs.modal', function () {
+                    $(membershipModal).find('#team_name').trigger('focus');
+                });
+
+                $(membershipModal).on('hidden.bs.modal', function () {
+                    $(membershipModal).find('#team_name').val("");
+                    $(membershipModal).find('.error').html("").css({"display": "none"});
+                });
+            });
+
             $('.btn-invitation-remove').unbind('click').on('click', function() {
                 let invitationRemoveModal = $('#invitation_remove_modal');
                 invitationDeleteId = $(this).data('id');
@@ -423,13 +575,23 @@
                 });
             });
 
-            $('.btn-member-remove').unbind('click').on('click', function() {
+            $('.btn-membership-remove').unbind('click').on('click', function() {
                 let membershipRemoveModal = $('#membership_remove_modal');
                 membershipDeleteId = $(this).data('id');
                 $(membershipRemoveModal).modal();
 
                 $(membershipRemoveModal).on('hidden.bs.modal', function () {
                     $(membershipRemoveModal).find('.error').html("").css({"display": "none"});
+                });
+            });
+
+            $('.btn-team-remove').unbind('click').on('click', function() {
+                let teamRemoveModal = $('#team_remove_modal');
+                teamDeleteId = $(this).data('id');
+                $(teamRemoveModal).modal();
+
+                $(teamRemoveModal).on('hidden.bs.modal', function () {
+                    $(teamRemoveModal).find('.error').html("").css({"display": "none"});
                 });
             });
 
@@ -456,7 +618,7 @@
             $('#membership_remove_modal .btn-primary').unbind('click').on('click', function() {
                 if (1 < $('.member-container.board-admins-container li').length || "ROLE_ADMIN" != $('.board-member[data-id="'+membershipDeleteId+'"]').closest('.member-container').attr('data-role')) {
                     $.ajax({
-                        url: '/board/member/'+membershipDeleteId,
+                        url: '/team/member/'+membershipDeleteId,
                         type: 'DELETE',
                         success: function(response) {
                             if (true == response.success) {
@@ -473,6 +635,24 @@
                 } else {
                     $('#membership_remove_modal .error').html("Only one admin left, deletion rejected!").fadeIn();
                 }
+            });
+
+            $('#team_remove_modal .btn-primary').unbind('click').on('click', function() {
+                $.ajax({
+                    url: '/team/member/'+teamDeleteId,
+                    type: 'DELETE',
+                    success: function(response) {
+                        if (true == response.success) {
+                            $('span.btn-team-remove[data-id="'+teamDeleteId+'"]').closest('li').fadeOut(500, function() {
+                                $('span.btn-team-remove[data-id="'+teamDeleteId+'"]').closest('li').remove();
+                                $('#team_remove_modal').modal('hide');
+                                teamDeleteId = undefined;
+                            });
+                        } else {
+                            $('#team_remove_modal .error').html(response.message).fadeIn();
+                        }
+                    }
+                })
             });
 
             $('#invitation_modal .btn-primary').unbind('click').on('click', function() {

@@ -8,12 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
  * TeamMembers
  *
  * @ORM\Table(name="team_members", uniqueConstraints={@ORM\UniqueConstraint(name="team_members_UN", columns={"id", "member"})},
- *     indexes={@ORM\Index(name="team_members_creator_IDX", columns={"creator"}),
- *     @ORM\Index(name="team_members_id_IDX", columns={"id"}),
- *     @ORM\Index(name="team_members_member_IDX", columns={"member"}),
- *     @ORM\Index(name="team_members_modifier_IDX", columns={"modifier"})}
+ *     indexes={
+ *          @ORM\Index(name="team_members_creator_IDX", columns={"creator"}),
+ *          @ORM\Index(name="team_members_id_IDX", columns={"id"}),
+ *          @ORM\Index(name="team_members_member_IDX", columns={"member"}),
+ *          @ORM\Index(name="team_members_modifier_IDX", columns={"modifier"})
+ *     }
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TeamMemberRepository"))
  */
 class TeamMember
 {

@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * Board
@@ -81,6 +82,11 @@ class Board
     private $members;
 
     /**
+     * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     */
+    private $teams;
+
+    /**
      * @ORM\OneToMany(targetEntity="BoardSubscriber", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $subscribers;
@@ -96,6 +102,7 @@ class Board
         $this->columns = new ArrayCollection();
         $this->invitations = new ArrayCollection();
         $this->members = new ArrayCollection();
+        $this->teams = new ArrayCollection();
     }
 
     /**
@@ -290,7 +297,7 @@ class Board
 
         return $this;
     }
-    
+
     public function removeBoardMember(BoardMember $boardMember): self
     {
         if ($this->members->contains($boardMember)) {
@@ -298,6 +305,37 @@ class Board
             // set the owning side to null (unless already changed)
             if ($boardMember->getBoard() === $this) {
                 $boardMember->setBoard(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BoardTeam[]
+     */
+    public function getBoardTeams(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addBoardTeam(BoardTeam $boardTeam): self
+    {
+        if (!$this->teams->contains($boardTeam)) {
+            $this->teams[] = $boardTeam;
+            $boardTeam->setBoard($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoardTeam(BoardTeam $boardTeam): self
+    {
+        if ($this->members->contains($boardTeam)) {
+            $this->members->removeElement($boardTeam);
+            // set the owning side to null (unless already changed)
+            if ($boardTeam->getBoard() === $this) {
+                $boardTeam->setBoard(null);
             }
         }
 
