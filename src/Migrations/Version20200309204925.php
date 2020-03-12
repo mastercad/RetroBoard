@@ -77,10 +77,32 @@ final class Version20200309204925 extends AbstractMigration
               CONSTRAINT `team_invitations_modifier_fk` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
         );
+
+        $this->addSql('CREATE TABLE `board_teams` (
+              `id` int unsigned NOT NULL AUTO_INCREMENT,
+              `board` int unsigned NOT NULL,
+              `team` int unsigned NOT NULL,
+              `creator` int unsigned NOT NULL,
+              `created` datetime NOT NULL,
+              `modifier` int unsigned DEFAULT NULL,
+              `modified` datetime DEFAULT NULL,
+              PRIMARY KEY (`id`),
+              KEY `board_teams_id_IDX` (`id`) USING BTREE,
+              KEY `board_teams_creator_IDX` (`creator`) USING BTREE,
+              KEY `board_teams_modifier_IDX` (`modifier`) USING BTREE,
+              KEY `board_teams_board_IDX` (`board`,`team`) USING BTREE,
+              KEY `board_teams_FK_1` (`team`),
+              CONSTRAINT `board_teams_FK` FOREIGN KEY (`board`) REFERENCES `boards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `board_teams_FK_1` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `board_teams_FK_2` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `board_teams_FK_3` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
+        );
     }
 
     public function down(Schema $schema) : void
     {
+        $this->addSql("DROP TABLE board_teans");
         $this->addSql("DROP TABLE team_invitations");
         $this->addSql("DROP TABLE team_members");
         $this->addSql("DROP TABLE teams");
