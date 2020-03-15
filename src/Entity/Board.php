@@ -82,7 +82,7 @@ class Board
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $teams;
 
@@ -316,7 +316,7 @@ class Board
      */
     public function getBoardTeams(): Collection
     {
-        return $this->members;
+        return $this->teams;
     }
 
     public function addBoardTeam(BoardTeam $boardTeam): self

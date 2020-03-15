@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Teams
  *
  * @ORM\Table(name="teams", indexes={@ORM\Index(name="teams_creator_IDX", columns={"creator"}), @ORM\Index(name="teams_id_IDX", columns={"id"}), @ORM\Index(name="teams_modifier_IDX", columns={"modifier"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\TeamRepository"))
  */
 class Team
 {

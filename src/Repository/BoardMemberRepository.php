@@ -3,18 +3,20 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 class BoardMemberRepository extends EntityRepository
 {
     public function findAllKnownMembers(User $user)
     {
-        return $this->createQueryBuilder('board_members')
-            ->select(['user.name'])
-            ->innerJoin('\App\Entity\User', 'user')
-            ->andWhere('board_members.user = :userId')
-            ->setParameter('userId', $user->getId())
-            ->groupBy('user.name')
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('board_members')
+            ->select(['user.id', 'user.name'])
+            ->innerJoin('\App\Entity\User', 'user', Join::WITH, 'user.id = board_members.user')
+            ->where('board_members.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('user.id', 'user.name')
+            ->getQuery();
+
+        return $query->getResult();
     }
 }

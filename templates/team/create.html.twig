@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Create New Team{% endblock %}
+{% block title %}{% if 0 < team.id %}{{ 'edit_team'|trans({}, 'labels') }} "{{ team.name }}" {% else %} {{ 'create_new_team'|trans({}, 'labels') }} {% endif %}{% endblock %}
 
 {% block navigation_additions %}
     <a href="/team/{{ team.id }}" class="m-2 btn-archive-team">

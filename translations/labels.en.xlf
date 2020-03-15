@@ -9,6 +9,10 @@
         <source>Add new board</source>
         <target>Add new board</target>
       </trans-unit>
+      <trans-unit id="add_new_team" resname="add_new_team">
+        <source>Add new team</source>
+        <target>Add new team</target>
+      </trans-unit>
       <trans-unit id="logout" resname="logout">
         <source>Logout</source>
         <target>Logout</target>
@@ -120,6 +124,10 @@
       <trans-unit id="teams" resname="teams">
         <source>Teams</source>
         <target>Teams</target>
+      </trans-unit>
+      <trans-unit id="invitations" resname="invitations">
+        <source>Invitations</source>
+        <target>Invitations</target>
       </trans-unit>
     </body>
   </file>

@@ -42,7 +42,7 @@ class BoardTeam
     /**
      * @var Board
      *
-     * @ORM\ManyToOne(targetEntity="Board", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Board", inversedBy="teams")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="board", referencedColumnName="id", nullable=false)
      * })
@@ -82,9 +82,6 @@ class BoardTeam
      * @ORM\Column(name="modified", type="datetime", nullable=true)
      */
     private $modified;
-
-    public function __construct() {
-    }
 
     /**
      * Get the value of id
@@ -250,6 +247,37 @@ class BoardTeam
     public function setModified($modified)
     {
         $this->modified = $modified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BoardMember[]
+     */
+    public function getBoardMember(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addBoardMember(BoardMember $boardMember): self
+    {
+        if (!$this->teams->contains($boardMember)) {
+            $this->teams[] = $boardMember;
+            $boardMember->setBoardTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoardTeam(BoardTeam $boardTeam): self
+    {
+        if ($this->members->contains($boardTeam)) {
+            $this->members->removeElement($boardTeam);
+            // set the owning side to null (unless already changed)
+            if ($boardTeam->getBoard() === $this) {
+                $boardTeam->setBoard(null);
+            }
+        }
 
         return $this;
     }

@@ -14,7 +14,9 @@
             <div class="row">
         {% endif %}
 
-        {% include '/team/preview.html.twig' with {'team': teamMember.team, 'teamCount': teamCount} only %}
+        {% if teamMember.team is not empty %}
+            {% include '/team/preview.html.twig' with {'team': teamMember.team, 'teamCount': teamCount} only %}
+        {% endif %}
 
         {% if teamCount is not divisible by(2) %}
             </div>

@@ -24,9 +24,9 @@ class TeamController extends AbstractController
     {
         $teamMembers = $entityManager->getRepository(TeamMember::class)->findBy(['member' => $this->getUser()]);
 
-        if (empty($teamMembers)) {
-            $teamMembers[]['team'] = $this->getDoctrine()->getRepository(Team::class)->findOneBy(['name' => 'Demo Team']);
-        }
+//        if (empty($teamMembers)) {
+//            $teamMembers[]['team'] = $this->getDoctrine()->getRepository(Team::class)->findOneBy(['name' => 'Demo Team']);
+//        }
 
         return $this->render(
             'team/index.html.twig',

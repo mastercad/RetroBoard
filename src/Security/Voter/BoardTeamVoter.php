@@ -3,13 +3,14 @@
 namespace App\Security\Voter;
 
 use App\Entity\Board;
+use App\Entity\BoardTeam;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class BoardVoter extends Voter
+class BoardTeamVoter extends Voter
 {
     private $security;
     private $logger;
@@ -22,10 +23,8 @@ class BoardVoter extends Voter
 
     protected function supports($attribute, $subject)
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['edit', 'create', 'show', 'delete', 'archive'])
-            && $subject instanceof Board;
+        return in_array($attribute, ['edit', 'create', 'show', 'delete'])
+            && $subject instanceof BoardTeam;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -44,7 +43,7 @@ class BoardVoter extends Voter
                     return false;
                 }
 
-                $results = $subject->getBoardMembers()->filter(
+                $results = $subject->getBoard()->getBoardMembers()->filter(
                     function($boardMember) use ($user) {
                         return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
@@ -57,26 +56,9 @@ class BoardVoter extends Voter
                     return true;
                 }
 
-                $resultMembers = $subject->getBoardMembers()->filter(
+                $results = $subject->getBoard()->getBoardMembers()->filter(
                         function ($boardMember) use ($user) {
-                            var_dump($boardMember);
                             return $boardMember->getUser() === $user;
-                    }
-                );
-
-                $resultTeamMembers = $subject->getBoardMembers()->getBoard()->filter(
-                        function ($boardMember) use ($user) {
-                            var_dump($boardMember);
-                            return $boardMember->getUser() === $user;
-                    }
-                );
-
-                return 0 < count($resultMembers) || 0 < count($resultTeamMembers);
-            case 'archive':
-                $results = $subject->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
-                        return $boardMember->getUser() === $user
-                            && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
                 return 0 < count($results);

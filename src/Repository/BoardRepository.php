@@ -1,12 +1,22 @@
 <?php
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use App\Entity\Board;
+use App\Entity\User;
 use App\Entity\Column;
+use Doctrine\ORM\EntityRepository;
 
 class BoardRepository extends EntityRepository
 {
+    public function findAllAvailableBoardsByUser(User $user)
+    {
+        return $this->createQueryBuilder('board')
+            ->innerJoin('board.teams', 'teams')
+            ->addSelect('teams')
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findActive(int $boardId)
     {
         return $this->createQueryBuilder('board')

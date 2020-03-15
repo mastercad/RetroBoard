@@ -9,6 +9,10 @@
         <source>Add new board</source>
         <target>Neues Board anlegen</target>
       </trans-unit>
+      <trans-unit id="add_new_team" resname="add_new_team">
+        <source>Add new team</source>
+        <target>Neue Gruppe anlegen</target>
+      </trans-unit>
       <trans-unit id="logout" resname="logout">
         <source>Logout</source>
         <target>Abmelden</target>
@@ -124,6 +128,10 @@
       <trans-unit id="teams" resname="teams">
         <source>Teams</source>
         <target>Gruppen</target>
+      </trans-unit>
+      <trans-unit id="invitations" resname="invitations">
+        <source>Invitations</source>
+        <target>Einladungen</target>
       </trans-unit>
     </body>
   </file>

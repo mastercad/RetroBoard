@@ -708,3 +708,15 @@ ul.navbar-nav .dropdown-menu label {
 .btn-adds .dropdown-toggle::after {
   display:none !important;
 }
+
+.color-heightligth {
+  color: #47CF47;
+}
+
+.ui-widget {
+  z-index: 1100;
+}
+
+li.ui-menu-item {
+  font-size: 14px;
+}
