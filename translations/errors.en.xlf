@@ -5,6 +5,122 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
+      <trans-unit id="user_unknown" resname="user_unknown">
+        <source>User unknown</source>
+        <target>User unknown</target>
+      </trans-unit>
+      <trans-unit id="board_not_found" resname="board_not_found">
+        <source>Board not found</source>
+        <target>Board not found</target>
+      </trans-unit>
+      <trans-unit id="error_one_column_needed_in_board" resname="error_one_column_needed_in_board">
+        <source>At least one column is required</source>
+        <target>At least one column is required</target>
+      </trans-unit>
+      <trans-unit id="one_or_more_columns_already_exists_in_board" resname="one_or_more_columns_already_exists_in_board">
+        <source>One or more columns already exist on this board</source>
+        <target>One or more columns already exist on this board</target>
+      </trans-unit>
+      <trans-unit id="name_must_be_set" resname="name_must_be_set">
+        <source>A name must be set</source>
+        <target>A name must be set</target>
+      </trans-unit>
+      <trans-unit id="email_invalid" resname="email_invalid">
+        <source>Email invalid</source>
+        <target>Email invalid</target>
+      </trans-unit>
+      <trans-unit id="invitation_not_found" resname="invitation_not_found">
+        <source>Invitation not found</source>
+        <target>Invitation not found</target>
+      </trans-unit>
+      <trans-unit id="team_not_found_for_board" resname="team_not_found_for_board">
+        <source>This team was not found for this board</source>
+        <target>This team was not found for this board</target>
+      </trans-unit>
+      <trans-unit id="member_not_found_for_board" resname="member_not_found_for_board">
+        <source>This member was not found for this board</source>
+        <target>This member was not found for this board</target>
+      </trans-unit>
+      <trans-unit id="member_already_exists" resname="member_already_exists">
+        <source>This member already exists</source>
+        <target>This member already exists</target>
+      </trans-unit>
+      <trans-unit id="member_already_added" resname="member_already_added">
+        <source>Member already added</source>
+        <target>Member already added</target>
+      </trans-unit>
+      <trans-unit id="team_unknown" resname="team_unknown">
+        <source>The team was not found.</source>
+        <target>The team was not found.</target>
+      </trans-unit>
+      <trans-unit id="team_already_added" resname="team_already_added">
+        <source>Team already added</source>
+        <target>Team already added</target>
+      </trans-unit>
+      <trans-unit id="board_member_not_found" resname="board_member_not_found">
+        <source>This Member for this board not found</source>
+        <target>This Member for this board not found</target>
+      </trans-unit>
+      <trans-unit id="team_not_found" resname="team_not_found">
+        <source>Team not found</source>
+        <target>Team not found</target>
+      </trans-unit>
+      <trans-unit id="team_already_invited" resname="team_already_invited">
+        <source>Team already invited</source>
+        <target>Team already invited</target>
+      </trans-unit>
+      <trans-unit id="team_member_already_invited" resname="team_member_already_invited">
+        <source>The member has already been invited to this team</source>
+        <target>The member has already been invited to this team</target>
+      </trans-unit>
+      <trans-unit id="member_not_found" resname="member_not_found">
+        <source>The member was not found</source>
+        <target>The member was not found</target>
+      </trans-unit>
+      <trans-unit id="team_member_not_found" resname="team_member_not_found">
+        <source>The member was not found for this team</source>
+        <target>The member was not found for this team</target>
+      </trans-unit>
+      <trans-unit id="ticket_not_found" resname="ticket_not_found">
+        <source>Ticket not found</source>
+        <target>Ticket not found</target>
+      </trans-unit>
+      <trans-unit id="ticket_deletion_not_allowed" resname="ticket_deletion_not_allowed">
+        <source>Deleting the ticket is not permitted</source>
+        <target>Deleting the ticket is not permitted</target>
+      </trans-unit>
+      <trans-unit id="something_went_wrong" resname="something_went_wrong">
+        <source>Something went wrong</source>
+        <target>Something went wrong</target>
+      </trans-unit>
+      <trans-unit id="only_one_admin_left" resname="only_one_admin_left">
+        <source>There is only one admin left</source>
+        <target>There is only one admin left</target>
+      </trans-unit>
+      <trans-unit id="only_this_types_accepted" resname="only_this_types_accepted">
+        <source>Only these types are allowed: %types%</source>
+        <target>Only these types are allowed: %types%</target>
+      </trans-unit>
+      <trans-unit id="max_upload_limit" resname="max_upload_limit">
+        <source>The maximum upload limit is %limit%</source>
+        <target>The maximum upload limit is %limit%</target>
+      </trans-unit>
+      <trans-unit id="email_already_invited" resname="email_already_invited">
+        <source>A user with this email has already been invited.</source>
+        <target>A user with this email has already been invited.</target>
+      </trans-unit>
+      <trans-unit id="error_ticket_creation" resname="error_ticket_creation">
+        <source>There was an error creating this ticket.</source>
+        <target>There was an error creating this ticket.</target>
+      </trans-unit>
+      <trans-unit id="error_ticket_deletion" resname="error_ticket_deletion">
+        <source>There was an error deleting this ticket.</source>
+        <target>There was an error deleting this ticket.</target>
+      </trans-unit>
+      <trans-unit id="user_already_added" resname="user_already_added">
+        <source>This user has already been added.</source>
+        <target>This user has already been added.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

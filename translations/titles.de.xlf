@@ -37,6 +37,170 @@
         <source>Archive of</source>
         <target>Archiv von</target>
       </trans-unit>
+      <trans-unit id="add_membership" resname="add_membership">
+        <source>Add Membership</source>
+        <target>Mitgliedschaft hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="add_team" resname="add_team">
+        <source>Add Team</source>
+        <target>Team hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="remove_team" resname="remove_team">
+        <source>Remove Team</source>
+        <target>Team entfernen</target>
+      </trans-unit>
+      <trans-unit id="error" resname="error">
+        <source>Error</source>
+        <target>Fehler</target>
+      </trans-unit>
+      <trans-unit id="information" resname="information">
+        <source>Information</source>
+        <target>Information</target>
+      </trans-unit>
+      <trans-unit id="alert" resname="alert">
+        <source>Alert</source>
+        <target>Achtung</target>
+      </trans-unit>
+      <trans-unit id="warning" resname="warning">
+        <source>Warning</source>
+        <target>Achtung</target>
+      </trans-unit>
+      <trans-unit id="success" resname="success">
+        <source>Success</source>
+        <target>Erfolgreich</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_new_column_to_board" resname="click_to_add_new_column_to_board">
+        <source>Click here to add a new column to the board.</source>
+        <target>Hier klicken um dem Board eine neue Spalte hinzuzufügen.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_existing_user_to_board" resname="click_to_add_existing_user_to_board">
+        <source>Click here to add an existing user to the board.</source>
+        <target>Hier klicken um dem Board ein bereits existierendes Mitglied hinzuzufügen</target>
+      </trans-unit>
+      <trans-unit id="remove_user_from_board" resname="remove_user_from_board">
+        <source>Click here to remove member %name% from the board.</source>
+        <target>Hier klicken um Mitglied %name% vom Board zu entfernen.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_existing_team_to_board" resname="click_to_add_existing_team_to_board">
+        <source>Click here to add an existing team to the board.</source>
+        <target>Hier klicken um eine bereits existierende Gruppe zum Board hinzuzufügen.</target>
+      </trans-unit>
+      <trans-unit id="remove_team_from_board" resname="remove_team_from_board">
+        <source>Click here to remove team %team% from the board.</source>
+        <target>Hier klicken um Team %team% vom Board zu entfernen.</target>
+      </trans-unit>
+      <trans-unit id="click_to_invite_new_member_via_email" resname="click_to_invite_new_member_via_email">
+        <source>Click here to invite a user to the board via email.</source>
+        <target>Hier klicken um einen Benutzer via Email einzuladen.</target>
+      </trans-unit>
+      <trans-unit id="remove_invitation" resname="remove_invitation">
+        <source>Click here to remove the invitation.</source>
+        <target>Hier klicken um die Einladung zu entfernen.</target>
+      </trans-unit>
+      <trans-unit id="resend_invitation" resname="resend_invitation">
+        <source>Click here to resend the invitation.</source>
+        <target>Hier klicken um die Einladung erneut zu senden.</target>
+      </trans-unit>
+      <trans-unit id="copy_invitation_to_clipboard" resname="copy_invitation_to_clipboard">
+        <source>Click here to copy the invitation link to the clipboard.</source>
+        <target>Hier klicken um den Link für die Einladung ins Clipboard zu kopieren.</target>
+      </trans-unit>
+      <trans-unit id="remove_board" resname="remove_board">
+        <source>Delete board.</source>
+        <target>Board löschen</target>
+      </trans-unit>
+      <trans-unit id="error_board_save" resname="error_board_save">
+        <source>Error! Board could not be saved!</source>
+        <target>Fehler! Das Board konnte nicht gespeichert werden!</target>
+      </trans-unit>
+      <trans-unit id="board_save_success" resname="board_save_success">
+        <source>Board was saved successfully!</source>
+        <target>Board wurde erfolgreich gespeichert!</target>
+      </trans-unit>
+      <trans-unit id="error_board_deletion" resname="error_board_deletion">
+        <source>Error! Board could not be deleted!</source>
+        <target>Fehler! Board konnte nicht gelöscht werden!</target>
+      </trans-unit>
+      <trans-unit id="delete_ticket" resname="delete_ticket">
+        <source>Delete ticket</source>
+        <target>Ticket löschen</target>
+      </trans-unit>
+      <trans-unit id="error_ticket_creation" resname="error_ticket_creation">
+        <source>Error! Ticket could not be created!</source>
+        <target>Fehler! Ticket konnte nicht erstellt werden!</target>
+      </trans-unit>
+      <trans-unit id="error_ticket_deletion" resname="error_ticket_deletion">
+        <source>Error! Ticket could not be deleted!</source>
+        <target>Fehler! Ticket konnte nicht gelöscht werden!</target>
+      </trans-unit>
+      <trans-unit id="reset_password" resname="reset_password">
+        <source>Reset Password</source>
+        <target>Passwort zurücksetzen</target>
+      </trans-unit>
+      <trans-unit id="forgot_password" resname="forgot_password">
+        <source>Forgot Password</source>
+        <target>Passwort vergessen</target>
+      </trans-unit>
+      <trans-unit id="login" resname="login">
+        <source>Login</source>
+        <target>Anmeldung</target>
+      </trans-unit>
+      <trans-unit id="new_password_is_set" resname="new_password_is_set">
+        <source>A new password has been set</source>
+        <target>Ein neues Passwort wurde gesetzt</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_existing_user_to_team" resname="click_to_add_existing_user_to_team">
+        <source>Click here to add an existing member to the team.</source>
+        <target>Hier klicken um ein existierendes Mitglied der Gruppe hinzuzufügen.</target>
+      </trans-unit>
+      <trans-unit id="remove_member_from_team" resname="remove_member_from_team">
+        <source>Click here to remove member %name% from the team.</source>
+        <target>Hier klicken um Mitglied %name% aus der Gruppe zu entfernen.</target>
+      </trans-unit>
+      <trans-unit id="ticket_overview" resname="ticket_overview">
+        <source>Ticket Overview</source>
+        <target>Ticket Übersicht</target>
+      </trans-unit>
+      <trans-unit id="remove_column" resname="remove_column">
+        <source>Click here to remove column %column% from Board.</source>
+        <target>Hier klicken um Spalte %column% vom Board zu entfernen.</target>
+      </trans-unit>
+      <trans-unit id="request_new_password" resname="request_new_password">
+        <source>Request new password</source>
+        <target>Neues Passwort angefragt</target>
+      </trans-unit>
+      <trans-unit id="new_password" resname="new_password">
+        <source>New password</source>
+        <target>Neues Passwort</target>
+      </trans-unit>
+      <trans-unit id="click_to_invite_member_via_email" resname="click_to_invite_member_via_email">
+        <source>Click here to invite a user via email.</source>
+        <target>Hier klicken um einen Benutzer per EMail einzuladen.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_new_board" resname="click_to_add_new_board">
+        <source>Click here to add new board.</source>
+        <target>Hier klicken um ein neues Board anzulegen.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_new_team" resname="click_to_add_new_team">
+        <source>Click here to add new team.</source>
+        <target>Hier klicken um eine neue Gruppe anzulegen.</target>
+      </trans-unit>
+      <trans-unit id="click_to_edit_board" resname="click_to_edit_board">
+        <source>Click here to edit this board.</source>
+        <target>Hier klicken um dieses Board zu Bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="click_to_edit_team" resname="click_to_edit_team">
+        <source>Click here to edit this team.</source>
+        <target>Hier klicken um diese Gruppe zu Bearbeiten.</target>
+      </trans-unit>
+      <trans-unit id="team_save_success" resname="team_save_success">
+        <source>Team was saved successfully!</source>
+        <target>Gruppe erfolgreich gespeichert!</target>
+      </trans-unit>
+      <trans-unit id="error_team_save" resname="error_team_save">
+        <source>Error! Team could not be saved!</source>
+        <target>Fehler! Die Gruppe konnte nicht gespeichert werden!</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

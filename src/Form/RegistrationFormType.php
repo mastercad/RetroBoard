@@ -23,6 +23,7 @@ class RegistrationFormType extends AbstractType
                 TextType::class,
                 [
                     'label' => false,
+                    'translation_domain' => 'labels',
                     'attr' => [
                         'placeholder' => 'Name',
                         'class' => 'fadeIn second'
@@ -34,6 +35,7 @@ class RegistrationFormType extends AbstractType
                         new Length([
                             'min' => 6,
                             'minMessage' => 'Your name should be at least {{ limit }} characters',
+//                            'minMessage' => 'fvxWW3V',
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
@@ -44,6 +46,7 @@ class RegistrationFormType extends AbstractType
                 TextType::class,
                 [
                     'label' => false,
+                    'translation_domain' => 'labels',
                     'attr' => [
                         'placeholder' => 'E-Mail',
                         'class' => 'fadeIn third'
@@ -65,15 +68,16 @@ class RegistrationFormType extends AbstractType
                 ]
             )
             ->add(
-                'password', 
-                PasswordType::class, 
+                'password',
+                PasswordType::class,
                 [
                     // instead of being set onto the object directly,
                     // this is read and encoded in the controller
                     'label' => false,
                     'mapped' => false,
+                    'translation_domain' => 'labels',
                     'attr' => [
-                        'placeholder' => 'Password',
+                        'placeholder' => 'password',
                         'class' => 'fadeIn third'
                     ],
                     'constraints' => [
@@ -90,12 +94,15 @@ class RegistrationFormType extends AbstractType
                 ]
             )
             ->add(
-                'agreeTerms', 
-                CheckboxType::class, 
+                'agreeTerms',
+                CheckboxType::class,
                 [
+                    'label' => 'agree_terms',
                     'mapped' => false,
+                    'translation_domain' => 'labels',
                     'attr' => [
-                        'class' => 'fadeIn third'
+                        'class' => 'fadeIn third',
+                        'style' => 'margin-left: 10px'
                     ],
                     'label_attr' => [
                         'class' => 'fadeIn third'

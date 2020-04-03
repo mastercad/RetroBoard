@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BoardMember
+ * BoardTeam
  *
  * @ORM\Table(
  *  name="board_teams",
@@ -16,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="board_teams_creator_fk", columns={"creator"})
  *  }
  * )
- * @ORM\Entity(repositoryClass="App\Repository\BoardMemberRepository"))
+ * @ORM\Entity(repositoryClass="App\Repository\BoardTeamRepository"))
  */
 class BoardTeam
 {
@@ -32,7 +33,7 @@ class BoardTeam
     /**
      * @var Team
      *
-     * @ORM\ManyToOne(targetEntity="Team", inversedBy="teams")
+     * @ORM\ManyToOne(targetEntity="Team", inversedBy="boardTeams")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="team", referencedColumnName="id", nullable=false)
      * })
@@ -42,7 +43,7 @@ class BoardTeam
     /**
      * @var Board
      *
-     * @ORM\ManyToOne(targetEntity="Board", inversedBy="teams")
+     * @ORM\ManyToOne(targetEntity="Board", inversedBy="boardTeams")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="board", referencedColumnName="id", nullable=false)
      * })
@@ -86,8 +87,8 @@ class BoardTeam
     /**
      * Get the value of id
      *
-     * @return  int
-     */ 
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -96,10 +97,10 @@ class BoardTeam
     /**
      * Set the value of id
      *
-     * @param  int  $id
+     * @param int $id
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -111,7 +112,7 @@ class BoardTeam
      * Get the value of Team
      *
      * @return Team
-     */ 
+     */
     public function getTeam()
     {
         return $this->team;
@@ -120,11 +121,11 @@ class BoardTeam
     /**
      * Set the value of team
      *
-     * @param Team  $team
+     * @param Team $team
      *
-     * @return  self
-     */ 
-    public function setTeam(Team $team)
+     * @return self
+     */
+    public function setTeam(?Team $team)
     {
         $this->team = $team;
 
@@ -134,8 +135,8 @@ class BoardTeam
     /**
      * Get the value of board
      *
-     * @return  Board
-     */ 
+     * @return Board
+     */
     public function getBoard()
     {
         return $this->board;
@@ -146,8 +147,8 @@ class BoardTeam
      *
      * @param Board $board
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setBoard(?Board $board)
     {
         $this->board = $board;
@@ -159,7 +160,7 @@ class BoardTeam
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -168,10 +169,10 @@ class BoardTeam
     /**
      * Set the value of creator
      *
-     * @param User  $creator
+     * @param User $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -183,7 +184,7 @@ class BoardTeam
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -192,10 +193,10 @@ class BoardTeam
     /**
      * Set the value of created
      *
-     * @param \DateTime  $created
+     * @param \DateTime $created
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -207,7 +208,7 @@ class BoardTeam
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -216,10 +217,10 @@ class BoardTeam
     /**
      * Set the value of modifier
      *
-     * @param User  $modifier
+     * @param User $modifier
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -231,7 +232,7 @@ class BoardTeam
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -242,42 +243,11 @@ class BoardTeam
      *
      * @param \DateTime|null  $modified
      *
-     * @return  self
-     */ 
+     * @return self
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|BoardMember[]
-     */
-    public function getBoardMember(): Collection
-    {
-        return $this->members;
-    }
-
-    public function addBoardMember(BoardMember $boardMember): self
-    {
-        if (!$this->teams->contains($boardMember)) {
-            $this->teams[] = $boardMember;
-            $boardMember->setBoardTeam($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBoardTeam(BoardTeam $boardTeam): self
-    {
-        if ($this->members->contains($boardTeam)) {
-            $this->members->removeElement($boardTeam);
-            // set the owning side to null (unless already changed)
-            if ($boardTeam->getBoard() === $this) {
-                $boardTeam->setBoard(null);
-            }
-        }
 
         return $this;
     }

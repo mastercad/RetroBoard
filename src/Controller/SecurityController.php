@@ -13,9 +13,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SecurityController extends AbstractController
 {
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @Route("/login", name="app_login", options={"permanent"=true, "keepRequestMethod"=true})
      */
@@ -64,7 +72,7 @@ class SecurityController extends AbstractController
         $email = $request->get('email');
 
         $emailConstraint = new Email();
-        $emailConstraint->message = 'Invalid email address';
+        $emailConstraint->message = $this->translator->trans('email_invalid', [], 'errors');
 
         $errorList = $validator->validate($email, $emailConstraint);
 
@@ -89,6 +97,7 @@ class SecurityController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
+                /** @TODO translate */
                 $message = new \Swift_Message('Password request for https://retro.byte-artist.de');
                 $message->setFrom('no-reply@byte-artist.de')
                     ->setTo($email)

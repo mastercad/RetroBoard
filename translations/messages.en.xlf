@@ -5,10 +5,6 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
-      <trans-unit id="error_occurred_please_repeat" resname="error_occurred_please_repeat">
-        <source>An error has occurred, please repeat the process!</source>
-        <target>An error has occurred, please repeat the process!</target>
-      </trans-unit>
       <trans-unit id="your_text_here" resname="your_text_here">
         <source>Your text here ...</source>
         <target>Your text here ...</target>
@@ -20,6 +16,118 @@
       <trans-unit id="question_remove_member_from_board" resname="question_remove_member_from_board">
         <source>Should the member really be removed from the board?</source>
         <target>Should the member really be removed from the board?</target>
+      </trans-unit>
+      <trans-unit id="question_remove_team_from_board" resname="question_remove_team_from_board">
+        <source>Should the team really be removed from the board?</source>
+        <target>Should the team really be removed from the board?</target>
+      </trans-unit>
+      <trans-unit id="question_remove_member_from_team" resname="question_remove_member_from_team">
+        <source>Should the member really be removed from the team?</source>
+        <target>Should the member really be removed from the team?</target>
+      </trans-unit>
+      <trans-unit id="board_saved" resname="board_saved">
+        <source>The board was saved successfully</source>
+        <target>The board was saved successfully</target>
+      </trans-unit>
+      <trans-unit id="board_member_saved" resname="board_member_saved">
+        <source>The member was successfully added to the board</source>
+        <target>The member was successfully added to the board</target>
+      </trans-unit>
+      <trans-unit id="success" resname="success">
+        <source>Successful</source>
+        <target>Successful</target>
+      </trans-unit>
+      <trans-unit id="invitation_removed" resname="invitation_removed">
+        <source>The invitation was removed successfully</source>
+        <target>The invitation was removed successfully</target>
+      </trans-unit>
+      <trans-unit id="board_removed" resname="board_removed">
+        <source>The board was removed successfully</source>
+        <target>The board was removed successfully</target>
+      </trans-unit>
+      <trans-unit id="team_removed_from_board" resname="team_removed_from_board">
+        <source>The team was successfully removed from the board.</source>
+        <target>The team was successfully removed from the board.</target>
+      </trans-unit>
+      <trans-unit id="member_removed_from_board" resname="member_removed_from_board">
+        <source>The member was successfully removed from the board.</source>
+        <target>The member was successfully removed from the board.</target>
+      </trans-unit>
+      <trans-unit id="board_successfully_subscribed" resname="board_successfully_subscribed">
+        <source>The board was successfully subscribed to.</source>
+        <target>The board was successfully subscribed to.</target>
+      </trans-unit>
+      <trans-unit id="board_successfully_unsubscribed" resname="board_successfully_unsubscribed">
+        <source>The board was successfully unsubscribed.</source>
+        <target>The board was successfully unsubscribed.</target>
+      </trans-unit>
+      <trans-unit id="team_created" resname="team_created">
+        <source>The team was created successfully.</source>
+        <target>The team was created successfully.</target>
+      </trans-unit>
+      <trans-unit id="team_removed" resname="team_removed">
+        <source>The team was successfully removed.</source>
+        <target>The team was successfully removed.</target>
+      </trans-unit>
+      <trans-unit id="member_removed" resname="member_removed">
+        <source>The member was successfully removed.</source>
+        <target>The member was successfully removed.</target>
+      </trans-unit>
+      <trans-unit id="team_member_saved" resname="team_member_saved">
+        <source>The member successfully added to the team.</source>
+        <target>The member successfully added to the team.</target>
+      </trans-unit>
+      <trans-unit id="ticket_removed" resname="ticket_removed">
+        <source>The ticket was removed successfully.</source>
+        <target>The ticket was removed successfully.</target>
+      </trans-unit>
+      <trans-unit id="ticket_archived" resname="ticket_archived">
+        <source>The ticket was successfully archived.</source>
+        <target>The ticket was successfully archived.</target>
+      </trans-unit>
+      <trans-unit id="ticket_created" resname="ticket_created">
+        <source>The ticket was successfully created.</source>
+        <target>The ticket was successfully created.</target>
+      </trans-unit>
+      <trans-unit id="ticket_updated" resname="ticket_updated">
+        <source>The ticket was successfully updated.</source>
+        <target>The ticket was successfully updated.</target>
+      </trans-unit>
+      <trans-unit id="successfully_saved" resname="successfully_saved">
+        <source>Successfully saved.</source>
+        <target>Successfully saved.</target>
+      </trans-unit>
+      <trans-unit id="question_remove_board" resname="question_remove_board">
+        <source>Are you sure you want to remove this board? It also removes all connections to teams and members.</source>
+        <target>Are you sure you want to remove this board? It also removes all connections to teams and members.</target>
+      </trans-unit>
+      <trans-unit id="should_this_ticket_really_be_removed_from_board" resname="should_this_ticket_really_be_removed_from_board">
+        <source>Are you sure you want to delete this ticket?</source>
+        <target>Are you sure you want to delete this ticket?</target>
+      </trans-unit>
+      <trans-unit id="votings_changed_tickets_reordered" resname="votings_changed_tickets_reordered">
+        <source>The voting has changed, the tickets are re-sorted.</source>
+        <target>The voting has changed, the tickets are re-sorted.</target>
+      </trans-unit>
+      <trans-unit id="error_occurred_please_repeat" resname="error_occurred_please_repeat">
+        <source>An error has occurred, please try again.</source>
+        <target>An error has occurred, please try again.</target>
+      </trans-unit>
+      <trans-unit id="error_occurred" resname="error_occurred">
+        <source>An error has occurred.</source>
+        <target>An error has occurred.</target>
+      </trans-unit>
+      <trans-unit id="password_reset_login" resname="password_reset_login">
+        <source>Enter Email to reset Password.</source>
+        <target>Enter Email to reset Password.</target>
+      </trans-unit>
+      <trans-unit id="password_request_send" resname="password_request_send">
+        <source>A request for a new password has been sent. This link must be confirmed, after which it is possible to set a new password.</source>
+        <target>A request for a new password has been sent. This link must be confirmed, after which it is possible to set a new password.</target>
+      </trans-unit>
+      <trans-unit id="question_remove_team" resname="question_remove_team">
+        <source>Are you sure you want to remove this team?</source>
+        <target>Are you sure you want to remove this team?</target>
       </trans-unit>
     </body>
   </file>

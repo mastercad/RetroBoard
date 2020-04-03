@@ -5,10 +5,6 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
-      <trans-unit id="error_occurred_please_repeat" resname="error_occurred_please_repeat">
-        <source>An error has occurred, please repeat the process!</source>
-        <target>Prišlo je do napake, ponovite postopek!</target>
-      </trans-unit>
       <trans-unit id="your_text_here" resname="your_text_here">
         <source>Your text here ...</source>
         <target>Vaše besedilo tukaj ...</target>
@@ -20,6 +16,118 @@
       <trans-unit id="question_remove_member_from_board" resname="question_remove_member_from_board">
         <source>Should the member really be removed from the board?</source>
         <target>Bi morali člana res odstraniti z deske?</target>
+      </trans-unit>
+      <trans-unit id="question_remove_team_from_board" resname="question_remove_team_from_board">
+        <source>Should the team really be removed from the board?</source>
+        <target>Je treba ekipo res odstraniti z deske?</target>
+      </trans-unit>
+      <trans-unit id="question_remove_member_from_team" resname="question_remove_member_from_team">
+        <source>Should the member really be removed from the team?</source>
+        <target>Bi morali člana res odstraniti iz ekipe?</target>
+      </trans-unit>
+      <trans-unit id="board_saved" resname="board_saved">
+        <source>The board was saved successfully.</source>
+        <target>Plošča je bila uspešno shranjena.</target>
+      </trans-unit>
+      <trans-unit id="board_member_saved" resname="board_member_saved">
+        <source>The member was successfully added to the board.</source>
+        <target>Član je bil uspešno dodan v odbor.</target>
+      </trans-unit>
+      <trans-unit id="success" resname="success">
+        <source>Successful.</source>
+        <target>Uspešno.</target>
+      </trans-unit>
+      <trans-unit id="invitation_removed" resname="invitation_removed">
+        <source>The invitation was removed successfully.</source>
+        <target>Povabilo je bilo uspešno odstranjeno.</target>
+      </trans-unit>
+      <trans-unit id="board_removed" resname="board_removed">
+        <source>The board was removed successfully.</source>
+        <target>Plošča je bila uspešno odstranjena.</target>
+      </trans-unit>
+      <trans-unit id="team_removed_from_board" resname="team_removed_from_board">
+        <source>The team was successfully removed from the board.</source>
+        <target>Ekipa je bila uspešno odstranjena z deske.</target>
+      </trans-unit>
+      <trans-unit id="member_removed_from_board" resname="member_removed_from_board">
+        <source>The member was successfully removed from the board.</source>
+        <target>Član je bil uspešno odstranjen iz upravnega odbora.</target>
+      </trans-unit>
+      <trans-unit id="board_successfully_subscribed" resname="board_successfully_subscribed">
+        <source>The board was successfully subscribed to.</source>
+        <target>Na ploščo smo uspešno naročili.</target>
+      </trans-unit>
+      <trans-unit id="board_successfully_unsubscribed" resname="board_successfully_unsubscribed">
+        <source>The board was successfully unsubscribed.</source>
+        <target>Tabla je bila uspešno odjavljena.</target>
+      </trans-unit>
+      <trans-unit id="team_created" resname="team_created">
+        <source>The team was created successfully.</source>
+        <target>Ekipa je bila ustvarjena uspešno.</target>
+      </trans-unit>
+      <trans-unit id="team_removed" resname="team_removed">
+        <source>The team was successfully removed.</source>
+        <target>Ekipa je bila uspešno odstranjena.</target>
+      </trans-unit>
+      <trans-unit id="member_removed" resname="member_removed">
+        <source>The member was successfully removed.</source>
+        <target>Član je bil uspešno odstranjen.</target>
+      </trans-unit>
+      <trans-unit id="team_member_saved" resname="team_member_saved">
+        <source>The member successfully added to the team.</source>
+        <target>Član je uspešno dodal ekipo.</target>
+      </trans-unit>
+      <trans-unit id="ticket_removed" resname="ticket_removed">
+        <source>The ticket was removed successfully.</source>
+        <target>Vstopnica je bila uspešno odstranjena.</target>
+      </trans-unit>
+      <trans-unit id="ticket_archived" resname="ticket_archived">
+        <source>The ticket was successfully archived.</source>
+        <target>Vstopnica je bila uspešno arhivirana.</target>
+      </trans-unit>
+      <trans-unit id="ticket_created" resname="ticket_created">
+        <source>The ticket was successfully created.</source>
+        <target>Vozovnica je bila uspešno ustvarjena.</target>
+      </trans-unit>
+      <trans-unit id="ticket_updated" resname="ticket_updated">
+        <source>The ticket was successfully updated.</source>
+        <target>Vstopnica je bila uspešno posodobljena.</target>
+      </trans-unit>
+      <trans-unit id="successfully_saved" resname="successfully_saved">
+        <source>Successfully saved.</source>
+        <target>Shranjeno.</target>
+      </trans-unit>
+      <trans-unit id="question_remove_board" resname="question_remove_board">
+        <source>Are you sure you want to remove this board? It also removes all connections to teams and members.</source>
+        <target>Ali ste prepričani, da želite odstraniti to ploščo? Odstrani tudi vse povezave z ekipami in člani.</target>
+      </trans-unit>
+      <trans-unit id="should_this_ticket_really_be_removed_from_board" resname="should_this_ticket_really_be_removed_from_board">
+        <source>Are you sure you want to delete this ticket?</source>
+        <target>Ali ste prepričani, da želite izbrisati to vozovnico?</target>
+      </trans-unit>
+      <trans-unit id="votings_changed_tickets_reordered" resname="votings_changed_tickets_reordered">
+        <source>The voting has changed, the tickets are re-sorted.</source>
+        <target>Glasovanje se je spremenilo, vstopnice so razvrščene.</target>
+      </trans-unit>
+      <trans-unit id="error_occurred_please_repeat" resname="error_occurred_please_repeat">
+        <source>An error has occurred, please try again.</source>
+        <target>Prišlo je do napake, poskusite znova.</target>
+      </trans-unit>
+      <trans-unit id="error_occurred" resname="error_occurred">
+        <source>An error has occurred.</source>
+        <target>Prišlo je do napake.</target>
+      </trans-unit>
+      <trans-unit id="password_reset_login" resname="password_reset_login">
+        <source>Enter Email to reset Password.</source>
+        <target>Vnesite e-pošto za ponastavitev gesla.</target>
+      </trans-unit>
+      <trans-unit id="password_request_send" resname="password_request_send">
+        <source>A request for a new password has been sent. This link must be confirmed, after which it is possible to set a new password.</source>
+        <target>Poslana je bila zahteva za novo geslo. To povezavo je treba potrditi, po kateri je mogoče nastaviti novo geslo.</target>
+      </trans-unit>
+      <trans-unit id="question_remove_team" resname="question_remove_team">
+        <source>Are you sure you want to remove this team?</source>
+        <target>Ali ste prepričani, da želite odstraniti to ekipo?</target>
       </trans-unit>
     </body>
   </file>

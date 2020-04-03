@@ -17,9 +17,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Mercure\Publisher;
 use Symfony\Component\Mercure\Update;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TicketController extends AbstractController
 {
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+    
     /*
     public function __invoke(Publisher $publisher) : Response
     {
@@ -62,7 +70,7 @@ class TicketController extends AbstractController
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
         if (! $ticket instanceof Ticket) {
-            return new JsonResponse(['sucess' => false, 'content' => 'Ticket not found!']);
+            return new JsonResponse(['sucess' => false, 'content' => $this->translator->trans('ticket_not_found', ['id' => $id], 'errors')]);
         }
 
         return $this->render('ticket/show.html.twig', 
@@ -229,11 +237,11 @@ class TicketController extends AbstractController
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
         if (!$ticket instanceof Ticket) {
-            return new JsonResponse(['success' => 'false', 'content' => 'ticket not found!']);
+            return new JsonResponse(['success' => 'false', 'content' => $this->translator->trans('ticket_not_found', ['id' => $id], 'errors')]);
         }
 
         if ($ticket->getCreator() != $this->getUser()) {
-            return new JsonResponse(['success' => 'false', 'content' => 'you are not allowed to delete this ticket!']);
+            return new JsonResponse(['success' => 'false', 'content' => $this->translator->trans('ticket_deletion_not_allowed', [], 'errors')]);
         }
 
         $entityManager->remove($ticket);
@@ -253,7 +261,7 @@ class TicketController extends AbstractController
 
         $publisher($update);
 
-        return new JsonResponse(['success' => true, 'content' => 'Ticket successfully deleted!']);
+        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('ticket_removed', [], 'messages')]);
     }
 
     /**
@@ -267,7 +275,7 @@ class TicketController extends AbstractController
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
         if (!$ticket instanceof Ticket) {
-            return new JsonResponse(['success' => 'false', 'content' => 'ticket not found!']);
+            return new JsonResponse(['success' => 'false', 'content' => $this->translator->trans('ticket_not_found', [], 'errors')]);
         }
 
         $ticket->setArchived(true);
@@ -288,7 +296,7 @@ class TicketController extends AbstractController
 
         $publisher($publisherMessage);
 
-        return new JsonResponse(['success' => true, 'content' => 'ticket archived']);
+        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('ticket_archived', ['id' => $id], 'messages')]);
     }
 
     /**
@@ -296,6 +304,7 @@ class TicketController extends AbstractController
      */
     private function informSubscribers(LoggerInterface $logger, \Swift_Mailer $mailer, $ticket)
     {
+        /** @TODO translate */
         $board = $ticket->getColumn()->getBoard();
         $message = new \Swift_Message('New Entry from '.$ticket->getCreator()->getName().' for board "'.$board->getName().'" on https://retro.byte-artist.de');
         $message->setFrom('no-reply@byte-artist.de')

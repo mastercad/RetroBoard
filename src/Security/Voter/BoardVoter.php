@@ -39,35 +39,49 @@ class BoardVoter extends Voter
         switch ($attribute) {
             case 'create':
                 return $user instanceof UserInterface;
+            case 'delete':
             case 'edit':
                 if (!$user instanceof UserInterface) {
                     return false;
                 }
 
-                $results = $subject->getBoardMembers()->filter(
+                $resultMembers = $subject->getBoardMembers()->filter(
                     function($boardMember) use ($user) {
                         return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
 
-                return 0 < count($results);
+                $resultTeamMembers = [];
+                foreach ($subject->getBoardTeams() as $boardTeam) {
+                    foreach ($boardTeam->getTeam()->getTeamMembers() as $teamMember) {
+                        if ($teamMember->getMember() === $user
+                            && $subject == $boardTeam->getBoard()
+                            && in_array('ROLE_ADMIN', $teamMember->getMember()->getRoles())
+                        ) {
+                            $resultTeamMembers[] = $boardTeam->getBoard();
+                        }
+                    }
+                }
+
+                return 0 < count($resultMembers) || 0 < count($resultTeamMembers);
             case 'show':
                 if ("Demo Board" === $subject->getName()) {
                     return true;
                 }
 
                 $resultMembers = $subject->getBoardMembers()->filter(
-                        function ($boardMember) use ($user) {
-                            var_dump($boardMember);
-                            return $boardMember->getUser() === $user;
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user;
                     }
                 );
 
-                $resultTeamMembers = $subject->getBoardMembers()->getBoard()->filter(
-                        function ($boardMember) use ($user) {
-                            var_dump($boardMember);
-                            return $boardMember->getUser() === $user;
+                $resultTeamMembers = $subject->getBoardTeams()->filter(
+                    function ($boardTeam) use ($user) {
+                            return $boardTeam->getTeam()->getTeamMembers()->filter(function($teamMember) use ($user) {
+                                return $teamMember->getMember() === $user;
+                            }
+                        );
                     }
                 );
 

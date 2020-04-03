@@ -3,9 +3,11 @@
 {% block title %}{% if 0 < board.id %}{{ 'edit_board'|trans({}, 'labels') }} "{{ board.name }}" {% else %} {{ 'create_new_board'|trans({}, 'labels') }} {% endif %}{% endblock %}
 
 {% block navigation_additions %}
+    {% if 0 < board.id %}
     <a href="/board/{{ board.id }}" class="m-2 btn-archive-board">
         <icon class="fas fa-chalkboard"></icon>
     </a>
+    {% endif %}
     {{ parent() }}
 {% endblock %}
 
@@ -14,10 +16,11 @@
 {% block body %}
 {% form_theme form 'bootstrap_4_horizontal_layout.html.twig' %}
 
+
 <div class="container mt-5">
     {% if errors is defined %}
         {% for error in errors %}
-            {{ error.message }}
+            {{ error.content }}
         {% endfor %}
     {% endif %}
     <div id="board">
@@ -30,14 +33,20 @@
         <div class="form-group row">
             <label class="col-form-label col-sm-2 required">
                 {{ 'columns'|trans({}, 'labels') }}
-                <span class="btn-add btn-column-add"><icon class="fas fa-plus-circle ml-2"></icon></span>
+                <span class="btn-add btn-column-add" data-toggle="tooltip" title="{{ 'click_to_add_new_column_to_board'|trans({}, 'titles') }}">
+                    <icon class="fas fa-plus-circle ml-2"></icon>
+                </span>
             </label>
             <div class="col-sm-10">
                 <div class="d-flex columns-container">
                     {% for column in board.columns %}
                     <div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="{{ column.id }}">
-                        <span class="board-column-name">{{ column.name }}</span>
-                        <span class="btn-remove btn-column-remove"><icon class="fas fa-minus-circle ml-2"></icon></span>
+                        <span class="board-column-name">
+                            {{ column.name }}
+                        </span>
+                        <span class="btn-remove btn-column-remove" data-toggle="tooltip" title="{{ 'remove_column'|trans({'%column%': column.name }, 'titles') }}">
+                            <icon class="fas fa-minus-circle ml-2"></icon>
+                        </span>
                     </div>
                     {% endfor %}
                 </div>
@@ -45,10 +54,10 @@
             {{ form_row(form._token) }}
             {{ form_row(form.id) }}
         </div>
+        {% set boardMemberUsers = [] %}
+        {% set boardMemberAdmins = [] %}
 
         {% if 0 < board.id %}
-            {% set boardMemberUsers = [] %}
-            {% set boardMemberAdmins = [] %}
             {% for boardMember in board.boardMembers %}
                 {% if "ROLE_ADMIN" in boardMember.roles %}
                     {% set boardMemberAdmins = boardMemberAdmins|merge([boardMember]) %}
@@ -58,97 +67,101 @@
             {% endfor %}
 
             {% set boardMemberAdminCount = boardMemberAdmins|length %}
-
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12">
-                    {{ 'members'|trans({}, 'labels') }}:
-                    <span class="btn-add btn-membership-add">
-                        <icon class="fas fa-plus-circle"></icon>
-                    </span>
-                    <div class="col-sm-12 col-md-12 col-xs-12 board-membership-container">
-                        <p>
-                            {{ 'admins'|trans({}, 'labels') }}:
-                        </p>
-                        <ul class="member-container board-admins-container" data-role="ROLE_ADMIN">
-                            {% for boardMember in boardMemberAdmins %}
-                                <li class="board-member small" data-id="{{ boardMember.id }}">
-                                    {{ boardMember.user.name }}
-                                    {% if 1 < boardMemberAdminCount %}
-                                        <span class="btn-remove btn-membership-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-xs-12 board-membership-container">
-                        <p>
-                            {{ 'users'|trans({}, 'labels') }}:
-                        </p>
-                        <ul class="member-container board-users-container" data-role="ROLE_USER">
-                            {% for boardMember in boardMemberUsers %}
-                                <li class="board-member small" data-id="{{ boardMember.id }}">
-                                    {{ boardMember.user.name }}
-                                    <span class="btn-remove btn-membership-remove" data-id="{{ boardMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12">
-                    {{ 'teams'|trans({}, 'labels') }}:
-                    <span class="btn-add btn-team-add">
-                        <icon class="fas fa-plus-circle"></icon>
-                    </span>
-                    <div class="col-12 team-container board-team-container">
-                        <ul>
-                        {% for boardTeam in boardTeams %}
-                            <li class="board-team small" data-id="{{ boardTeam.id }}">
-                                {{ boardTeam.team.name }}
-                                <span class="btn-remove btn-team-remove" data-id="{{ boardTeam.id }}">
-                                    <icon class="fas fa-minus-circle"></icon>
-                                </span>
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 col-md-12 col-xs-12">
-                    {{ 'invitations'|trans({}, 'labels') }}:
-                    <span class="btn-add btn-invitation-add">
-                        <icon class="fas fa-plus-circle"></icon>
-                    </span>
-                    <div class="col-sm-12 col-md-12 col-xs-12 board-invitations-container">
-                        <ul>
-                        {% for boardInvitation in board.boardInvitations %}
-                            <li class="small">
-                                {{ boardInvitation.email }}
-                                <span class="btn-remove btn-invitation-remove" data-id="{{ boardInvitation.id }}">
-                                    <icon class="fas fa-minus-circle"></icon>
-                                </span>
-                                <span class="btn-resend btn-invitation-resend" data-id="{{ boardInvitation.id }}" >
-                                    <icon class="fas fa-sync-alt"></icon>
-                                </span>
-                                <span class="btn-copy btn-invitation-link-copy" data-token="{{ boardInvitation.token }}" data-tooltip="">
-                                    <icon class="fas fa-copy"></icon>
-                                </span>
-                            </li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
         {% endif %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-xs-12">
+                {{ 'members'|trans({}, 'labels') }}:
+                <span class="btn-add btn-membership-add" data-toggle="tooltip" title="{{ 'click_to_add_existing_user_to_board'|trans({}, 'titles') }}">
+                    <icon class="fas fa-plus-circle"></icon>
+                </span>
+                <div class="col-sm-12 col-md-12 col-xs-12 board-membership-container">
+                    <p>
+                        {{ 'admins'|trans({}, 'labels') }}:
+                    </p>
+                    <ul class="member-container board-admins-container" data-role="ROLE_ADMIN">
+                        {% for boardMember in boardMemberAdmins %}
+                            <li class="board-member small" data-id="{{ boardMember.id }}" data-identifier="{{ 12|uuid() }}">
+                                {{ boardMember.user.name }}
+                                {% if 1 < boardMemberAdminCount %}
+                                    <span class="btn-remove btn-membership-remove" data-user-id="{{ boardMember.user.id }}" data-toggle="tooltip" title="{{ 'remove_user_from_board'|trans({'%name%': boardMember.user.name }, 'titles') }}" data-id="{{ boardMember.id }}">
+                                        <icon class="fas fa-minus-circle"></icon>
+                                    </span>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-12 col-xs-12 board-membership-container">
+                    <p>
+                        {{ 'users'|trans({}, 'labels') }}:
+                    </p>
+                    <ul class="member-container board-users-container" data-role="ROLE_USER">
+                        {% for boardMember in boardMemberUsers %}
+                            <li class="board-member small" data-id="{{ boardMember.id }}" data-identifier="{{ 12|uuid() }}">
+                                {{ boardMember.user.name }}
+                                <span class="btn-remove btn-membership-remove" data-user-id="{{ boardMember.user.id }}" data-toggle="tooltip" title="{{ 'remove_user_from_board'|trans({'%name%': boardMember.user.name }, 'titles') }}" data-id="{{ boardMember.id }}">
+                                    <icon class="fas fa-minus-circle"></icon>
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-xs-12">
+                {{ 'teams'|trans({}, 'labels') }}:
+                <span class="btn-add btn-team-add" data-toggle="tooltip" title="{{ 'click_to_add_existing_team_to_board'|trans({}, 'titles') }}" >
+                    <icon class="fas fa-plus-circle"></icon>
+                </span>
+                <div class="col-12 team-container board-team-container">
+                    <ul>
+                    {% for boardTeam in boardTeams %}
+                        <li class="board-team small" data-id="{{ boardTeam.id }}" data-identifier="{{ 12|uuid() }}">
+                            {{ boardTeam.team.name }}
+                            <span class="btn-remove btn-team-remove" data-toggle="tooltip" title="{{ 'remove_team_from_board'|trans({'%team%': boardTeam.team.name }, 'titles') }}" data-id="{{ boardTeam.id }}">
+                                <icon class="fas fa-minus-circle"></icon>
+                            </span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-xs-12">
+                {{ 'invitations'|trans({}, 'labels') }}:
+                <span class="btn-add btn-invitation-add" data-toggle="tooltip" title="{{ 'click_to_invite_new_member_via_email'|trans({}, 'titles') }}" >
+                    <icon class="fas fa-plus-circle"></icon>
+                </span>
+                <div class="col-sm-12 col-md-12 col-xs-12 board-invitations-container">
+                    <ul>
+                    {% for boardInvitation in board.boardInvitations %}
+                        <li class="small board-invitation" data-identifier="{{ 12|uuid() }}">
+                            {{ boardInvitation.email }}
+                            <span class="btn-remove btn-invitation-remove" data-toggle="tooltip" data-email="{{ boardInvitation.email }}" title="{{ 'remove_invitation'|trans({'%email%': boardInvitation.email }, 'titles') }}" data-id="{{ boardInvitation.id }}">
+                                <icon class="fas fa-minus-circle"></icon>
+                            </span>
+                            <span class="btn-resend btn-invitation-resend" data-toggle="tooltip" data-email="{{ boardInvitation.email }}" title="{{ 'resend_invitation'|trans({'%email%': boardInvitation.email }, 'titles') }}" data-id="{{ boardInvitation.id }}" >
+                                <icon class="fas fa-sync-alt"></icon>
+                            </span>
+                            <span class="btn-copy btn-invitation-link-copy" data-toggle="tooltip" data-email="{{ boardInvitation.email }}" title="{{ 'copy_invitation_to_clipboard'|trans({'%email%': boardInvitation.email }, 'titles') }}" data-token="{{ boardInvitation.token }}" data-tooltip="">
+                                <icon class="fas fa-copy"></icon>
+                            </span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-danger btn-delete" type="delete">{{ 'delete'|trans({}, 'labels') }}</button>
         <button class="btn btn-primary btn-save" type="submit">{{ 'save'|trans({}, 'labels') }}</button>
     </div>
 </div>
 
-<div id="membership_modal" class="modal" tabindex="-1" role="dialog">
+<div id="membership_modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -159,11 +172,11 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>{{ 'Name'|trans({}, 'labels') }}</label>
+                    <label>{{ 'name'|trans({}, 'labels') }}</label>
                     <input id="membership_name" name="membership-name" type="text" class="form-control" value="" >
                     <input id="membership_type" name="membership-type" type="hidden" class="form-control" value="" >
                 </div>
-                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
@@ -174,7 +187,7 @@
     </div>
 </div>
 
-<div id="team_modal" class="modal" tabindex="-1" role="dialog">
+<div id="team_modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -185,11 +198,11 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>{{ 'Name'|trans({}, 'labels') }}</label>
+                    <label>{{ 'name'|trans({}, 'labels') }}</label>
                     <input id="team_name" name="team-name" type="text" class="form-control" value="" >
                     <input id="team_id" name="team-id" type="hidden" class="form-control" value="" >
                 </div>
-                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
@@ -200,7 +213,7 @@
     </div>
 </div>
 
-<div id="invitation_modal" class="modal" tabindex="-1" role="dialog">
+<div id="invitation_modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -214,7 +227,7 @@
                     <label>{{ 'email'|trans({}, 'labels') }}</label>
                     <input id="invitation_email" name="invitation-email" type="email" class="form-control" value="" >
                 </div>
-                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
@@ -225,7 +238,7 @@
     </div>
 </div>
 
-<div id="invitation_remove_modal" class="modal" tabindex="-1" role="dialog">
+<div id="invitation_remove_modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -238,7 +251,7 @@
                 <div class="form-group">
                     {{ 'question_inverse_invitation'|trans({}, 'messages') }}
                 </div>
-                <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
@@ -249,7 +262,7 @@
     </div>
 </div>
 
-<div id="membership_remove_modal" class="modal" tabindex="-1" role="dialog">
+<div id="membership_remove_modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -262,7 +275,7 @@
                 <div class="form-group">
                     {{ 'question_remove_member_from_board'|trans({}, 'messages') }}
                 </div>
-                <div class="error alert alert-danger" style="display: none;" role="alert">
+                <div class="error small alert alert-danger" style="display: none;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
@@ -273,7 +286,7 @@
     </div>
 </div>
 
-<div id="team_remove_modal" class="modal" tabindex="-1" role="dialog">
+<div id="team_remove_modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -286,11 +299,35 @@
                 <div class="form-group">
                     {{ 'question_remove_team_from_board'|trans({}, 'messages') }}
                 </div>
-                <div class="error alert alert-danger" style="display: none;" role="alert">
+                <div class="error small alert alert-danger" style="display: none;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="board_remove_modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header alert alert-danger">
+                <h5 class="modal-title">{{ 'remove_board'|trans({}, 'titles') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    {{ 'question_remove_board'|trans({}, 'messages') }}
+                </div>
+                <div class="error small alert alert-danger" style="display: none;" role="alert">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" {% if 0 == board.id %} style="display: none;" {% endif %} class="btn btn-danger btn-ok">{{ 'remove'|trans({}, 'labels') }}</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
             </div>
         </div>
@@ -303,18 +340,18 @@
     {{ parent() }}
     <script type="text/javascript">
         $(document).ready(function() {
-            init();
+            initBoard();
         });
 
         let currentUserId = {{ app.user.id }}
-        var invitationDeleteId = undefined;
-        var teamDeleteId = undefined;
-        var membershipDeleteId = undefined;
+        let invitationDeleteId = undefined;
+        let teamDeleteId = undefined;
+        let membershipDeleteId = undefined;
+        let elementIdentifier = undefined;
 
         let rawCurrentBoardMembers = {{ board.boardMembers|json_encode|raw }}
-        let rawCurrentBoardTeams = {{ currentBoardTeams|json_encode|raw }}
-        let rawKnownBoardMembers = {{ knownBoardMembers|json_encode|raw }}
-        let rawKnownTeamMembers = {{ knownTeamMembers|json_encode|raw }}
+        let rawCurrentBoardTeams = {{ boardTeams|json_encode|raw }}
+        let rawKnownMembers = {{ knownMembers|json_encode|raw }}
         let rawKnownTeams = {{ knownTeams|json_encode|raw }}
 
         let currentBoardMembers = [];
@@ -332,20 +369,9 @@
             currentBoardTeams[rawCurrentBoardTeams[index].name] = rawCurrentBoardTeams[index].id;
         }
 
-        for (var index = 0; index < rawKnownBoardMembers.length; index++) {
-            let currentMemberName = rawKnownBoardMembers[index].name;
-            let currentMemberId = rawKnownBoardMembers[index].id;
-            if (undefined === knownMemberIds[currentMemberName]
-                && currentUserId != currentMemberId
-            ) {
-                knownMembers.push(currentMemberName)
-                knownMemberIds[currentMemberName] = currentMemberId;
-            }
-        }
-
-        for (var index = 0; index < rawKnownTeamMembers.length; index++) {
-            let currentMemberName = rawKnownTeamMembers[index].name;
-            let currentMemberId = rawKnownTeamMembers[index].id;
+        for (var index = 0; index < rawKnownMembers.length; index++) {
+            let currentMemberName = rawKnownMembers[index].name;
+            let currentMemberId = rawKnownMembers[index].id;
             if (undefined === knownMemberIds[currentMemberName]
                 && currentUserId != currentMemberId
             ) {
@@ -367,64 +393,204 @@
 
         function save() {
             let formData = [];
+            let boardName = $('#board_name').val().trim();
+
+            if (0 == boardName.length) {
+                alert("{{ 'name_must_be_set'|trans({}, 'errors') }}", "{{ 'error_board_save'|trans({}, 'titles') }}");
+                return false;
+            }
+
             formData.push({name: "board[id]", value: $('#board_id').val()});
-            formData.push({name: "board[name]", value: $('#board_name').val()});
+            formData.push({name: "board[name]", value: boardName});
 
             let columnsCount = 0;
             let priority = 0;
             $('.columns-container .board-column').each(function() {
                 if (true !== $(this).data('deleted')) {
-                    formData.push({name: "board[columns]["+columnsCount+"][name]", value: $(this).find('.board-column-name').text()});
-                    formData.push({name: "board[columns]["+columnsCount+"][priority]", value: priority});
-                    formData.push({name: "board[columns]["+columnsCount+"][id]", value: $(this).attr('data-id')});
-                    ++priority;
+                    let name = $(this).find('.board-column-name').text().trim();
+
+                    if (0 < name.length) {
+                        formData.push({name: "board[columns]["+columnsCount+"][name]", value: name});
+                        formData.push({name: "board[columns]["+columnsCount+"][priority]", value: priority});
+                        formData.push({name: "board[columns]["+columnsCount+"][id]", value: $(this).attr('data-id')});
+                        formData.push({name: "board[columns]["+columnsCount+"][identifier]", value: $(this).closest('div').attr('data-identifier')});
+                        ++priority;
+                    }
                 }
                 ++columnsCount;
             });
 
+            if (0 == columnsCount) {
+                alert("{{ 'error_one_column_needed_in_board'|trans({}, 'errors') }}", "{{ 'error_board_save'|trans({}, 'titles') }}");
+                return false;
+            }
+
+            let memberCount = 0;
+            $('.member-container.board-admins-container span[data-state="changed"]').each(function() {
+                formData.push({name: "board[members]["+memberCount+"][userId]", value: $(this).attr('data-user-id')});
+                formData.push({name: "board[members]["+memberCount+"][boardMemberId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "board[members]["+memberCount+"][roles]", value: 'ROLE_ADMIN'});
+                formData.push({name: "board[members]["+memberCount+"][identifier]", value: $(this).closest('li').attr('data-identifier')});
+                ++memberCount;
+            })
+
+            $('.member-container.board-users-container span[data-state="changed"]').each(function() {
+                formData.push({name: "board[members]["+memberCount+"][userId]", value: $(this).attr('data-user-id')});
+                formData.push({name: "board[members]["+memberCount+"][boardMemberId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "board[members]["+memberCount+"][roles]", value: 'ROLE_USER'});
+                formData.push({name: "board[members]["+memberCount+"][identifier]", value: $(this).closest('li').attr('data-identifier')});
+                ++memberCount;
+            })
+
+            let teamCount = 0;
+            $('.board-team-container span[data-state="changed"]').each(function() {
+                formData.push({name: "board[teams]["+teamCount+"][teamId]", value: $(this).attr('data-team-id')});
+                formData.push({name: "board[teams]["+teamCount+"][boardTeamId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "board[teams]["+teamCount+"][identifier]", value: $(this).closest('li').attr('data-identifier')});
+                ++teamCount;
+            })
+
+            let invitationCount = 0;
+            $('.board-invitations-container li[data-state="changed"]').each(function() {
+                formData.push({name: "board[invitations]["+invitationCount+"][boardInvitationId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "board[invitations]["+invitationCount+"][email]", value: $(this).text().trim()});
+                formData.push({name: "board[invitations]["+invitationCount+"][identifier]", value: $(this).closest('li').attr('data-identifier')});
+                ++invitationCount;
+            })
+
             formData.push({name: "board[_token]", value: $('#board__token').val()});
 
             $.post("{{ path('board_save') }}", formData, function(response) {
+                handleSaveResult(response);
                 if (true == response.success) {
-                    window.location.href="/board/"+response.id;
+                    success(response.content, "{{ 'board_save_success'|trans({}, 'titles') }}");
+//                    window.location.href="/board/"+response.id;
+                } else {
+                    alert(response.content, "{{ 'error_board_save'|trans({}, 'titles') }}");
                 }
             });
         }
 
-        function addMembership(name, id, userRole) {
+        function handleSaveResult(json) {
+            $('#board_id').val(json.data.id);
+
+            if (undefined !== json.data.columns) {
+                handleColumnSaveResult(json.data.columns);
+            }
+
+            if (undefined !== json.data.members) {
+                handleMemberSaveResult(json.data.members);
+            }
+
+            if (undefined !== json.data.teams) {
+                handleTeamSaveResult(json.data.teams);
+            }
+
+            if (undefined !== json.data.invitations) {
+                handleInvitationSaveResult(json.data.invitations);
+            }
+        }
+
+        function handleColumnSaveResult(columns) {
+            for (let columnsCount = 0; columnsCount < columns.length; columnsCount++) {
+                let container = $('div.board-column[data-identifier="'+columns[columnsCount]['identifier']+'"]');
+                $(container).find('span.btn-team-remove').attr('data-state-changed', '');
+                $(container).attr('data-id', columns[columnsCount]['id']);
+            }
+        }
+
+        function handleMemberSaveResult(members) {
+            for (let membersCount = 0; membersCount < members.length; membersCount++) {
+                let container = $('li.board-member[data-identifier="'+members[membersCount]['identifier']+'"]');
+                $(container).attr('data-id', members[membersCount]['boardMemberId']);
+                $(container).find('span.btn-membership-remove').attr('data-id', members[membersCount]['boardMemberId']);
+                $(container).find('span.btn-membership-remove').attr('data-user-id', members[membersCount]['userId']);
+                $(container).find('span.btn-membership-remove').attr('data-state-changed', '');
+            }
+        }
+
+        function handleTeamSaveResult(teams) {
+            for (let teamsCount = 0; teamsCount < teams.length; teamsCount++) {
+                let container = $('li.board-team[data-identifier="'+teams[teamsCount]['identifier']+'"]');
+                $(container).attr('data-id', teams[teamsCount]['boardTeamId']);
+                $(container).find('span.btn-team-remove').attr('data-id', teams[teamsCount]['boardTeamId']);
+                $(container).find('span.btn-team-remove').attr('data-team-id', teams[teamsCount]['teamId']);
+                $(container).find('span.btn-team-remove').attr('data-state-changed', '');
+            }
+        }
+
+        function handleInvitationSaveResult(invitations) {
+            for (let invitationsCount = 0; invitationsCount < invitations.length; invitationsCount++) {
+                let container = $('li.board-invitation[data-identifier="'+invitations[invitationsCount]['identifier']+'"]');
+                $(container).attr('data-id', invitations[invitationsCount]['boardInvitationId']);
+                $(container).attr('data-state-changed', '');
+                $(container).find('span.btn-invitation-remove').attr('data-id', invitations[invitationsCount]['boardInvitationId']);
+                $(container).find('span.btn-invitation-remove').attr('data-state-changed', '');
+            }
+        }
+
+        function addMembership(name, id, userRole, userId, state) {
+            let identifier = makeid();
+            let translatedTitle = "{{ 'remove_user_from_board'|trans({'%name%': 'name_placeholder'}, 'titles') }}";
+            translatedTitle = translatedTitle.replace('name_placeholder', name);
             let membershipRow = $(
-                '<li class="small">'+name+'\
-                    <span class="btn-remove btn-invitation-remove" data-id="'+id+'">\
-                    <icon class="fas fa-minus-circle"></icon></span>\
+                '<li class="board-member small" data-id="'+id+'" data-identifier="'+identifier+'">'+name+'\
+                    <span class="btn-remove btn-membership-remove" data-toggle="tooltip" title="'+translatedTitle+'" data-id="'+id+'" data-user-id="'+userId+'" data-state="'+state+'">\
+                        <icon class="fas fa-minus-circle"></icon>\
+                    </span>\
                 </li>'
             );
 
+            $(membershipRow).tooltip();
             $('ul.member-container[data-role="'+userRole+'"]').append(membershipRow);
         }
 
-        function addTeam(name, id) {
+        function addTeam(name, id, teamId, state) {
+            let identifier = makeid();
+            let translatedTitle = "{{ 'remove_team_from_board'|trans({'%team%': 'name_placeholder'}, 'titles') }}";
+            translatedTitle = translatedTitle.replace('name_placeholder', name);
             let teamRow = $(
-                '<li class="board-team small">'+name+'\
-                    <span class="btn-remove btn-team-remove" data-id="'+id+'">\
+                '<li class="board-team small" data-id="'+id+'" data-identifier="'+identifier+'">'+name+'\
+                    <span class="btn-remove btn-team-remove" data-toggle="tooltip" title="'+translatedTitle+'" data-id="'+id+'" data-team-id="'+teamId+'" data-state="'+state+'">\
                     <icon class="fas fa-minus-circle"></icon></span>\
                 </li>'
             );
 
+            $(teamRow).tooltip();
             $('.board-team-container ul').append(teamRow);
         }
 
-        function addInvitation(email, id, token) {
+        function addInvitation(email, id, token, state) {
+            let identifier = makeid();
+            let translatedTitleRemove = "{{ 'remove_invitation'|trans({'%email%': 'email_placeholder'}, 'titles') }}";
+            translatedTitleRemove = translatedTitleRemove.replace('email_placeholder', email);
+            let translatedTitleResend = "{{ 'resend_invitation'|trans({'%email%': 'email_placeholder'}, 'titles') }}";
+            translatedTitleResend = translatedTitleResend.replace('email_placeholder', email);
+            let translatedTitleCopy = "{{ 'copy_invitation_to_clipboard'|trans({'%email%': 'email_placeholder'}, 'titles') }}";
+            translatedTitleCopy = translatedTitleCopy.replace('email_placeholder', email);
             let invitationRow = $(
-                '<li class="small">'+email+'\
-                    <span class="btn-remove btn-invitation-remove" data-id="'+id+'">\
-                    <icon class="fas fa-minus-circle"></icon></span>\
-                    <span class="btn-resend btn-invitation-resend" data-id="'+id+'">\
-                    <icon class="fas fa-sync-alt"></icon></span>\
-                    <span class="btn-copy btn-invitation-link-copy" data-token="'+token+'">\
-                    <icon class="fas fa-copy"></icon></span>\
+                '<li class="small board-invitation" data-id="'+id+'" data-state="'+state+'" data-identifier="'+identifier+'">'+email+'\
+                    <span class="btn-remove btn-invitation-remove" data-toggle="tooltip" title="'+translatedTitleRemove+'" data-id="'+id+'">\
+                        <icon class="fas fa-minus-circle"></icon> \
+                    </span>\
+                    <span class="btn-resend btn-invitation-resend" data-toggle="tooltip" title="'+translatedTitleResend+'" data-id="'+id+'">\
+                        <icon class="fas fa-sync-alt"></icon>\
+                    </span>\
+                    <span class="btn-copy btn-invitation-link-copy" data-toggle="tooltip" title="'+translatedTitleCopy+'" data-token="'+token+'">\
+                        <icon class="fas fa-copy"></icon>\
+                    </span>\
                 </li>'
             );
 
+            if ('changed' == state
+                || "undefined" == id
+                || "undefined" == token
+            ) {
+                $(invitationRow).find('.btn-resend').hide();
+                $(invitationRow).find('.btn-copy').hide();
+            }
+
+            $(invitationRow).tooltip();
             $('.board-invitations-container ul').append(invitationRow);
         }
 
@@ -433,7 +599,17 @@
             $(target).parent().fadeOut();
         }
 
-        function init() {
+        function makeid(length = 12) {
+            let result = '';
+            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#_-';
+            let charactersLength = characters.length;
+            for (let i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
+        }
+
+        function initBoard() {
             $('.columns-container').sortable({
                 axis: "x",
                 cancel: 'input',
@@ -462,21 +638,28 @@
                     },
                     stop: function(event, ui) {
                         $('.member-container').removeClass('hover');
+                        $(item).attr('data-state', 'changed');
                         if (0 < $(oldList).find('li').length || "ROLE_ADMIN" != oldList.attr('data-role')) {
 
-                            $.ajax({
-                                url: '/board-member/role',
-                                type: 'PUT',
-                                data: {
-                                    id: item.data('id'),
-                                    newRole: newList.attr('data-role'),
-                                    oldRole: oldList.attr('data-role')
-                                },
-                                success: function(response) {
-                                }
-                            });
+                            // only save, is boardMember already known
+                            if ("undefined" != $(item).attr('data-id')
+                                && 0 < $(item).attr('data-id').length
+                            ) {
+                                $.ajax({
+                                    url: '/board-member/role',
+                                    type: 'PUT',
+                                    data: {
+                                        id: $(item).data('id'),
+                                        newRole: newList.attr('data-role'),
+                                        oldRole: oldList.attr('data-role')
+                                    },
+                                    success: function(response) {
+                                        $(item).attr('data-state', '');
+                                    }
+                                });
+                            }
                         } else {
-                            console.log("Letzter Admin, geht nicht!");
+//                            console.log("Letzter Admin, geht nicht!");
                             $(this).sortable('cancel');
                         }
                     },
@@ -499,15 +682,20 @@
             $('.btn-invitation-link-copy').unbind('click').on('click', function() {
                 /* Get the text field */
                 var copyText = $(this).data('token');
-                const el = document.createElement('textarea');
-                el.value = "https://retro.byte-artist.de/board/member/"+copyText;
-                el.setAttribute('readonly', '');
-                el.style.position = 'absolute';
-                el.style.left = '-9999px';
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
+
+                if ("undefined" != copyText
+                    && 0 < copyText.length
+                ) {
+                    const el = document.createElement('textarea');
+                    el.value = "https://retro.byte-artist.de/board/member/"+copyText;
+                    el.setAttribute('readonly', '');
+                    el.style.position = 'absolute';
+                    el.style.left = '-9999px';
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                }
             });
 
             $('.btn-invitation-resend').unbind('click').on('click', function() {
@@ -516,24 +704,69 @@
                 let invitationId = $(this).data('id');
                 let self = this;
 
-                $.post("{{ path('board_invite') }}", {email: email, id: boardId, invitationId: invitationId}, function(response) {
-                    if (200 === response.code) {
-                        $(self).parent().find('.btn-copy').attr('data-token', response.token);
-                    } else {
-                        alert(response.message);
-                    }
-                });
+                if (0 < boardId.length
+                    && "undefined" != invitationId
+                    && (0 < invitationId.length || 0 < invitationId)
+                ) {
+                    $.post("{{ path('board_invite') }}", {email: email, id: boardId, invitationId: invitationId}, function(response) {
+                        if (200 === response.code) {
+                            $(self).parent().find('.btn-copy').attr('data-token', response.token);
+                        } else {
+                            alert(response.content);
+                        }
+                    });
+                }
             });
 
             $('.btn-column-add').unbind('click').on('click', function() {
+                let identifier = makeid();
+                let translatedTitle = "{{ 'remove_column'|trans({'%column%': ''}, 'titles') }}";
+//            translatedTitle = translatedTitle.replace('name_placeholder', name);
                 let newColumn = $(
-                    '<div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="">\
+                    '<div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="" data-identifier="'+identifier+'">\
                         <span class="board-column-name" style="display: inline-block; min-height: 1em; min-width: 50px;"></span>\
-                        <span class="btn-remove btn-column-remove"><icon class="fas fa-minus-circle ml-2"></icon></span>\
+                        <span class="btn-remove btn-column-remove" data-toggle="tooltip" title="'+translatedTitle+'" > \
+                            <icon class="fas fa-minus-circle ml-2"></icon> \
+                        </span>\
                     </div>');
 
                 $('.columns-container').append(newColumn);
-                init();
+                initBoard();
+                $(newColumn).find('.board-column-name').click();
+            });
+
+            $('.btn-team-add').unbind('click').on('click', function() {
+                $('#team_modal').modal();
+            });
+
+            $('.btn-invitation-add').unbind('click').on('click', function() {
+                $('#invitation_modal').modal();
+            });
+
+            $('.btn-membership-add').unbind('click').on('click', function() {
+                $('#membership_modal').modal();
+            });
+
+            $('.btn-invitation-remove').unbind('click').on('click', function() {
+                invitationDeleteId = $(this).data('id');
+                elementIdentifier = $(this).closest('li').data('identifier');
+                $('#invitation_remove_modal').modal();
+            });
+
+            $('.btn-membership-remove').unbind('click').on('click', function() {
+                membershipDeleteId = $(this).data('id');
+                elementIdentifier = $(this).closest('li').data('identifier');
+                $('#membership_remove_modal').modal();
+            });
+
+            $('.btn-team-remove').unbind('click').on('click', function() {
+                teamDeleteId = $(this).data('id');
+                elementIdentifier = $(this).closest('li').data('identifier');
+                $('#team_remove_modal').modal();
+            });
+
+            $('.btn-delete').unbind('click').on('click', function() {
+                $('#board_remove_modal').modal();
             });
 
             $('.columns-container .btn-column-remove').unbind('click').on('click', function() {
@@ -554,7 +787,7 @@
                         } else {
                             $(this).replaceWith('<span class="board-column-name">'+currentValue+'</span>');
                         }
-                        init();
+                        initBoard();
                     });
 
                     $(inputElement).keydown(function (event) {
@@ -569,148 +802,151 @@
                         }
                     });
                 }
-                init();
+                initBoard();
             });
 
-            $('.btn-invitation-add').unbind('click').on('click', function() {
-                let inivitationModal = $('#invitation_modal');
-                $(inivitationModal).modal();
-
-                $(inivitationModal).on('shown.bs.modal', function () {
-                    $(inivitationModal).find('#invitation_email').trigger('focus');
-                });
-
-                $(inivitationModal).on('hidden.bs.modal', function () {
-                    $(inivitationModal).find('#invitation_email').val("");
-                    $(inivitationModal).find('.error').html("").css({"display": "none"});
-                });
+            $("#membership_name").autocomplete({
+                source: knownMembers
             });
 
-            $('.btn-membership-add').unbind('click').on('click', function() {
-
-                $("#membership_name").autocomplete({
-                    source: knownMembers
-                });
-
-                let membershipModal = $('#membership_modal');
-                $(membershipModal).modal();
-
-                $(membershipModal).on('shown.bs.modal', function () {
-                    $(membershipModal).find('#membership_name').trigger('focus');
-                });
-
-                $(membershipModal).on('hidden.bs.modal', function () {
-                    $(membershipModal).find('#membership_name').val("");
-                    $(membershipModal).find('.error').html("").css({"display": "none"});
-                });
+            $('#membership_name').on('keyup', function() {
+                $('#membership_modal').find('.error').html("").css({"display": "none"});
             });
 
-            $('.btn-team-add').unbind('click').on('click', function() {
-                $("#team_name").autocomplete({
-                    source: knownTeams
-                });
-
-                let teamModal = $('#team_modal');
-                $(teamModal).modal();
-
-                $(teamModal).on('shown.bs.modal', function () {
-                    $(teamModal).find('#team_name').trigger('focus');
-                });
-
-                $(teamModal).on('hidden.bs.modal', function () {
-                    $(teamModal).find('#team_name').val("");
-                    $(teamModal).find('.error').html("").css({"display": "none"});
-                });
+            $('#membership_modal').on('shown.bs.modal', function () {
+                setTimeout(function() {$('#membership_modal').find('#membership_name').focus()});
             });
 
-            $('.btn-invitation-remove').unbind('click').on('click', function() {
-                let invitationRemoveModal = $('#invitation_remove_modal');
-                invitationDeleteId = $(this).data('id');
-                $(invitationRemoveModal).modal();
-
-                $(invitationRemoveModal).on('hidden.bs.modal', function () {
-                    $(invitationRemoveModal).find('.error').html("").css({"display": "none"});
-                });
+            $('#membership_modal').on('hidden.bs.modal', function () {
+                $('#membership_modal').find('#membership_name').val("");
+                $('#membership_modal').find('.error').html("").css({"display": "none"});
             });
 
-            $('.btn-membership-remove').unbind('click').on('click', function() {
-                let membershipRemoveModal = $('#membership_remove_modal');
-                membershipDeleteId = $(this).data('id');
-                $(membershipRemoveModal).modal();
-
-                $(membershipRemoveModal).on('hidden.bs.modal', function () {
-                    $(membershipRemoveModal).find('.error').html("").css({"display": "none"});
-                });
+            $("#team_name").autocomplete({
+                source: knownTeams
             });
 
-            $('.btn-team-remove').unbind('click').on('click', function() {
-                let teamRemoveModal = $('#team_remove_modal');
-                teamDeleteId = $(this).data('id');
-                $(teamRemoveModal).modal();
-
-                $(teamRemoveModal).on('hidden.bs.modal', function () {
-                    $(teamRemoveModal).find('.error').html("").css({"display": "none"});
-                });
+            $('#team_name').on('keyup', function() {
+                $('#team_modal').find('.error').html("").css({"display": "none"});
             });
 
-            $('#invitation_remove_modal .btn-primary').unbind('click').on('click', function() {
-                $.ajax({
-                    url: '/board/invitation/'+invitationDeleteId,
-                    type: 'DELETE',
-                    success: function(response) {
-                        if (true == response.success) {
-                            $('span.btn-invitation-remove[data-id="'+invitationDeleteId+'"]').closest('li').fadeOut(500, function() {
-                                $('span.btn-invitation-remove[data-id="'+invitationDeleteId+'"]').closest('li').remove();
-                                $('#invitation_remove_modal').modal('hide');
-                                invitationDeleteId = undefined;
-                            });
+            $('#team_modal').on('shown.bs.modal', function () {
+                setTimeout(function() {$('#team_modal').find('#team_name').focus()});
+            });
+
+            $('#team_modal').on('hidden.bs.modal', function () {
+                $('#team_modal').find('#team_name').val("");
+                $('#team_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#membership_remove_modal').on('hidden.bs.modal', function () {
+                $('#membership_remove_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#team_remove_modal').on('hidden.bs.modal', function () {
+                $('#team_remove_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#invitation_modal .btn-primary').unbind('click').on('click', function() {
+                let email = $('#invitation_modal #invitation_email').val().trim();
+                let boardId = $('#board_id').val();
+                let inputValid = $('#invitation_modal #invitation_email')[0].checkValidity() && 0 < email.length;
+                let userAlreadyInvited = 0 < $('.board-invitations-container li:contains("'+email+'")').length;
+
+                if (!userAlreadyInvited
+                    && 0 == boardId.length
+                    && inputValid
+                ) {
+                    addInvitation(email, undefined, undefined, 'changed');
+                    $('#invitation_modal').modal('hide');
+                    initBoard();
+                    return true;
+                } else if (!userAlreadyInvited
+                    && inputValid
+                ) {
+                    $.post("{{ path('board_invite') }}", {email: email, id: boardId}, function(response) {
+                        if (200 === response.code) {
+                            addInvitation(email, response.id, response.token);
+                            $('#invitation_modal').modal('hide');
+                            initBoard();
                         } else {
-                            $('#invitation_remove_modal .error').html(response.message).fadeIn();
+                            $('#invitation_modal .error').html(response.content).fadeIn(function() {
+                                $(this).css({'visibility': 'visible'});
+                            });
                         }
-                    }
-                });
-            });
-
-            $('#membership_remove_modal .btn-primary').unbind('click').on('click', function() {
-                if (1 < $('.member-container.board-admins-container li').length || "ROLE_ADMIN" != $('.board-member[data-id="'+membershipDeleteId+'"]').closest('.member-container').attr('data-role')) {
-                    $.ajax({
-                        url: '/board/member/'+membershipDeleteId,
-                        type: 'DELETE',
-                        success: function(response) {
-                            if (true == response.success) {
-                                $('span.btn-membership-remove[data-id="'+membershipDeleteId+'"]').closest('li').fadeOut(500, function() {
-                                    $('span.btn-membership-remove[data-id="'+membershipDeleteId+'"]').closest('li').remove();
-                                    $('#membership_remove_modal').modal('hide');
-                                    membershipDeleteId = undefined;
-                                });
-                            } else {
-                                $('#membership_remove_modal .error').html(response.message).fadeIn(function() {
-                                    $(this).css({'visibility': 'visible'});
-                                });
-                            }
-                        }
-                    })
-                } else {
-                    $('#membership_remove_modal .error').html("Only one admin left, deletion rejected!").fadeIn();
+                    });
+                } else if (!userAlreadyInvited
+                    && !inputValid
+                ) {
+                    $('#invitation_modal .error').html("{{ 'email_invalid'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                } else if (userAlreadyInvited) {
+                    $('#invitation_modal .error').html("{{ 'email_already_invited'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
                 }
             });
 
-            $('#team_remove_modal .btn-primary').unbind('click').on('click', function() {
-                $.ajax({
-                    url: '/board/team/'+teamDeleteId,
-                    type: 'DELETE',
-                    success: function(response) {
-                        if (true == response.success) {
-                            $('span.btn-team-remove[data-id="'+teamDeleteId+'"]').closest('li').fadeOut(500, function() {
-                                $('span.btn-team-remove[data-id="'+teamDeleteId+'"]').closest('li').remove();
-                                $('#team_remove_modal').modal('hide');
-                                teamDeleteId = undefined;
-                            });
-                        } else {
-                            $('#team_remove_modal .error').html(response.message).fadeIn();
+            $('#invitation_modal').on('shown.bs.modal', function () {
+                setTimeout(function() {$('#invitation_modal').find('#invitation_email').focus()});
+            });
+
+            $('#invitation_modal').on('hidden.bs.modal', function () {
+                $('#invitation_modal').find('#invitation_email').val("");
+                $('#invitation_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#invitation_email').on('keyup', function() {
+                $('#invitation_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#invitation_remove_modal .btn-primary').unbind('click').on('click', function() {
+                if ("undefined" == invitationDeleteId) {
+                    $('.board-invitations-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                    $('#invitation_remove_modal').modal('hide');
+                    invitationDeleteId = undefined;
+                    elementIdentifier = undefined;
+                } else {
+                    $.ajax({
+                        url: '/board/invitation/'+invitationDeleteId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (true == response.success) {
+                                $('.board-invitations-container li[data-identifier="'+elementIdentifier+'"]').fadeOut(500, function() {
+                                    $('.board-invitations-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                                    $('#invitation_remove_modal').modal('hide');
+                                    invitationDeleteId = undefined;
+                                    elementIdentifier = undefined;
+                                });
+                            } else {
+                                $('#invitation_remove_modal .error').html(response.content).fadeIn();
+                            }
                         }
-                    }
-                })
+                    });
+                }
+            });
+
+            $('#invitation_remove_modal').on('hidden.bs.modal', function () {
+                $('#invitation_remove_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#board_remove_modal .btn-ok').unbind('click').on('click', function() {
+                let boardId = $('#board_id').val();
+                if (0 < boardId.length) {
+                    $.ajax({
+                        url: '/board/'+boardId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            window.location.href="/boards";
+                        },
+                        error: function(response) {
+                            error(response.content, "{{ 'error_board_deletion'|trans({}, 'titles') }}");
+                        }
+                    });
+                }
             });
 
             $('#membership_modal .btn-primary').unbind('click').on('click', function() {
@@ -720,40 +956,107 @@
                 let boardId = $('#board_id').val();
 
                 if (undefined === userId) {
-                    $('#membership_modal .error').html("{{ 'user_unknown'|trans({}, 'error') }}").fadeIn(function() {
+                    $('#membership_modal .error').html("{{ 'user_unknown'|trans({}, 'errors') }}").fadeIn(function() {
                         $(this).css({'visibility': 'visible'});
                     });
                     return false;
                 }
 
+                let userExists = 0 < $('.board-membership-container span[data-user-id="'+userId+'"]').length;
+
+                if (userExists) {
+                    $('#membership_modal .error').html("{{ 'member_already_added'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                }
+
+                if (0 == boardId.length) {
+                    addMembership(userName, undefined, userRole, userId, 'changed');
+                    $('#membership_modal').modal('hide');
+                    initBoard();
+                    return true;
+                }
+
                 $.post("{{ path('board_add_member') }}", {userId: userId, boardId: boardId, userRole: userRole}, function(response) {
                     if (200 === response.code) {
-                        addMembership(userName, response.id, userRole);
+                        addMembership(userName, response.id, userRole, userId);
                         $('#membership_modal').modal('hide');
-                        init();
+                        initBoard();
                     } else {
-                        $('#membership_modal .error').html(response.message).fadeIn(function() {
+                        $('#membership_modal .error').html(response.content).fadeIn(function() {
                             $(this).css({'visibility': 'visible'});
                         });
                     }
                 });
             });
 
-            $('#invitation_modal .btn-primary').unbind('click').on('click', function() {
-                let email = $('#invitation_modal #invitation_email').val().trim();
-                let boardId = $('#board_id').val();
-
-                $.post("{{ path('board_invite') }}", {email: email, id: boardId}, function(response) {
-                    if (200 === response.code) {
-                        addInvitation(email, response.id, response.token);
-                        $('#invitation_modal').modal('hide');
-                        init();
+            $('#membership_remove_modal .btn-primary').unbind('click').on('click', function() {
+                if (1 < $('.member-container.board-admins-container li').length
+                    || "ROLE_ADMIN" != $('.board-member[data-identifier="'+elementIdentifier+'"]').attr('data-role')
+                ) {
+                    // @TODO hier über identifier arbeiten statt über konkrete IDs, da diese unter umständen noch nicht gesetzt sind!
+                    if ("undefined" == membershipDeleteId) {
+                        $('.board-membership-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                        $('#membership_remove_modal').modal('hide');
+                        membershipDeleteId = undefined;
+                        elementIdentifier = undefined;
                     } else {
-                        $('#invitation_modal .error').html(response.message).fadeIn(function() {
-                            $(this).css({'visibility': 'visible'});
-                        });
+                        $.ajax({
+                            url: '/board/member/'+membershipDeleteId,
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (true == response.success) {
+                                    $('li[data-identifier="'+elementIdentifier+'"]').fadeOut(500, function() {
+                                        $('.board-membership-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                                        $('#membership_remove_modal').modal('hide');
+                                        membershipDeleteId = undefined;
+                                        elementIdentifier = undefined;
+                                    });
+                                } else {
+                                    $('#membership_remove_modal .error').html(response.content).fadeIn(function() {
+                                        $(this).css({'visibility': 'visible'});
+                                    });
+                                }
+                            }
+                        })
                     }
-                });
+                } else {
+                    $('#membership_remove_modal .error').html("Only one admin left, deletion rejected!").fadeIn();
+                }
+            });
+
+            $('#team_remove_modal .btn-primary').unbind('click').on('click', function() {
+                console.log(elementIdentifier);
+                console.log(teamDeleteId);
+                // @TODO hier über identifier arbeiten statt über konkrete IDs, da diese unter umständen noch nicht gesetzt sind!
+                if ("undefined" == teamDeleteId) {
+                    console.log("DELETE ONLY IN FRONTEND!");
+                    $('li.board-team[data-identifier="'+elementIdentifier+'"]').fadeOut(500, function() {
+                        $('li.board-team[data-identifier="'+elementIdentifier+'"]').remove();
+                    });
+                    $('#team_remove_modal').modal('hide');
+                    teamDeleteId = undefined;
+                    elementIdentifier = undefined;
+                } else {
+                    console.log("DELETE IN BACKEND!");
+                    $.ajax({
+                        url: '/board/team/'+teamDeleteId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (true == response.success) {
+                                $('li.board-team[data-identifier="'+elementIdentifier+'"]').fadeOut(500, function() {
+                                    $('li.board-team[data-identifier="'+elementIdentifier+'"]').remove();
+                                    $('#team_remove_modal').modal('hide');
+                                    teamDeleteId = undefined;
+                                    elementIdentifier = undefined;
+                                });
+                            } else {
+                                $('#team_remove_modal .error').html(response.content).fadeIn();
+                            }
+                        }
+                    })
+                }
             });
 
             $('#team_modal .btn-primary').unbind('click').on('click', function() {
@@ -761,18 +1064,45 @@
                 let teamId = knownTeamIds[teamName];
                 let boardId = $('#board_id').val();
 
+                console.log(teamId);
+
+                if (undefined === teamId) {
+                    $('#team_modal .error').html("{{ 'team_unknown'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                }
+
+                let teamExists = 0 < $('.board-team-container span[data-team-id="'+teamId+'"]').length;
+
+                if (teamExists) {
+                    $('#team_modal .error').html("{{ 'team_already_added'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                }
+
+                if (0 == boardId.length) {
+                    addTeam(teamName, undefined, teamId, 'changed');
+                    $('#team_modal').modal('hide');
+                    initBoard();
+                    return true;
+                }
+
                 $.post("{{ path('board_add_team') }}", {teamId: teamId, boardId: boardId}, function(response) {
                     if (200 === response.code) {
-                        addTeam(teamName, response.id);
+                        addTeam(teamName, response.id, teamId);
                         $('#team_modal').modal('hide');
-                        init();
+                        initBoard();
                     } else {
-                        $('#team_modal .error').html(response.message).fadeIn(function() {
+                        $('#team_modal .error').html(response.content).fadeIn(function() {
                             $(this).css({'visibility': 'visible'});
                         });
                     }
                 });
             });
+
+            $('[data-toggle="tooltip"]').tooltip();
         }
     </script>
 {% endblock %}

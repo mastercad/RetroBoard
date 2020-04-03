@@ -11,7 +11,7 @@
 {% endfor %}
 <div class="preview col-sm-6 col-md-5 col-xs-5 m-5 p-2 border rounded">
     {% if is_granted('edit', board) %}
-        <a href="/board/create/{{ board.id }}" class="btn-edit-board">
+        <a href="/board/create/{{ board.id }}" class="btn-edit-board" data-toggle="tooltip" title="{{ 'click_to_edit_board'|trans({}, 'titles') }}">
             <icon class="fas fa-edit"></icon>
         </a>
     {% endif %}

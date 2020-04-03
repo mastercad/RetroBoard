@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * BoardMember
@@ -20,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BoardMember
 {
+    private $tokenStorage;
+
     /**
      * @var int
      *
@@ -40,7 +45,7 @@ class BoardMember
     private $user;
 
     /**
-     * @var json
+     * @var array
      *
      * @ORM\Column(name="roles", type="json", length=250, nullable=false)
      */
@@ -49,7 +54,7 @@ class BoardMember
     /**
      * @var Board
      *
-     * @ORM\ManyToOne(targetEntity="Board", inversedBy="members")
+     * @ORM\ManyToOne(targetEntity="Board", inversedBy="boardMembers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="board", referencedColumnName="id", nullable=false)
      * })
@@ -90,8 +95,14 @@ class BoardMember
      */
     private $modified;
 
+//    public function __construct(UserInterface $user)
+//    public function __construct(TokenStorageInterface $tokenStorage)
     public function __construct()
     {
+//        var_dump("UserName: ".$user->getId());
+//        $this->tokenStorage = $tokenStorage;
+//        $this->creator = $tokenStorage->getToken()->getUser();
+        $this->created = new \DateTime("now");
         $this->roles = ['ROLE_USER'];
     }
 
@@ -99,7 +110,7 @@ class BoardMember
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -111,7 +122,7 @@ class BoardMember
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -123,7 +134,7 @@ class BoardMember
      * Get the value of User
      *
      * @return User
-     */ 
+     */
     public function getUser()
     {
         return $this->user;
@@ -135,7 +146,7 @@ class BoardMember
      * @param User  $user
      *
      * @return  self
-     */ 
+     */
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -147,7 +158,7 @@ class BoardMember
      * Get the value of board
      *
      * @return  Board
-     */ 
+     */
     public function getBoard()
     {
         return $this->board;
@@ -159,7 +170,7 @@ class BoardMember
      * @param Board $board
      *
      * @return  self
-     */ 
+     */
     public function setBoard(?Board $board)
     {
         $this->board = $board;
@@ -173,12 +184,15 @@ class BoardMember
         $roles = $this->roles;
         // damit mindestens eine Rolle gesetzt wird
         $roles[] = 'ROLE_USER';
-    
+
         return array_unique($roles);
     }
 
     public function setRoles($roles)
     {
+        if (!is_array($roles)) {
+            $roles = [$roles];
+        }
         $this->roles = $roles;
         return $this;
     }
@@ -202,9 +216,13 @@ class BoardMember
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
+//        if (null === $this->creator) {
+//            var_dump("User in getCreator: ".$this->tokenStorage->getToken()->getUser()->getName());
+//            return $this->tokenStorage->getToken()->getUser();
+//        }
         return $this->creator;
     }
 
@@ -214,7 +232,7 @@ class BoardMember
      * @param User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -226,7 +244,7 @@ class BoardMember
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -238,7 +256,7 @@ class BoardMember
      * @param \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -250,7 +268,7 @@ class BoardMember
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -262,7 +280,7 @@ class BoardMember
      * @param User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -274,7 +292,7 @@ class BoardMember
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -286,11 +304,16 @@ class BoardMember
      * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getId();
     }
 }

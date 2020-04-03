@@ -97,21 +97,22 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Delete Ticket</h5>
+                <h5 class="modal-title">{{ 'delete_ticket'|trans({}, 'titles') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    Should this ticket really be removed from the board?
+{#                    Should this ticket really be removed from the board? #}
+                    {{ 'should_this_ticket_really_be_removed_from_board'|trans({}, 'messages') }}
                 </div>
                 <div class="error alert alert-danger" style="display: none;" role="alert">
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Remove</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
             </div>
         </div>
     </div>
@@ -197,6 +198,8 @@
                                     }, function(response) {
                                         if (true === response.success) {
                                             $(editFormContainer).modal('hide');
+                                        } else {
+                                            alert(response.content, "{{ 'error_ticket_creation'|trans({}, 'titles') }}")
                                         }
                                     }
                                 );
@@ -383,6 +386,8 @@
                                     ticketDeleteId = undefined;
                                     $(this).remove();
                                 });
+                            } else {
+                                alert(response.content, "{{ 'error_ticket_deletion'|trans({}, 'titles') }}")
                             }
                         }
                     })
@@ -410,10 +415,10 @@
                     let contentContainer = $(ticketContainer).find('.content');
                     let content = contentContainer.text().trim();
                     let editContainer = $('<div class="col-md-12 col-sm-12 textarea-container">'+
-                        '<textarea rows="3" data-min-rows="3" placeholder="Your text here..." class="form-control textarea-custom autoExpand">'+
+                        '<textarea rows="3" data-min-rows="3" placeholder="{{ 'your_text_here'|trans({}, 'labels') }}" class="form-control textarea-custom autoExpand">'+
                         content+
                         '</textarea>'+
-                        '<button class="btn btn-primary btn-save float-right">Save</button>'+
+                        '<button class="btn btn-primary btn-save float-right">{{ 'save'|trans({}, 'labels') }}</button>'+
                         '</div>'
                     );
 
@@ -490,7 +495,7 @@
                 eventSource.onmessage = eventMessage => handleEventMessage(eventMessage); // do something with the payload
 
                 eventSource.addEventListener('error', function(event) {
-                    console.log(event);
+//                    console.log(event);
                     eventSource.close();
                     connect();
                 });
@@ -544,7 +549,7 @@
             ) {
                 $.notify({
                     // options
-                    message: 'New Ticket created!'
+                    message: '{{ 'ticket_created'|trans({}, 'messages') }}'
                 },{
                     // settings
                     type: 'info'
@@ -569,7 +574,7 @@
             ) {
                 $.notify({
                     // options
-                    message: 'Ticket updated!'
+                    message: '{{ 'ticket_updated'|trans({}, 'messages') }}'
                 },{
                     // settings
                     type: 'info'
@@ -585,7 +590,7 @@
             ) {
                 $.notify({
                     // options
-                    message: 'Ticket deleted!'
+                    message: '{{ 'ticket_removed'|trans({}, 'messages') }}'
                 },{
                     // settings
                     type: 'info'
@@ -601,7 +606,7 @@
             ) {
                 $.notify({
                     // options
-                    message: 'Ticket archived!'
+                    message: '{{ 'ticket_archived'|trans({}, 'messages') }}'
                 },{
                     // settings
                     type: 'info'
@@ -644,7 +649,7 @@
                 ) {
                     $.notify({
                         // options
-                        message: 'Votings changed, View reordered!'
+                        message: '{{ 'votings_changed_tickets_reordered'|trans({}, 'messages') }}'
                     },{
                         // settings
                         type: 'info'

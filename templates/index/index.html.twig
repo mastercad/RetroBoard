@@ -10,12 +10,12 @@
 {% block body %}
     {% set boardCount = 2 %}
     <div class="container-fluid">
-        {% for boardMember in boardMembers %}
+        {% for board in boards %}
             {% if boardCount is divisible by(2) %}
                 <div class="row">
             {% endif %}
 
-            {% include '/board/preview.html.twig' with {'board': boardMember.board, 'boardCount': boardCount} only %}
+            {% include '/board/preview.html.twig' with {'board': board, 'boardCount': boardCount} only %}
 
             {% if boardCount is not divisible by(2) %}
                 </div>

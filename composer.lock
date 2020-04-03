@@ -4,34 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "306d1c7f1bc94c520040d53c14bc2edf",
+    "content-hash": "67ae72ca733cef89861e1431e5a48967",
     "packages": [
         {
             "name": "doctrine/annotations",
-            "version": "v1.7.0",
+            "version": "1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "fa4c4e861e809d6a1103bd620cce63ed91aedfeb"
+                "reference": "5eb79f3dbdffed6544e1fc287572c0f462bd29bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/fa4c4e861e809d6a1103bd620cce63ed91aedfeb",
-                "reference": "fa4c4e861e809d6a1103bd620cce63ed91aedfeb",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/5eb79f3dbdffed6544e1fc287572c0f462bd29bb",
+                "reference": "5eb79f3dbdffed6544e1fc287572c0f462bd29bb",
                 "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
+                "ext-tokenizer": "*",
                 "php": "^7.1"
             },
             "require-dev": {
                 "doctrine/cache": "1.*",
-                "phpunit/phpunit": "^7.5@dev"
+                "phpunit/phpunit": "^7.5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.9.x-dev"
                 }
             },
             "autoload": {
@@ -72,7 +73,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2019-08-08T18:11:40+00:00"
+            "time": "2020-04-02T12:33:25+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -4915,16 +4916,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v4.3.4",
+            "version": "v4.3.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "173b483999c2acad8e040633105733318dcc8a83"
+                "reference": "0d2dcf4ae26db5b6781f40fcab9785f427ee7fa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/173b483999c2acad8e040633105733318dcc8a83",
-                "reference": "173b483999c2acad8e040633105733318dcc8a83",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/0d2dcf4ae26db5b6781f40fcab9785f427ee7fa4",
+                "reference": "0d2dcf4ae26db5b6781f40fcab9785f427ee7fa4",
                 "shasum": ""
             },
             "require": {
@@ -5004,7 +5005,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "time": "2019-08-26T09:28:48+00:00"
+            "time": "2020-01-31T09:10:37+00:00"
         },
         {
             "name": "symfony/var-exporter",
@@ -5243,6 +5244,7 @@
                 "code",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2018-08-13T20:36:59+00:00"
         },
         {
@@ -5297,6 +5299,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
         }
     ],

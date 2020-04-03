@@ -213,7 +213,7 @@ class ArchiveBoard
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -225,7 +225,7 @@ class ArchiveBoard
      * @param User $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -245,7 +245,7 @@ class ArchiveBoard
     {
         if (!$this->archiveColumns->contains($archiveColumn)) {
             $this->archiveColumns[] = $archiveColumn;
-            $archiveColumn->setArchiveBoard($this);
+            $archiveColumn->setBoard($this);
         }
 
         return $this;
@@ -256,15 +256,15 @@ class ArchiveBoard
         if ($this->archiveColumns->contains($archiveColumn)) {
             $this->archiveColumns->removeElement($archiveColumn);
             // set the owning side to null (unless already changed)
-            if ($archiveColumn->getArchiveBoard() === $this) {
-                $archiveColumn->setArchiveBoard(null);
+            if ($archiveColumn->getBoard() === $this) {
+                $archiveColumn->setBoard(null);
             }
         }
 
         return $this;
     }
 
-    public function setBoardMembers(Collection $archiveBoardMembers) : self
+    public function setMembers(Collection $archiveBoardMembers) : self
     {
         $this->members = $archiveBoardMembers;
 
@@ -274,12 +274,12 @@ class ArchiveBoard
     /**
      * @return Collection|ArchiveBoardMember[]
      */
-    public function getBoardMembers(): Collection
+    public function getMembers(): Collection
     {
         return $this->members;
     }
 
-    public function addBoardMember(ArchiveBoardMember $archiveBoardMember): self
+    public function addMember(ArchiveBoardMember $archiveBoardMember): self
     {
         if (!$this->members->contains($archiveBoardMember)) {
             $this->members[] = $archiveBoardMember;
@@ -289,7 +289,7 @@ class ArchiveBoard
         return $this;
     }
     
-    public function removeBoardMember(ArchiveBoardMember $archiveBoardMember): self
+    public function removeMember(ArchiveBoardMember $archiveBoardMember): self
     {
         if ($this->members->contains($archiveBoardMember)) {
             $this->members->removeElement($archiveBoardMember);

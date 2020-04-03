@@ -129,6 +129,74 @@
         <source>Invitations</source>
         <target>Invitations</target>
       </trans-unit>
+      <trans-unit id="add" resname="add">
+        <source>add</source>
+        <target>add</target>
+      </trans-unit>
+      <trans-unit id="edit_team" resname="edit_team">
+        <source>Edit Team</source>
+        <target>Edit Team</target>
+      </trans-unit>
+      <trans-unit id="create_new_team" resname="create_new_team">
+        <source>Create Team</source>
+        <target>Create Team</target>
+      </trans-unit>
+      <trans-unit id="error" resname="error">
+        <source>Error</source>
+        <target>Error</target>
+      </trans-unit>
+      <trans-unit id="your_text_here" resname="your_text_here">
+        <source>Your text here…</source>
+        <target>Your text here…</target>
+      </trans-unit>
+      <trans-unit id="logged_in_as" resname="logged_in_as">
+        <source>Logged in as</source>
+        <target>Logged in as</target>
+      </trans-unit>
+      <trans-unit id="enter_email_reset_password" resname="enter_email_reset_password">
+        <source>Enter email for reset password</source>
+        <target>Enter email for reset password</target>
+      </trans-unit>
+      <trans-unit id="login" resname="login">
+        <source>Login</source>
+        <target>Login</target>
+      </trans-unit>
+      <trans-unit id="reset" resname="reset">
+        <source>Reset</source>
+        <target>Reset</target>
+      </trans-unit>
+      <trans-unit id="register" resname="register">
+        <source>Register</source>
+        <target>Register</target>
+      </trans-unit>
+      <trans-unit id="sign_in" resname="sign_in">
+        <source>Sign in</source>
+        <target>Sign in</target>
+      </trans-unit>
+      <trans-unit id="password" resname="password">
+        <source>Password</source>
+        <target>Password</target>
+      </trans-unit>
+      <trans-unit id="forgot_password" resname="forgot_password">
+        <source>Forgot password</source>
+        <target>Forgot password</target>
+      </trans-unit>
+      <trans-unit id="confirm_password" resname="confirm_password">
+        <source>Confirm password</source>
+        <target>Confirm password</target>
+      </trans-unit>
+      <trans-unit id="password_not_equal" resname="password_not_equal">
+        <source>Password not equal</source>
+        <target>Password not equal</target>
+      </trans-unit>
+      <trans-unit id="password_must_changed" resname="password_must_changed">
+        <source>Password must changed</source>
+        <target>Password must changed</target>
+      </trans-unit>
+      <trans-unit id="agree_terms" resname="agree_terms">
+        <source>Agree terms</source>
+        <target>Agree terms</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

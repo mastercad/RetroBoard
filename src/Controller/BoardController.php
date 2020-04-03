@@ -13,34 +13,107 @@ use App\Entity\Board;
 use App\Entity\BoardInvitation;
 use App\Entity\BoardMember;
 use App\Entity\BoardSubscriber;
+use App\Entity\Column;
 use App\Form\BoardType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BoardController extends AbstractController
 {
+    private $validator;
+    private $mailer;
+    private $entityManager;
+    private $translator;
+
+    public function __construct(\Swift_Mailer $mailer, ValidatorInterface $validator, EntityManagerInterface $entityManager, TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+        $this->validator = $validator;
+        $this->mailer = $mailer;
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * @Route("/boards", name="boards", methods={"GET"})
      */
     public function index(EntityManagerInterface $entityManager)
     {
-        $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy([
-            'user' => $this->getUser()
-        ]);
+        /*
+        $boards = [];
 
-        $board = $this->getDoctrine()->getRepository(Board::class)->findAllAvailableBoardsByUser($this->getUser());
+        $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
 
-        if (empty($boardMembers)) {
-            $boardMembers[]['board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
+        foreach ($boardMembers as $boardMember) {
+            $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
+        }
+
+        $teamBoards = $this->getDoctrine()->getRepository(Team::class)->findAllTeamsForUser($this->getUser());
+
+//        \Doctrine\Common\Util\Debug::dump($teamBoards->getBoardTeams());
+
+        foreach ($teamBoards as $teamBoard) {
+            foreach ($teamBoard as $currentBoards) {
+                foreach ($currentBoards as $board) {
+                    $boards[$board->getName()] = $board->getBoard();
+                }
+            }
+        }
+
+        if (empty($boards)) {
+            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
+        } else if (isset($boards['Demo Board'])) {
+            unset ($boards['Demo Board']);
         }
 
         return $this->render(
-            'board/index.html.twig',
+            'index/index.html.twig',
             [
-                'boardMembers' => $boardMembers
+                'boards' => $boards,
+            ]
+        );
+        */
+        $boards = [];
+
+        $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
+
+        foreach ($boardMembers as $boardMember) {
+            $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
+        }
+//        \Doctrine\Common\Util\Debug::dump($boardMembers);
+/*
+        $teams = $this->getDoctrine()->getRepository(Team::class)->findAllTeamsForUser($this->getUser());
+
+        \Doctrine\Common\Util\Debug::dump($teams);
+
+        foreach ($teams as $team) {
+            \Doctrine\Common\Util\Debug::dump($team->getBoardTeams());
+            foreach ($team->getBoardTeams() as $boardTeam) {
+                $boards[$boardTeam->getBoard()->getName()] = $boardTeam->getBoard();
+            }
+        }
+*/
+        $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser($this->getUser());
+
+        foreach ($boardTeams as $boardTeam) {
+            $board = $this->getDoctrine()->getRepository(Board::class)->find($boardTeam['board']);
+            $boards[$board->getName()] = $board;
+        }
+
+        if (empty($boards)) {
+            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
+        } else if (isset($boards['Demo Board'])) {
+            unset ($boards['Demo Board']);
+        }
+
+        return $this->render(
+            'index/index.html.twig',
+            [
+                'boards' => $boards,
             ]
         );
     }
@@ -54,12 +127,7 @@ class BoardController extends AbstractController
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
 
         if (!$board) {
-            throw $this->createNotFoundException('Board '.$id.' not found!');
-        }
-
-        foreach ($board->getBoardTeams() as $team) {
-            var_dump($team->getTeams()->getName());
-            var_dump($team->getMembers());
+            throw $this->createNotFoundException($this->translator->trans('board_not_found', ['id' => $id], 'errors'));
         }
 
         $this->denyAccessUnlessGranted('show', $board);
@@ -82,7 +150,7 @@ class BoardController extends AbstractController
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
 
         if (!$board) {
-            throw $this->createNotFoundException('Board '.$id.' not found!');
+            throw $this->createNotFoundException($this->translator->trans('board_not_found', ['id' => $id], 'errors'));
         }
 
         $this->denyAccessUnlessGranted('show', $board);
@@ -106,16 +174,21 @@ class BoardController extends AbstractController
 
         $this->denyAccessUnlessGranted('create', $board);
 
-        $knownMembers = $this->getDoctrine()->getRepository(BoardMember::class)->findAllKnownMembers($this->getUser());
-        $knownTeams = $this->getDoctrine()->getRepository(TeamMember::class)->findAllKnownMembers($this->getUser());
+        $knownTeams = $this->collectAllKnownTeams();
+        $knownMembers = $this->collectAllKnownMembers();
+
+        $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findBy(['board' => $board->getId()]);
+
+        $form = $this->createForm(BoardType::class, $board, ['action' => $this->generateUrl('board_save')]);
 
         return $this->render(
             'board/create.html.twig',
             [
                 'form' => $form->createView(),
                 'board' => $board,
-                'knownMembers' => $knownMembers,
-                'knownTeams' => $knownTeams
+                'boardTeams' => $boardTeams,
+                'knownTeams' => $knownTeams,
+                'knownMembers' => $knownMembers
             ]
         );
     }
@@ -128,36 +201,25 @@ class BoardController extends AbstractController
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
 
         if (!$board) {
-            throw $this->createNotFoundException('No task found for is '.$id);
+            throw $this->createNotFoundException($this->translator->trans('board_not_found', ['id' => $id], 'errors'));
         }
-
         $this->denyAccessUnlessGranted('edit', $board);
 
-        $boardMembers = $this->getDoctrine()->getRepository(BoardMember::class)->findBy(['board' => $board->getId()]);
+        $knownTeams = $this->collectAllKnownTeams();
+        $knownMembers = $this->collectAllKnownMembers();
+
         $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findBy(['board' => $board->getId()]);
-        $knownTeams = $this->getDoctrine()->getRepository(TeamMember::class)->findAllKnownTeams($this->getUser());
-        $knownBoardMembers = $this->getDoctrine()->getRepository(BoardMember::class)->findAllKnownMembers($this->getUser());
-        $knownTeamMembers = $this->getDoctrine()->getRepository(TeamMember::class)->findAllKnownMembers($this->getUser());
 
         $form = $this->createForm(BoardType::class, $board, ['action' => $this->generateUrl('board_save')]);
-
-        $currentBoardTeams = [];
-
-        foreach ($boardTeams as $boardTeam) {
-            $currentBoardTeams[] = ['id' => $boardTeam->getTeam()->getId(), 'name' => $boardTeam->getTeam()->getName()];
-        }
 
         return $this->render(
             'board/create.html.twig',
             [
                 'form' => $form->createView(),
                 'board' => $board,
-                'boardMembers' => $boardMembers,
                 'boardTeams' => $boardTeams,
-                'currentBoardTeams' => $currentBoardTeams,
                 'knownTeams' => $knownTeams,
-                'knownBoardMembers' => $knownBoardMembers,
-                'knownTeamMembers' => $knownTeamMembers
+                'knownMembers' => $knownMembers
             ]
         );
     }
@@ -165,18 +227,19 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/create", name="board_save", methods={"PUT", "POST"})
      */
-    public function saveAction(EntityManagerInterface $entityManager, Request $request)
-    {
-        $id = (int)$request->request->get('board')['id'];
+    public function saveAction(Request $request) {
+        $boardRequestData = $request->request->get('board');
+        $id = (int)$boardRequestData['id'];
 
+        /** Board $board */
         $board = null;
-        $boardMember = null;
+        $boardOwner = null;
         $errors = [];
         $success = false;
 
         if (0 < $id) {
             $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
-            $boardMember = $this->getDoctrine()->getRepository(BoardMember::class)->findOneBy(['user' => $this->getUser(), 'board' => $board]);
+            $boardOwner = $this->getDoctrine()->getRepository(BoardMember::class)->findOneBy(['user' => $this->getUser(), 'board' => $board]);
             $board->setModifier($this->getUser());
             $board->setModified(new \DateTime());
 
@@ -189,43 +252,329 @@ class BoardController extends AbstractController
             $this->denyAccessUnlessGranted('create', $board);
         }
 
-        if (!$boardMember instanceof BoardMember) {
-            $boardMember = new BoardMember();
-            $boardMember->setBoard($board);
-            $boardMember->setRoles(['ROLE_ADMIN']);
-            $boardMember->setUser($this->getUser());
-            $boardMember->setCreator($this->getUser());
-            $boardMember->setCreated(new \DateTime());
+        $board->setName($boardRequestData['name']);
+
+        if (!$boardOwner instanceof BoardMember) {
+            $boardOwner = new BoardMember();
+            $boardOwner->setBoard($board);
+            $boardOwner->setRoles(['ROLE_ADMIN']);
+            $boardOwner->setUser($this->getUser());
+            $boardOwner->setCreator($this->getUser());
+            $boardOwner->setCreated(new \DateTime());
         }
 
-        $form = $this->createForm(BoardType::class, $board);
-        $form->handleRequest($request);
+        $boardMemberSuccess = $this->manageBoardMember($request, $board);
+        $boardInvitationsSuccess = $this->manageBoardInvitations($request, $board);
+        $boardTeamsSuccess = $this->manageBoardTeams($request, $board);
+        $boardColumnsSuccess = $this->manageBoardColumns($request, $board);
 
-        if ($form->isSubmitted()
-            && $form->isValid()
+//        $boardRequestData = $request->request->get('board');
+
+        if (!$boardMemberSuccess
+            || !$boardInvitationsSuccess
+            || !$boardTeamsSuccess
+            || !$boardColumnsSuccess
         ) {
-            try {
-                $board = $form->getData();
-
-                $columns = $board->getColumns();
-
-                foreach ($columns as $column) {
-                    $column->setBoard($board);
-                    $entityManager->persist($column);
+            if (isset($boardRequestData['members'])
+                && is_array($boardRequestData['members'])
+            ) {
+                foreach ($boardRequestData['members'] as &$member) {
+                    if ($member['boardMemberId'] instanceof BoardMember) {
+                        $member['boardMemberId'] = $member['boardMemberId']->getId();
+                    }
                 }
+            }
 
-                $entityManager->persist($board);
-                $entityManager->persist($boardMember);
-                $entityManager->flush();
-                $success = true;
+            if (isset($boardRequestData['teams'])
+                && is_array($boardRequestData['teams'])
+            ) {
+                foreach ($boardRequestData['teams'] as &$team) {
+                    if ($team['boardTeamId'] instanceof BoardTeam) {
+                        $team['boardTeamId'] = $team['boardTeamId']->getId();
+                    }
+                }
+            }
+
+            if (isset($boardRequestData['columns'])
+                && is_array($boardRequestData['columns'])
+            ) {
+                foreach ($boardRequestData['columns'] as &$column) {
+                    if ($column['columnId'] instanceof Column) {
+                        $column['columnId'] = $column['columnId']->getId();
+                    }
+                }
+            }
+
+            if (isset($boardRequestData['invitations'])
+                && is_array($boardRequestData['invitations'])
+            ) {
+                foreach ($boardRequestData['invitations'] as &$invitation) {
+                    if ($invitation['boardInvitationId'] instanceof BoardInvitation) {
+                        $this->sendInvitationEmail($board, $invitation['boardInvitationId']);
+
+                        $invitation['id'] = $invitation['boardInvitationId']->getId();
+                        $invitation['token'] = $invitation['boardInvitationId']->getToken();
+                        $invitation['boardInvitationId'] = $invitation['boardInvitationId']->getId();
+                    }
+                }
+            }
+            return new JsonResponse(['success' => false, 'data' => $boardRequestData]);
+        }
+/*
+        $members = [];
+        if (isset($boardRequestData['members'])) {
+            $members = $boardRequestData['members'];
+            unset($boardRequestData['members']);
+        }
+
+        $teams = [];
+        if (isset($boardRequestData['teams'])) {
+            $teams = $boardRequestData['teams'];
+            unset($boardRequestData['teams']);
+        }
+
+        $invitations = [];
+        if (isset($boardRequestData['invitations'])) {
+            $invitations = $boardRequestData['invitations'];
+            unset($boardRequestData['invitations']);
+        }
+
+        $columns = [];
+        if (isset($boardRequestData['columns'])) {
+            $columns = $boardRequestData['columns'];
+            unset($boardRequestData['columns']);
+        }
+        $request->request->set('board', $boardRequestData);
+*/
+
+//        $form = $this->createForm(BoardType::class, $board, ['creator' => $this->getUser()]);
+//        $form->handleRequest($request);
+
+        $errors = $this->validator->validate($board);
+
+        if (1 || 0 < count($errors)) {
+            try {
+                /** @var ArrayCollection */
+//                $columns = $board->getColumns();
+
+//                if ($columns->isEmpty()) {
+//                    $errors = [['content' => $this->translator->trans('error_one_column_needed_in_board', [], 'errors')]];
+//                } else {
+                    $this->entityManager->persist($board);
+                    $this->entityManager->persist($boardOwner);
+                    $this->entityManager->flush();
+
+                    $success = true;
+
+                    if (isset($boardRequestData['columns'])
+                        && is_array($boardRequestData['columns'])
+                    ) {
+                        foreach ($boardRequestData['columns'] as &$column) {
+                            if ($column['id'] instanceof Column) {
+                                $column['id'] = $column['id']->getId();
+                            }
+                        }
+                    }
+
+                    $boardRequestData['id'] = $board->getId();
+
+                    if (isset($boardRequestData['members'])
+                        && is_array($boardRequestData['members'])
+                    ) {
+                        foreach ($boardRequestData['members'] as &$member) {
+                            if ($member['boardMemberId'] instanceof BoardMember) {
+                                $member['boardMemberId'] = $member['boardMemberId']->getId();
+                            }
+                        }
+                    }
+
+                    if (isset($boardRequestData['teams'])
+                        && is_array($boardRequestData['teams'])
+                    ) {
+                        foreach ($boardRequestData['teams'] as &$team) {
+                            if ($team['boardTeamId'] instanceof BoardTeam) {
+                                $team['boardTeamId'] = $team['boardTeamId']->getId();
+                            }
+                        }
+                    }
+
+                    if (isset($boardRequestData['invitations'])
+                        && is_array($boardRequestData['invitations'])
+                    ) {
+                        foreach ($boardRequestData['invitations'] as &$invitation) {
+                            if ($invitation['boardInvitationId'] instanceof BoardInvitation) {
+                                $this->sendInvitationEmail($invitation['boardInvitationId']);
+
+                                $invitation['id'] = $invitation['boardInvitationId']->getId();
+                                $invitation['token'] = $invitation['boardInvitationId']->getToken();
+                                $invitation['boardInvitationId'] = $invitation['boardInvitationId']->getId();
+                            }
+                        }
+                    }
+//                }
             } catch (UniqueConstraintViolationException $exception) {
-                $errors = [['message' => 'One or more Columns with the Same name already exists on this board!']];
+                $errors = [['content' => $this->translator->trans('one_or_more_columns_already_exists_in_board', [], 'errors')]];
             }
         } else {
-            $errors = $form->getErrors(true);
+//            $errors = $form->getErrors(true, false);
+            var_dump("FORM INVALID!");
+//            dump($form->getErrors());
+//            dump($form['board']->getErrors());
+            dump($errors);
         }
 
-        return new JsonResponse(['success' => $success, 'id' => $board->getId(), 'content' => $success ? 'Ticket erfolgreich gespeichert!' : json_encode($errors)]);
+        return new JsonResponse([
+            'success' => $success, 
+            'id' => $board->getId(), 
+            'data' => $boardRequestData,
+            'content' => $success ? $this->translator->trans('board_saved', [], 'messages') : json_encode($errors)
+//            'content' => $success ? $this->translator->trans('board_saved', [], 'messages') : (string) $errors
+        ]);
+    }
+
+    /**
+     * Manage given member for board membership.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function manageBoardMember(Request $request, Board $board) : bool {
+
+        $success = true;
+        $boardRequestData = $request->request->get('board');
+        if (!isset($boardRequestData['members'])) {
+            return $success;
+        }
+
+        foreach ($boardRequestData['members'] as &$member) {
+            $boardMember = null;
+            $user = $this->getDoctrine()->getRepository(User::class)->find($member['userId']);
+            if (empty($member['boardMemberId'])) {
+                $boardMember = new BoardMember;
+                $boardMember->setUser($user);
+                $boardMember->setCreator($this->getUser());
+                $boardMember->setCreated(new \DateTime());
+                $boardMember->setBoard($board);
+                $boardMember->setRoles($member['roles']);
+                $member['boardMemberId'] = $boardMember;
+            } else {
+                $boardMember = $this->getDoctrine()->getRepository(BoardMember::class)->find($member['boardMemberId']);
+                $boardMember->setRoles($member['roles']);
+                $boardMember->setModifier($this->getUser());
+                $boardMember->setModified(new \DateTime());
+            }
+            $this->entityManager->persist($boardMember);
+        }
+
+        $request->request->set('board', $boardRequestData);
+        return $success;
+    }
+
+    /**
+     * Manage given teams for board.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function manageBoardTeams(Request $request, Board $board) : bool {
+
+        $success = true;
+
+        $boardRequestData = $request->request->get('board');
+        if (!isset($boardRequestData['teams'])) {
+            return $success;
+        }
+
+        foreach ($boardRequestData['teams'] as &$currentTeam) {
+            $boardTeam = null;
+            $team = $this->getDoctrine()->getRepository(Team::class)->find($currentTeam['teamId']); 
+            if (empty($currentTeam['boardTeamId'])) {
+                $boardTeam = new BoardTeam;
+                $boardTeam->setTeam($team);
+                $boardTeam->setBoard($board);
+                $boardTeam->setCreator($this->getUser());
+                $boardTeam->setCreated(new \DateTime());
+                $currentTeam['boardTeamId'] = $boardTeam;
+            } else {
+                $boardTeam = $this->getDoctrine()->getRepository(BoardTeam::class)->find($currentTeam['boardTeamId']);
+                $boardTeam->setModifier($this->getUser());
+                $boardTeam->setModified(new \DateTime());
+            }
+            $this->entityManager->persist($boardTeam);
+        }
+
+        $request->request->set('board', $boardRequestData);
+        return $success;
+    }
+
+    /**
+     * Manage given invitations for board membership.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function manageBoardInvitations(Request $request, Board $board) : bool {
+
+        $success = true;
+
+        $boardRequestData = $request->request->get('board');
+        if (!isset($boardRequestData['invitations'])) {
+            return $success;
+        }
+
+        foreach ($boardRequestData['invitations'] as &$invitation) {
+            $result = $this->handleBoardInvitation($board, $invitation['email'], $invitation['boardInvitationId'], true);
+
+            if ($result instanceof BoardInvitation) {
+                $invitation['boardInvitationId'] = $result;
+            } else {
+                $success = false;
+                $invitation['result'] = $result;
+            }
+        }
+
+        $request->request->set('board', $boardRequestData);
+        return $success;
+    }
+
+    /**
+     * Manage given columns for board membership.
+     *
+     * @param Request $request
+     *
+     * @return bool
+     */
+    private function manageBoardColumns(Request $request, Board $board) : bool {
+
+        $success = true;
+
+        $boardRequestData = $request->request->get('board');
+        if (!isset($boardRequestData['columns'])) {
+            return $success;
+        }
+
+        foreach ($boardRequestData['columns'] as &$currentColumn) {
+            $name = $currentColumn['name'];
+            $priority = $currentColumn['priority'];
+
+            if (empty($currentColumn['id'])) {
+                $column = new Column;
+                $column->setBoard($board);
+                $currentColumn['id'] = $column;
+            } else {
+                $column = $this->getDoctrine()->getRepository(Column::class)->find($currentColumn['id']);
+            }
+            $column->setName($name);
+            $column->setPriority($priority);
+
+            $this->entityManager->persist($column);
+        }
+
+        $request->request->set('board', $boardRequestData);
+        return $success;
     }
 
     /**
@@ -237,27 +586,33 @@ class BoardController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function inviteAction(\Swift_Mailer $mailer, Request $request, ValidatorInterface $validator, EntityManagerInterface $entityManager)
+    public function inviteAction(Request $request)
     {
         $board = $this->getDoctrine()->getRepository(Board::class)->find($request->request->get('id'));
 
-        $data = [];
+        $data = $this->handleBoardInvitation($board, $request->request->get('email'), $request->request->get('invitationId'));
+
+        return new JsonResponse($data);
+    }
+
+    private function handleBoardInvitation($board, $email, $invitationId = null, $postProcessed = false) {
+
         $boardInvitation = new BoardInvitation();
         $token = sha1(random_bytes(20));
+        $data = [];
 
-        if (!empty($request->request->get('invitationId'))) {
-            $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($request->request->get('invitationId'));
+        if (!empty($invitationId)) {
+            $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($invitationId);
             $boardInvitation->setToken($token);
             $boardInvitation->setModifier($this->getUser());
             $boardInvitation->setModified(new \DateTime());
 
             $email = $boardInvitation->getEmail();
         } else {
-            $email = $request->request->get('email');
             $emailConstraint = new Email();
-            $emailConstraint->message = 'Invalid email address';
+            $emailConstraint->message = $this->translator->trans('email_invalid', [], 'errors');
 
-            $errorList = $validator->validate(
+            $errorList = $this->validator->validate(
                 $email,
                 $emailConstraint
             );
@@ -265,10 +620,18 @@ class BoardController extends AbstractController
             if (0 < count($errorList)) {
 //                throw new InvalidArgumentException("Email ".$email." invalid!");
                 $data['code'] = 500;
-                $data['message'] = 'Invalid email address';
+                $data['content'] = $this->translator->trans('email_invalid', [], 'errors');
                 $data['success'] = false;
 
-                return new JsonResponse($data);
+                if (!empty($boardInvitation->getId())) {
+                    $this->entityManager->remove($boardInvitation);
+
+                    if (!$postProcessed) {
+                        $this->entityManager->flush();
+                    }
+                }
+
+                return $data;
             }
 
             $boardInvitation->setBoard($board);
@@ -278,29 +641,58 @@ class BoardController extends AbstractController
             $boardInvitation->setCreated(new \DateTime());
         }
 
-        $this->denyAccessUnlessGranted('create', $boardInvitation);
+        if ($board->getId()) {
+            $this->denyAccessUnlessGranted('create', $boardInvitation);
+        }
 
         try {
-            $entityManager->persist($boardInvitation);
-            $entityManager->flush();
+            $this->entityManager->persist($boardInvitation);
 
             $data['code'] = 200;
             $data['success'] = true;
-            $data['message'] = "success";
+            $data['content'] = $this->translator->trans('success', [], 'messages');
+
+            if (!$postProcessed) {
+                $this->entityManager->flush();
+                $data['id'] = $boardInvitation->getId();
+                $data['token'] = $boardInvitation->getToken();
+                $this->sendInvitationEmail($boardInvitation);
+            }
+        } catch (UniqueConstraintViolationException $exception) {
+            $data['code'] = 500;
+            $data['success'] = false;
+            $data['content'] = $this->translator->trans('email_already_invited', [], 'errors');
             $data['id'] = $boardInvitation->getId();
             $data['token'] = $boardInvitation->getToken();
+        }
 
-            $message = new \Swift_Message('Invitation request board "'.$board->getName().'" on https://retro.byte-artist.de');
+        if ($postProcessed) {
+            return $boardInvitation;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param BoardInvitation $boardInvitation
+     *
+     * @return void
+     */
+    private function sendInvitationEmail(BoardInvitation $boardInvitation) {
+
+            $message = new \Swift_Message('Invitation request board "'.$boardInvitation->getBoard()->getName().'" on https://retro.byte-artist.de');
             $message->setFrom('no-reply@byte-artist.de')
-                ->setTo($email)
+                ->setTo($boardInvitation->getEmail())
                 ->setBcc('andreas.kempe@byte-artist.de')
                 ->setBody(
                     $this->renderView(
                         'emails/invite-user.html.twig',
                         [
-                            'email' => $email,
-                            'board' => $board,
-                            'token' => $token
+                            'email' => $boardInvitation->getEmail(),
+                            'board' => $boardInvitation->getBoard(),
+                            'token' => $boardInvitation->getToken()
                         ]
                     ),
                     'text/html'
@@ -309,50 +701,69 @@ class BoardController extends AbstractController
                     $this->renderView(
                         'emails/invite-user.txt.twig',
                         [
-                            'email' => $email,
-                            'board' => $board,
-                            'token' => $token
+                            'email' => $boardInvitation->getEmail(),
+                            'board' => $boardInvitation->getBoard(),
+                            'token' => $boardInvitation->getToken()
                         ]
                     ),
                     'text/plain'
                 );
 
-            $mailer->send($message);
-        } catch (UniqueConstraintViolationException $exception) {
-            $data['code'] = 500;
-            $data['success'] = false;
-            $data['message'] = "email already invited";
-            $data['id'] = $boardInvitation->getId();
-            $data['token'] = $boardInvitation->getToken();
-        }
+            $this->mailer->send($message);
 
-        return new JsonResponse($data);
+        return $this;
     }
 
     /**
      * @Route("/board/invitation/{id}", name="board_invite_delete", methods={"DELETE"})
      *
-     * @param EntityManagerInterface $entityManager
      * @param integer $id
      *
      * @return void
      */
-    public function deleteInvitationAction(EntityManagerInterface $entityManager, int $id)
+    public function deleteInvitationAction(int $id)
     {
         $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($id);
         if (!$boardInvitation instanceof BoardInvitation) {
-            return new JsonResponse(['success' => false, 'content' => 'Einladung nicht gefunden!']);
+            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('invitation_not_found', [], 'errors')]);
         }
 
         $this->denyAccessUnlessGranted('delete', $boardInvitation);
 
-        $entityManager->remove($boardInvitation);
-        $entityManager->flush();
+        $this->entityManager->remove($boardInvitation);
+        $this->entityManager->flush();
 
         return new JsonResponse(
             [
                 'success' => true,
-                'content' => 'Einladung erfolgreich gelöscht!'
+                'content' => $this->translator->trans('invitation_removed', [], 'messages')
+            ]
+        );
+    }
+
+    /**
+     * @Route("/board/{id}", name="board_delete", methods={"DELETE"})
+     *
+     * @param integer $id
+     *
+     * @return void
+     */
+    public function deleteAction(int $id)
+    {
+        $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
+        if (!$board instanceof Board) {
+            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('board_not_found', [], 'errors')]);
+        }
+
+        $this->denyAccessUnlessGranted('delete', $board);
+
+        $this->entityManager->remove($board);
+        $this->entityManager->flush();
+
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('board_removed', [], 'messages')
             ]
         );
     }
@@ -361,14 +772,13 @@ class BoardController extends AbstractController
      * @Route("/board/member/{token}", name="board_member", methods={"GET"})
      *
      * @param Request                $request
-     * @param EntityManagerInterface $entityManager
      */
-    public function memberAction(string $token, EntityManagerInterface $entityManager)
+    public function memberAction(string $token)
     {
         $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->findOneBy(['token' => $token]);
 
         if (!$boardInvitation instanceof BoardInvitation) {
-            throw $this->createNotFoundException('Invitation not found!');
+            throw $this->createNotFoundException($this->translator->trans('invitation_not_found', [], 'errors'));
         }
 
         $this->denyAccessUnlessGranted('accept', $boardInvitation);
@@ -387,10 +797,10 @@ class BoardController extends AbstractController
         $boardSubscriber->setCreated(new \DateTime());
 
         try {
-            $entityManager->persist($boardMember);
-            $entityManager->persist($boardSubscriber);
-            $entityManager->remove($boardInvitation);
-            $entityManager->flush();
+            $this->entityManager->persist($boardMember);
+            $this->entityManager->persist($boardSubscriber);
+            $this->entityManager->remove($boardInvitation);
+            $this->entityManager->flush();
         } catch (UniqueConstraintViolationException $exception) {
             // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig ablief
             // ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
@@ -401,62 +811,59 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/team/{id}", name="board_team_delete", methods={"DELETE"})
      *
-     * @param EntityManagerInterface $entityManager
      * @param integer $id
      *
      * @return void
      */
-    public function deleteTeamAction(EntityManagerInterface $entityManager, int $id)
+    public function deleteTeamAction(int $id)
     {
         $boardTeam = $this->getDoctrine()->getRepository(BoardTeam::class)->find($id);
 
         if (!$boardTeam instanceof BoardTeam) {
-            return new JsonResponse(['success' => false, 'content' => 'Team für dieses Board nicht gefunden!']);
+            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('team_not_found_for_board', [], 'errors')]);
         }
 
-        $entityManager->remove($boardTeam);
-        $entityManager->flush();
+        $this->entityManager->remove($boardTeam);
+        $this->entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => 'Team erfolgreich vom Board entfernt!']);
+        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('team_removed_from_board', [], 'messages')]);
     }
 
     /**
      * @Route("/board/member/{id}", name="board_member_delete", methods={"DELETE"})
      *
-     * @param EntityManagerInterface $entityManager
      * @param integer $id
      *
      * @return void
      */
-    public function deleteMemberAction(EntityManagerInterface $entityManager, int $id)
+    public function deleteMemberAction(int $id)
     {
         $boardMember = $this->getDoctrine()->getRepository(BoardMember::class)->find($id);
 
         if (!$boardMember instanceof BoardMember) {
-            return new JsonResponse(['success' => false, 'content' => 'Mitglied für dieses Board nicht gefunden!']);
+            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('member_not_found_for_board', [], 'errors')]);
         }
 
-        $entityManager->remove($boardMember);
-        $entityManager->flush();
+        $this->entityManager->remove($boardMember);
+        $this->entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => 'Mitglied erfolgreich vom Board entfernt!']);
+        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('member_removed_from_board', [], 'messages')]);
     }
 
     /**
      * @Route("/board/subscribe/{id}", name="board_subscribe", methods={"GET"})
      *
-     * @param EntityManagerInterface $entityManager
      * @param integer $id
      *
      * @return void
      */
-    public function subscribeAction(EntityManagerInterface $entityManager, int $id)
+    public function subscribeAction(int $id)
     {
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
         $content = "";
 
         if (!$board instanceof Board) {
-            return new JsonResponse(['success' => false, 'content' => 'Board nicht gefunden!']);
+            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('board_not_found', ['id' => $id], 'errors')]);
         }
 
         $boardSubscriber = $this->getDoctrine()->getRepository(BoardSubscriber::class)->findOneBy(
@@ -473,14 +880,14 @@ class BoardController extends AbstractController
             $boardSubscriber->setCreator($this->getUser());
             $boardSubscriber->setCreated(new \DateTime());
 
-            $entityManager->persist($boardSubscriber);
-            $content = "Board erfolgreich abboniert!";
+            $this->entityManager->persist($boardSubscriber);
+            $content = $this->translator->trans('board_successfully_subscribed', [], 'messages');
         } else {
-            $entityManager->remove($boardSubscriber);
-            $content = "Board erfolgreich deabboniert!";
+            $this->entityManager->remove($boardSubscriber);
+            $content = $this->translator->trans('board_successfully_unsubscribed', [], 'messages');
         }
 
-        $entityManager->flush();
+        $this->entityManager->flush();
 
         return new JsonResponse(['success' => true, 'content' => $content]);
     }
@@ -488,12 +895,11 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/member", name="board_add_member", methods={"POST"})
      *
-     * @param EntityManagerInterface $entityManager
-     * @param Request                $request
+     * @param Request $request
      *
      * @return void
      */
-    public function addMemberAction(EntityManagerInterface $entityManager, Request $request) {
+    public function addMemberAction(Request $request) {
         $data = [];
         $boardMember = new BoardMember();
 
@@ -519,17 +925,17 @@ class BoardController extends AbstractController
                 $boardMember->setCreated(new \DateTime());
             }
 
-            $entityManager->persist($boardMember);
-            $entityManager->flush();
+            $this->entityManager->persist($boardMember);
+            $this->entityManager->flush();
 
             $data['code'] = 200;
             $data['success'] = true;
-            $data['message'] = "success";
+            $data['content'] = $this->translator->trans('success', [], 'messages');
             $data['id'] = $boardMember->getId();
         } catch (UniqueConstraintViolationException $exception) {
             $data['code'] = 500;
             $data['success'] = false;
-            $data['message'] = "member already added";
+            $data['content'] = $this->translator->trans('member_already_added', [], 'errors');
             $data['id'] = $boardMember->getId();
         }
         return new JsonResponse($data);
@@ -538,12 +944,11 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/team", name="board_add_team", methods={"POST"})
      *
-     * @param EntityManagerInterface $entityManager
-     * @param Request                $request
+     * @param Request $request
      *
      * @return void
      */
-    public function addTeamAction(EntityManagerInterface $entityManager, Request $request) {
+    public function addTeamAction(Request $request) {
         $data = [];
         $boardTeam = new BoardTeam();
 
@@ -560,19 +965,61 @@ class BoardController extends AbstractController
             $boardTeam->setCreator($this->getUser());
             $boardTeam->setCreated(new \DateTime());
 
-            $entityManager->persist($boardTeam);
-            $entityManager->flush();
+            $this->entityManager->persist($boardTeam);
+            $this->entityManager->flush();
 
             $data['code'] = 200;
             $data['success'] = true;
-            $data['message'] = "success";
+            $data['content'] = $this->translator->trans('success', [], 'messages');
             $data['id'] = $boardTeam->getId();
         } catch (UniqueConstraintViolationException $exception) {
             $data['code'] = 500;
             $data['success'] = false;
-            $data['message'] = "team already added";
+            $data['content'] = $this->translator->trans('team_already_added', [], 'errors');
             $data['id'] = $boardTeam->getId();
         }
         return new JsonResponse($data);
+    }
+
+    private function collectAllKnownBoards() {
+        /*
+        $boards = [];
+        // select all boards where i in board_members as user
+        $boardIds = $this->getDoctrine()->getRepository(Board::class)->findAllKnownBoards($this->getUser());
+
+        foreach ($boardIds as $boardId) {
+            $boards[] = $this->getDoctrine()->getRepository(Board::class)->find($boardId['id']);
+        }
+        return $boards;
+        */
+        return $this->getDoctrine()->getRepository(Board::class)->findAllKnownBoards($this->getUser());
+    }
+
+    private function collectAllKnownTeams() {
+        /*
+        $teams = [];
+        // select all boards where i in board_members as user
+        $teamIds = $this->getDoctrine()->getRepository(Board::class)->findAllKnownTeams($this->getUser());
+
+        foreach ($teamIds as $teamId) {
+            $teams[] = $this->getDoctrine()->getRepository(Team::class)->find($teamId['id']);
+        }
+        return $teams;
+        */
+        return $this->getDoctrine()->getRepository(Board::class)->findAllKnownTeams($this->getUser());
+    }
+
+    private function collectAllKnownMembers() {
+        /*
+        $users = [];
+        // select all boards where i in board_members as user
+        $userIds = $this->getDoctrine()->getRepository(Board::class)->findAllKnownMembers($this->getUser());
+
+        foreach ($userIds as $userId) {
+            $users[] = $this->getDoctrine()->getRepository(Team::class)->find($userId['id']);
+        }
+        return $users;
+        */
+        return $this->getDoctrine()->getRepository(Board::class)->findAllKnownMembers($this->getUser());
     }
 }

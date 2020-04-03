@@ -18,7 +18,7 @@ class BoardInvitationVoter extends Voter
         $this->security = $security;
         $this->logger = $logger;
     }
-    
+
     protected function supports($attribute, $subject)
     {
         // replace with your own logic

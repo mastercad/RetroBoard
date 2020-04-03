@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Validator\Constraints;
 
 /**
  * Board
@@ -33,6 +33,7 @@ class Board
     /**
      * @var string
      *
+     * @Constraints\NotBlank
      * @ORM\Column(name="name", type="string", length=250, nullable=false)
      */
     private $name;
@@ -40,6 +41,8 @@ class Board
     /**
      * @var \DateTime
      *
+     * @Constraints\NotBlank
+     * 
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
@@ -54,6 +57,8 @@ class Board
     /**
      * @var User
      *
+     * @Constraints\NotBlank
+     * 
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
@@ -72,26 +77,38 @@ class Board
     private $modifier;
 
     /**
+     * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="BoardInvitation", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $invitations;
 
     /**
+     * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="BoardMember", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
-    private $members;
+    private $boardMembers;
 
     /**
+     * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
-    private $teams;
+    private $boardTeams;
 
     /**
+     * @var Collection
+     *
      * @ORM\OneToMany(targetEntity="BoardSubscriber", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $subscribers;
 
     /**
+     * @var Collection
+     *
+     * @Constraints\NotBlank
+     * 
      * @ORM\OneToMany(targetEntity="Column", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      * @ORM\OrderBy({"priority" = "ASC"})
      */
@@ -101,15 +118,15 @@ class Board
     {
         $this->columns = new ArrayCollection();
         $this->invitations = new ArrayCollection();
-        $this->members = new ArrayCollection();
-        $this->teams = new ArrayCollection();
+        $this->boardMembers = new ArrayCollection();
+        $this->boardTeams = new ArrayCollection();
     }
 
     /**
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -121,7 +138,7 @@ class Board
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -133,7 +150,7 @@ class Board
      * Get the value of name
      *
      * @return  string
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -145,7 +162,7 @@ class Board
      * @param  string  $name
      *
      * @return  self
-     */ 
+     */
     public function setName(string $name)
     {
         $this->name = $name;
@@ -156,8 +173,8 @@ class Board
     /**
      * Get the value of created
      *
-     * @return  \DateTime
-     */ 
+     * @return \DateTime
+     */
     public function getCreated()
     {
         return $this->created;
@@ -166,10 +183,10 @@ class Board
     /**
      * Set the value of created
      *
-     * @param  \DateTime  $created
+     * @param \DateTime $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -180,8 +197,8 @@ class Board
     /**
      * Get the value of modified
      *
-     * @return  \DateTime|null
-     */ 
+     * @return \DateTime|null
+     */
     public function getModified()
     {
         return $this->modified;
@@ -190,10 +207,10 @@ class Board
     /**
      * Set the value of modified
      *
-     * @param  \DateTime|null  $modified
+     * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
@@ -205,7 +222,7 @@ class Board
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -214,10 +231,10 @@ class Board
     /**
      * Set the value of creator
      *
-     * @param User  $creator
+     * @param User $creator
      *
      * @return  self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -229,7 +246,7 @@ class Board
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -238,10 +255,10 @@ class Board
     /**
      * Set the value of modifier
      *
-     * @param User  $modifier
+     * @param User $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -266,7 +283,7 @@ class Board
 
         return $this;
     }
-    
+
     public function removeColumn(Column $column): self
     {
         if ($this->columns->contains($column)) {
@@ -285,13 +302,13 @@ class Board
      */
     public function getBoardMembers(): Collection
     {
-        return $this->members;
+        return $this->boardMembers;
     }
 
     public function addBoardMember(BoardMember $boardMember): self
     {
-        if (!$this->members->contains($boardMember)) {
-            $this->members[] = $boardMember;
+        if (!$this->boardMembers->contains($boardMember)) {
+            $this->boardMembers[] = $boardMember;
             $boardMember->setBoard($this);
         }
 
@@ -300,8 +317,8 @@ class Board
 
     public function removeBoardMember(BoardMember $boardMember): self
     {
-        if ($this->members->contains($boardMember)) {
-            $this->members->removeElement($boardMember);
+        if ($this->boardMembers->contains($boardMember)) {
+            $this->boardMembers->removeElement($boardMember);
             // set the owning side to null (unless already changed)
             if ($boardMember->getBoard() === $this) {
                 $boardMember->setBoard(null);
@@ -316,13 +333,13 @@ class Board
      */
     public function getBoardTeams(): Collection
     {
-        return $this->teams;
+        return $this->boardTeams;
     }
 
     public function addBoardTeam(BoardTeam $boardTeam): self
     {
-        if (!$this->teams->contains($boardTeam)) {
-            $this->teams[] = $boardTeam;
+        if (!$this->boardTeams->contains($boardTeam)) {
+            $this->boardTeams[] = $boardTeam;
             $boardTeam->setBoard($this);
         }
 
@@ -331,8 +348,8 @@ class Board
 
     public function removeBoardTeam(BoardTeam $boardTeam): self
     {
-        if ($this->members->contains($boardTeam)) {
-            $this->members->removeElement($boardTeam);
+        if ($this->boardTeams->contains($boardTeam)) {
+            $this->boardTeams->removeElement($boardTeam);
             // set the owning side to null (unless already changed)
             if ($boardTeam->getBoard() === $this) {
                 $boardTeam->setBoard(null);
@@ -359,7 +376,7 @@ class Board
 
         return $this;
     }
-    
+
     public function removeBoardSubscriber(BoardSubscriber $boardSubscriber): self
     {
         if ($this->subscribers->contains($boardSubscriber)) {
@@ -390,7 +407,7 @@ class Board
 
         return $this;
     }
-    
+
     public function removeBoardInvitation(BoardInvitation $boardInvitation): self
     {
         if ($this->invitations->contains($boardInvitation)) {
@@ -403,9 +420,9 @@ class Board
 
         return $this;
     }
-    
-    public function __toString()
-    {
-        return $this->getName();
-    }
+
+//    public function __toString()
+//    {
+//        return $this->getName();
+//    }
 }

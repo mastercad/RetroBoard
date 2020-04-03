@@ -138,7 +138,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param  string  $password
      *
      * @return  self
-     */ 
+     */
     public function setPassword(string $password)
     {
         $this->password = $password;
@@ -152,7 +152,7 @@ class User implements UserInterface, EquatableInterface, Serializable
         $roles = $this->roles;
         // damit mindestens eine Rolle gesetzt wird
         $roles[] = 'ROLE_USER';
-    
+
         return array_unique($roles);
     }
 
@@ -184,7 +184,7 @@ class User implements UserInterface, EquatableInterface, Serializable
         return $this;
     }
 
-    public function eraseCredentials() 
+    public function eraseCredentials()
     {
         $this->password = null;
         $this->salt = null;
@@ -194,7 +194,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of name
      *
      * @return  string
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -206,7 +206,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param string  $name
      *
      * @return self
-     */ 
+     */
     public function setName(string $name)
     {
         $this->name = $name;
@@ -218,7 +218,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -230,7 +230,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -242,7 +242,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of email
      *
      * @return  string
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -254,7 +254,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param  string  $email
      *
      * @return  self
-     */ 
+     */
     public function setEmail(string $email)
     {
         $this->email = $email;
@@ -299,7 +299,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -311,7 +311,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -323,7 +323,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -335,7 +335,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -347,7 +347,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -359,7 +359,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -371,7 +371,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -383,14 +383,14 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
 
         return $this;
     }
-    
+
     public function isEqualTo(UserInterface $user)
     {
 //        if ($this->password !== $user->getPassword()) {
@@ -406,7 +406,7 @@ class User implements UserInterface, EquatableInterface, Serializable
         }
         return true;
     }
-    
+
     public function serialize()
     {
         return serialize(array(
@@ -429,6 +429,6 @@ class User implements UserInterface, EquatableInterface, Serializable
 
     public function __toString()
     {
-        return $this->getName();
+        return (string)$this->getId();
     }
 }

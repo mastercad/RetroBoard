@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 {# http://172.19.2.1/board/member/2684d45705094162edf989e7f870973d507ec340 #}
-{% block title %}Log in!{% endblock %}
+{% block title %}{{ 'login'|trans({}, 'titles') }}{% endblock %}
 
 {% block body %}
 
@@ -18,16 +18,16 @@
 
                 <?php if ($logout_setup): ?>
                     {% if app.user %}
-                        <div class="checkbox mb-3">You are logged in as {{ app.user.name }},
-                        <a href="{{ path('app_logout') }}">Logout</a>
+                        <div class="checkbox mb-3">{{ 'logged_in_as'|trans({'%name%': app.user.name }, 'labels') }},
+                        <a href="{{ path('app_logout') }}">{{ 'logout'|trans({}, 'labels') }}</a>
                     {% endif %}
                 <?php endif; ?>
 
-                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-                <label for="inputEmail" class="sr-only">Email</label>
+                <h1 class="h3 mb-3 font-weight-normal">{{ 'sign_in'|trans({}, 'labels') }}</h1>
+                <label for="inputEmail" class="sr-only">{{ 'email'|trans({}, 'labels') }}</label>
                 <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="fadeIn second" placeholder="E-Mail" required autofocus>
-                <label for="inputPassword" class="sr-only">Password</label>
-                <input type="password" name="password" id="inputPassword" class="fadeIn third" placeholder="Password" required>
+                <label for="inputPassword" class="sr-only">{{ 'password'|trans({}, 'labels') }}</label>
+                <input type="password" name="password" id="inputPassword" class="fadeIn third" placeholder="{{ 'password'|trans({}, 'labels') }}" required>
 
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 {#                <input type="hidden" name="_target_path" value="{{ path('account') }}"/> #}
@@ -44,17 +44,17 @@
                 #}
 
                 <button class="fadeIn fourth" type="submit">
-                    Sign in
+                    {{ 'sign_in'|trans({}, 'labels') }}
                 </button>
             </form>
 
             <div class="row" id="formFooter">
                 <div class="col-md-6 col-sm-6 col-xl-6">
-                    <a class="underlineHover" href="{{ path('app_forgot_password') }}">Forgot Password?</a>
+                    <a class="underlineHover" href="{{ path('app_forgot_password') }}">{{ 'forgot_password'|trans({}, 'labels') }}</a>
                 </div>
                 <div class="col-md-6 col-xl-6">
 <!--                    <a class="underlineHover" href="{{ path('app_register') }}{% if redirect_uri %}?redirect={{ redirect_uri }}{% endif %}">Register</a>-->
-                    <a class="underlineHover" href="{{ path('app_register') }}">Register</a>
+                    <a class="underlineHover" href="{{ path('app_register') }}">{{ 'register'|trans({}, 'labels') }}</a>
                 </div>
             </div>
         </div>

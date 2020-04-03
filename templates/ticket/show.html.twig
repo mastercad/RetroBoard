@@ -66,13 +66,22 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     {% if is_granted('delete', ticket) %}
-                        <span class="dropdown-item btn-ticket-delete" href="#"><icon class="fas fa-trash mr-1"></icon>{{ 'delete'|trans({}, 'labels') }}</span>
+                        <span class="dropdown-item btn-ticket-delete" href="#">
+                            <icon class="fas fa-trash mr-1"></icon>
+                            {{ 'delete'|trans({}, 'labels') }}
+                        </span>
                     {% endif %}
                     {% if is_granted('edit', ticket) %}
-                        <span class="dropdown-item btn-ticket-edit" href="#"><icon class="fas fa-edit mr-1"></icon>{{ 'edit'|trans({}, 'labels') }}</span>
+                        <span class="dropdown-item btn-ticket-edit" href="#">
+                            <icon class="fas fa-edit mr-1"></icon>
+                            {{ 'edit'|trans({}, 'labels') }}
+                        </span>
                     {% endif %}
                     {% if is_granted('archive', ticket) %}
-                        <span class="dropdown-item btn-ticket-archive" href="#"><icon class="fas fa-archive mr-1"></icon>{{ 'archive'|trans({}, 'labels') }}</span>
+                        <span class="dropdown-item btn-ticket-archive" href="#">
+                            <icon class="fas fa-archive mr-1"></icon>
+                            {{ 'archive'|trans({}, 'labels') }}
+                        </span>
                     {% endif %}
                 </div>
             </li>

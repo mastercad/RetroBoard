@@ -46,44 +46,44 @@ class TeamInvitationVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-        case 'edit':
-            $results = $subject->getTeam()->getTeamMembers()->filter(
-                function ($teamMember) use ($user) {
-                    return $teamMember->getMember() === $user
-                        && in_array('ROLE_ADMIN', $teamMember->getRoles());
+            case 'edit':
+                $results = $subject->getTeam()->getTeamMembers()->filter(
+                    function ($teamMember) use ($user) {
+                        return $teamMember->getMember() === $user
+                            && in_array('ROLE_ADMIN', $teamMember->getRoles());
+                    }
+                );
+                return 0 < count($results);
+            case 'accept':
+                if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
+                    return true;
                 }
-            );
-            return 0 < count($results);
-        case 'accept':
-            if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
-                return true;
-            }
-            break;
-        case 'delete':
-            if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
-                return true;
-            }
-            $results = $subject->getTeam()->getTeamMembers()->filter(
-                function ($teamMember) use ($user) {
-                    return $teamMember->getMember() === $user
-                        && in_array('ROLE_ADMIN', $teamMember->getRoles());
+                break;
+            case 'delete':
+                if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
+                    return true;
                 }
-            );
-            return 0 < count($results);
-        case 'create':
-            $results = $subject->getTeam()->getTeamMembers()->filter(
-                function ($teamMember) use ($user) {
-                    return $teamMember->getMember() === $user;
-                }
-            );
-            return 0 < count($results);
-        case 'show':
-            $results = $subject->getTeam()->getTeamMembers()->filter(
-                function ($teamMember) use ($user) {
-                    return $teamMember->getMember() === $user;
-                }
-            );
-            return 0 < count($results);
+                $results = $subject->getTeam()->getTeamMembers()->filter(
+                    function ($teamMember) use ($user) {
+                        return $teamMember->getMember() === $user
+                            && in_array('ROLE_ADMIN', $teamMember->getRoles());
+                    }
+                );
+                return 0 < count($results);
+            case 'create':
+                $results = $subject->getTeam()->getTeamMembers()->filter(
+                    function ($teamMember) use ($user) {
+                        return $teamMember->getMember() === $user;
+                    }
+                );
+                return 0 < count($results);
+            case 'show':
+                $results = $subject->getTeam()->getTeamMembers()->filter(
+                    function ($teamMember) use ($user) {
+                        return $teamMember->getMember() === $user;
+                    }
+                );
+                return 0 < count($results);
         }
 
         return false;

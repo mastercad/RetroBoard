@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Board;
+use App\Entity\BoardMember;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -24,6 +25,13 @@ class BoardType extends AbstractType
 //                'prototype' => true,
                 'by_reference' => false
             ])
+//            ->add('boardMembers', CollectionType::class, [
+//                'entry_type' => BoardMemberType::class,
+//                'allow_add' => true,
+//                'allow_delete' => true,
+//                'prototype' => true,
+//                'by_reference' => false
+//            ])
 //            ->add('created')
 //            ->add('modified')
 //            ->add('creator')
@@ -36,6 +44,7 @@ class BoardType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Board::class,
+            'creator' => null
         ]);
     }
 

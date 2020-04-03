@@ -10,9 +10,17 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
 {
+    private $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @Route("/user", name="user")
      */
@@ -57,7 +65,7 @@ class UserController extends AbstractController
 //        $uploadDir = __DIR__.'/../../var/tmp/upload';
         $uploadDir = __DIR__.'/../../public/upload';
         $id = $request->get('id');
-        
+
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
 
         $this->denyAccessUnlessGranted('edit', $user);
@@ -73,14 +81,14 @@ class UserController extends AbstractController
 
         /* Getting File size */
         $filesize = $_FILES['file']['size'];
-        
+
         /* Location */
         $location = $uploadDir.'/'.$filename;
 
         /* Upload file */
         if(move_uploaded_file($_FILES['file']['tmp_name'], $location)){
             $src = "default.png";
-        
+
             // checking file is image or not
             if(is_array(getimagesize($location))){
                 $src = $location;
@@ -99,13 +107,13 @@ class UserController extends AbstractController
     {
         $userRequest = $request->request->get('user');
         $user = $this->getDoctrine()->getRepository(User::class)->find($userRequest['id']);
-        
+
         if (!$user instanceof User) {
             return new JsonResponse(
                 [
                     'code' => 500,
                     'success' => false,
-                    'message' => 'Something went wrong!'
+                    'content' => $this->translator->trans('something_went_wrong', [], 'errors')
                 ]
             );
         }
@@ -113,7 +121,7 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted('edit', $user);
 
         $emailConstraint = new Email();
-        $emailConstraint->message = 'Invalid email address';
+        $emailConstraint->message = $this->translator->trans('email_invalid', [], 'errors');
 
         $errorList = $validator->validate(
             $userRequest['email'],
@@ -126,7 +134,7 @@ class UserController extends AbstractController
             [
                 'code' => 500,
                 'success' => false,
-                'message' => 'Invalid email address'
+                'content' => $this->translator->trans('email_invalid', [], 'errors')
             ]);
         }
 
@@ -157,7 +165,7 @@ class UserController extends AbstractController
                 [
                     'code' => 500,
                     'success' => false,
-                    'message' => 'Something went wrong!'
+                    'content' => $this->translator->trans('something_went_wrong', [], 'errors')
                 ]
                 );
         }
@@ -165,7 +173,7 @@ class UserController extends AbstractController
         return new JsonResponse([
             'code' => 201,
             'success' => true,
-            'message' => 'Successfully saved'
+            'content' => $this->translator->trans('successfully_saved', [], 'messages')
         ]);
     }
 }

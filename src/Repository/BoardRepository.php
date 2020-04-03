@@ -4,17 +4,105 @@ namespace App\Repository;
 use App\Entity\Board;
 use App\Entity\User;
 use App\Entity\Column;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\ORM\EntityRepository;
 
 class BoardRepository extends EntityRepository
 {
     public function findAllAvailableBoardsByUser(User $user)
     {
-        return $this->createQueryBuilder('board')
-            ->innerJoin('board.teams', 'teams')
-            ->addSelect('teams')
-            ->getQuery()
-            ->getResult();
+        $query = $this->createQueryBuilder('board')
+            ->where(':user MEMBER OF board.boardTeams')
+            ->orWhere(':user MEMBER OF board.boardMembers')
+            ->setParameter('user', $user)
+            ->getQuery();
+
+        var_dump($query->getSQL());
+
+        return $query->getResult();
+    }
+
+    public function findAllKnownMembers(User $user)
+    {
+        /*
+        $statement = $this->getEntityManager()->getConnection()->prepare(
+            "SELECT if (teamMembersUser.id IS NOT NULL, teamMembersUser.id, boardMembersUser.id) as id, if (teamMembersUser.id IS NOT NULL, teamMembersUser.name, boardMembersUser.name) as name
+                FROM boards
+                LEFT JOIN board_members ON boards.id = board_members.board
+                LEFT JOIN board_teams ON board_teams.board = boards.id
+                LEFT JOIN teams ON teams.id = board_teams.team
+                LEFT JOIN team_members ON team_members.team = teams.id
+                INNER JOIN users  AS boardMembersUser ON board_members.user = boardMembersUser.id
+                INNER JOIN users AS teamMembersUser ON team_members.member = teamMembersUser.id
+                WHERE board_members.user = :userId OR team_members.member = :userId
+                GROUP BY id, name"
+        );
+        */
+
+        $statement = $this->getEntityManager()->getConnection()->prepare(
+            "SELECT DISTINCT users_show.id, users_show.name
+            FROM users 
+            INNER JOIN team_members ON team_members.`member`  =  users.id  
+            INNER JOIN board_teams ON board_teams.team  = team_members.team 
+            INNER JOIN board_teams AS board_teams_revert ON board_teams_revert.board = board_teams.board 
+            INNER JOIN team_members AS team_members_revert ON team_members_revert.team = board_teams_revert.team 
+            INNER JOIN users AS users_show ON users_show.id = team_members_revert.`member`
+            WHERE users.id = :userId
+            UNION
+            SELECT  users_show.id, users_show.name
+            FROM users
+            INNER JOIN board_members ON board_members.`user` = users.id 
+            INNER JOIN board_members as board_members_show ON board_members_show.board = board_members.board 
+            INNER JOIN users as users_show ON users_show.id = board_members_show.`user` 
+            WHERE users.id = :userId"
+        );
+
+        $statement->execute(['userId' => $user->getId()]);
+
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    public function findAllKnownBoards(User $user)
+    {
+        $statement = $this->getEntityManager()->getConnection()->prepare(
+            "SELECT boards.id, boards.name
+                FROM boards
+                LEFT JOIN board_members ON boards.id = board_members.board
+                LEFT JOIN board_teams ON board_teams.board = boards.id
+                LEFT JOIN teams ON teams.id = board_teams.team
+                LEFT JOIN team_members ON team_members.team = teams.id
+                WHERE boards.id IS NOT NULL AND (board_members.user = :userId OR team_members.member = :userId)
+                GROUP BY boards.id, boards.name"
+        );
+
+        $statement->execute(['userId' => $user->getId()]);
+
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    public function findAllKnownTeams(User $user)
+    {
+        $statement = $this->getEntityManager()->getConnection()->prepare(
+            "SELECT teams.id, teams.name
+            FROM users 
+            INNER JOIN team_members ON team_members.`member`  =  users.id  
+            INNER JOIN board_teams ON board_teams.team  = team_members.team 
+            INNER JOIN board_teams AS board_teams_revert ON board_teams_revert.board = board_teams.board 
+            INNER JOIN teams ON teams.id = board_teams_revert.team
+            WHERE users.id = :userId
+            
+            GROUP BY teams.id, teams.name
+            
+            UNION
+            
+            SELECT teams.id, teams.name FROM teams
+            INNER JOIN team_members ON team_members.team = teams.id
+            WHERE team_members.member = :userId"
+        );
+
+        $statement->execute(['userId' => $user->getId()]);
+
+        return $statement->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     public function findActive(int $boardId)

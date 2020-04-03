@@ -129,6 +129,74 @@
         <source>Invitations</source>
         <target>Vabila</target>
       </trans-unit>
+      <trans-unit id="add" resname="add">
+        <source>add</source>
+        <target>dodaj</target>
+      </trans-unit>
+      <trans-unit id="edit_team" resname="edit_team">
+        <source>Edit Team</source>
+        <target>Uredi ekipo</target>
+      </trans-unit>
+      <trans-unit id="create_new_team" resname="create_new_team">
+        <source>Create Team</source>
+        <target>Ustvari ekipo</target>
+      </trans-unit>
+      <trans-unit id="error" resname="error">
+        <source>Error</source>
+        <target>Napaka</target>
+      </trans-unit>
+      <trans-unit id="your_text_here" resname="your_text_here">
+        <source>Your text here…</source>
+        <target>Vaše besedilo tukaj ...</target>
+      </trans-unit>
+      <trans-unit id="logged_in_as" resname="logged_in_as">
+        <source>Logged in as</source>
+        <target>Prijavljen kot</target>
+      </trans-unit>
+      <trans-unit id="enter_email_reset_password" resname="enter_email_reset_password">
+        <source>Enter email for reset password</source>
+        <target>Vnesite e-pošto za ponastavitev gesla</target>
+      </trans-unit>
+      <trans-unit id="login" resname="login">
+        <source>Login</source>
+        <target>Prijavite se</target>
+      </trans-unit>
+      <trans-unit id="reset" resname="reset">
+        <source>Reset</source>
+        <target>Ponastavitev</target>
+      </trans-unit>
+      <trans-unit id="register" resname="register">
+        <source>Register</source>
+        <target>Registrirajte se</target>
+      </trans-unit>
+      <trans-unit id="sign_in" resname="sign_in">
+        <source>Sign in</source>
+        <target>Prijava</target>
+      </trans-unit>
+      <trans-unit id="password" resname="password">
+        <source>Password</source>
+        <target>Geslo</target>
+      </trans-unit>
+      <trans-unit id="forgot_password" resname="forgot_password">
+        <source>Forgot password</source>
+        <target>Pozabil sem geslo</target>
+      </trans-unit>
+      <trans-unit id="confirm_password" resname="confirm_password">
+        <source>Confirm password</source>
+        <target>Potrdite geslo</target>
+      </trans-unit>
+      <trans-unit id="password_not_equal" resname="password_not_equal">
+        <source>Password not equal</source>
+        <target>Gesla se ne ujemajo</target>
+      </trans-unit>
+      <trans-unit id="password_must_changed" resname="password_must_changed">
+        <source>Password must changed</source>
+        <target>Geslo je treba spremeniti</target>
+      </trans-unit>
+      <trans-unit id="agree_terms" resname="agree_terms">
+        <source>Agree terms</source>
+        <target>Strinjam se s pogoji</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

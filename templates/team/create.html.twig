@@ -2,12 +2,14 @@
 
 {% block title %}{% if 0 < team.id %}{{ 'edit_team'|trans({}, 'labels') }} "{{ team.name }}" {% else %} {{ 'create_new_team'|trans({}, 'labels') }} {% endif %}{% endblock %}
 
+{#
 {% block navigation_additions %}
     <a href="/team/{{ team.id }}" class="m-2 btn-archive-team">
-        <icon class="fas fa-group"></icon>
+        <icon class="fas fa-user-friends"></icon>
     </a>
     {{ parent() }}
 {% endblock %}
+#}
 
 {% block navigation_title %}{% if 0 < team.id %}{{ 'edit_team'|trans({}, 'labels') }} "{{ team.name }}" {% else %} {{ 'create_new_team'|trans({}, 'labels') }} {% endif %}{% endblock %}
 
@@ -17,7 +19,7 @@
     <div class="container mt-5">
         {% if errors is defined %}
             {% for error in errors %}
-                {{ error.message }}
+                {{ error.content }}
             {% endfor %}
         {% endif %}
         <div id="team">
@@ -27,10 +29,10 @@
                     <input id="team_name" class="form-control" type="text" name="team[name]" required="required" maxlength="250" value="{{ team.name }}" >
                 </div>
             </div>
+            {% set teamMemberUsers = [] %}
+            {% set teamMemberAdmins = [] %}
 
             {% if 0 < team.id %}
-                {% set teamMemberUsers = [] %}
-                {% set teamMemberAdmins = [] %}
                 {% for teamMember in team.teamMembers %}
                     {% if "ROLE_ADMIN" in teamMember.roles %}
                         {% set teamMemberAdmins = teamMemberAdmins|merge([teamMember]) %}
@@ -40,76 +42,110 @@
                 {% endfor %}
 
                 {% set teamMemberAdminCount = teamMemberAdmins|length %}
+            {% endif %}
 
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-xs-12">
-                        {{ 'members'|trans({}, 'labels') }}:
-                    </div>
-                    <div class="col-1"></div>
-                    <div class="col-11">
-                        <div class="row">
-                            <p>
-                                {{ 'admins'|trans({}, 'labels') }}:
-                            </p>
-                            <ul class="col-12 member-container team-admins-container" data-role="ROLE_ADMIN">
-                                {% for teamMember in teamMemberAdmins %}
-                                    <li class="team-member small" data-id="{{ teamMember.id }}">
-                                        {{ teamMember.member.name }}
-                                        {% if 1 < teamMemberAdminCount %}
-                                            <span class="btn-remove btn-member-remove" data-id="{{ teamMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
-                                        {% endif %}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-1"></div>
-                    <div class="col-11">
-                        <div class="row">
-                            <p>
-                                {{ 'users'|trans({}, 'labels') }}:
-                            </p>
-                            <ul class="col-12 member-container team-users-container" data-role="ROLE_USER">
-                                {% for teamMember in teamMemberUsers %}
-                                    <li class="team-member small" data-id="{{ teamMember.id }}">
-                                        {{ teamMember.member.name }}
-                                        <span class="btn-remove btn-member-remove" data-id="{{ teamMember.id }}"><icon class="fas fa-minus-circle"></icon></span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-xs-12">
-                        Einladungen:
-                        <span class="btn-add btn-invitation-add">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    {{ 'members'|trans({}, 'labels') }}:
+                    <span class="btn-add btn-membership-add" data-toggle="tooltip" title="{{ 'click_to_add_existing_user_to_team'|trans({}, 'titles') }}">
                         <icon class="fas fa-plus-circle"></icon>
                     </span>
-                    </div>
-                    <div class="col-sm-12 col-md-12 col-xs-12 bord-invitations-container">
-                        <ul>
-                            {% for teamInvitation in team.teamInvitations %}
-                                <li class="small">
-                                    {{ teamInvitation.email }}
-                                    <span class="btn-remove btn-invitation-remove" data-id="{{ teamInvitation.id }}">
-                                <icon class="fas fa-minus-circle"></icon>
-                            </span>
-                                    <span class="btn-resend btn-invitation-resend" data-id="{{ teamInvitation.id }}" >
-                                <icon class="fas fa-sync-alt"></icon>
-                            </span>
-                                    <span class="btn-copy btn-invitation-link-copy" data-token="{{ teamInvitation.token }}" data-tooltip="">
-                                <icon class="fas fa-copy"></icon>
-                            </span>
+                </div>
+                <div class="col-1"></div>
+                <div class="col-11">
+                    <div class="row">
+                        <p>
+                            {{ 'admins'|trans({}, 'labels') }}:
+                        </p>
+                        <ul class="col-12 member-container team-admins-container" data-role="ROLE_ADMIN">
+                            {% for teamMember in teamMemberAdmins %}
+                                <li class="team-member small" data-id="{{ teamMember.id }}" data-identifier="{{ 12|uuid() }}">
+                                    {{ teamMember.member.name }}
+                                    {% if 1 < teamMemberAdminCount %}
+                                        <span class="btn-remove btn-membership-remove" data-user-id="{{ teamMember.member.id }}" data-toggle="tooltip" title="{{ 'remove_member_from_team'|trans({'%name%': teamMember.member.name}, 'titles') }}" data-id="{{ teamMember.id }}">
+                                            <icon class="fas fa-minus-circle"></icon>
+                                        </span>
+                                    {% endif %}
                                 </li>
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
-            {% endif %}
+                <div class="col-1"></div>
+                <div class="col-11">
+                    <div class="row">
+                        <p>
+                            {{ 'users'|trans({}, 'labels') }}:
+                        </p>
+                        <ul class="col-12 member-container team-users-container" data-role="ROLE_USER">
+                            {% for teamMember in teamMemberUsers %}
+                                <li class="team-member small" data-id="{{ teamMember.id }}" data-identifier="{{ 12|uuid() }}">
+                                    {{ teamMember.member.name }}
+                                    <span class="btn-remove btn-membership-remove" data-user-id="{{ teamMember.member.id }}" data-toggle="tooltip" title="{{ 'remove_member_from_team'|trans({'%name%': teamMember.member.name}, 'titles') }}" data-id="{{ teamMember.id }}">
+                                        <icon class="fas fa-minus-circle"></icon>
+                                    </span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-xs-12">
+                    Einladungen:
+                    <span class="btn-add btn-invitation-add" data-toggle="tooltip" title="{{ 'click_to_invite_member_via_email'|trans({}, 'titles') }}">
+                    <icon class="fas fa-plus-circle"></icon>
+                </span>
+                </div>
+                <div class="col-sm-12 col-md-12 col-xs-12 team-invitations-container">
+                    <ul>
+                        {% for teamInvitation in team.teamInvitations %}
+                            <li class="small" data-identifier="{{ 12|uuid() }}">
+                                {{ teamInvitation.email }}
+                                <span class="btn-remove btn-invitation-remove" data-toggle="tooltip" data-email="{{ teamInvitation.email }}" title="{{ 'remove_invitation'|trans({'%email%': teamInvitation.email }, 'titles') }}" data-id="{{ teamInvitation.id }}">
+                                    <icon class="fas fa-minus-circle"></icon>
+                                </span>
+                                <span class="btn-resend btn-invitation-resend" data-toggle="tooltip" data-email="{{ teamInvitation.email }}" title="{{ 'resend_invitation'|trans({'%email%': teamInvitation.email}, 'titles') }}" data-id="{{ teamInvitation.id }}" >
+                                    <icon class="fas fa-sync-alt"></icon>
+                                 </span>
+                                <span class="btn-copy btn-invitation-link-copy" data-toggle="tooltip" data-email="{{ teamInvitation.email }}" title="{{ 'copy_invitation_to_clipboard'|trans({'%email%': teamInvitation.email}, 'titles') }}" data-token="{{ teamInvitation.token }}" data-tooltip="">
+                                    <icon class="fas fa-copy"></icon>
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
             {{ form_row(form._token) }}
             {{ form_row(form.id) }}
-            <button class="btn btn-primary btn-save" type="submit">{{ 'save'|trans({}, 'labels') }}</button>
+            <button class="btn btn-danger btn-delete" {% if 0 == team.id %} style="display: none;" {% endif %} type="delete">{{ 'delete'|trans({}, 'labels') }}</button>
+            <button class="btn btn-primary btn-ok btn-save" type="submit">{{ 'save'|trans({}, 'labels') }}</button>
+        </div>
+    </div>
+
+    <div id="membership_modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'add_membership'|trans({}, 'titles') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>{{ 'name'|trans({}, 'labels') }}</label>
+                        <input id="membership_name" name="membership-name" type="text" class="form-control" value="" >
+                        <input id="membership_type" name="membership-type" type="hidden" class="form-control" value="" >
+                    </div>
+                    <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-ok btn-primary">{{ 'add'|trans({}, 'labels') }}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -127,11 +163,11 @@
                         <label>{{ 'email'|trans({}, 'labels') }}</label>
                         <input id="invitation_email" name="invitation-email" type="email" class="form-control" value="" >
                     </div>
-                    <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                    <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">{{ 'invite'|trans({}, 'labels') }}</button>
+                    <button type="button" class="btn btn-ok btn-primary">{{ 'invite'|trans({}, 'labels') }}</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
                 </div>
             </div>
@@ -151,11 +187,11 @@
                     <div class="form-group">
                         {{ 'question_inverse_invitation'|trans({}, 'messages') }}
                     </div>
-                    <div class="error alert alert-danger" style="visibility: hidden;" role="alert">
+                    <div class="error small alert alert-danger" style="visibility: hidden;" role="alert">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                    <button type="button" class="btn btn-ok btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
                 </div>
             </div>
@@ -175,11 +211,35 @@
                     <div class="form-group">
                         {{ 'question_remove_member_from_team'|trans({}, 'messages') }}
                     </div>
-                    <div class="error alert alert-danger" style="display: none;" role="alert">
+                    <div class="error small alert alert-danger" style="display: none;" role="alert">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                    <button type="button" class="btn btn-ok btn-primary">{{ 'remove'|trans({}, 'labels') }}</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="team_remove_modal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ 'remove_team'|trans({}, 'titles') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {{ 'question_remove_team'|trans({}, 'messages') }}
+                    </div>
+                    <div class="error small alert alert-danger" style="display: none;" role="alert">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-ok">{{ 'remove'|trans({}, 'labels') }}</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'close'|trans({}, 'labels') }}</button>
                 </div>
             </div>
@@ -195,41 +255,170 @@
             init();
         });
 
-        var invitationDeleteId = undefined;
-        var membershipDeleteId = undefined;
+        let currentUserId = {{ app.user.id }}
+        let invitationDeleteId = undefined;
+        let membershipDeleteId = undefined;
+        let elementIdentifier = undefined;
+
+        let rawKnownMembers = {{ knownMembers|json_encode|raw }}
+
+        let knownMembers = [];
+        let knownMemberIds = [];
+
+        for (var index = 0; index < rawKnownMembers.length; index++) {
+            let currentMemberName = rawKnownMembers[index].name;
+            let currentMemberId = rawKnownMembers[index].id;
+            if (undefined === knownMemberIds[currentMemberName]
+                && currentUserId != currentMemberId
+            ) {
+                knownMembers.push(currentMemberName)
+                knownMemberIds[currentMemberName] = currentMemberId;
+            }
+        }
 
         function save() {
             let formData = [];
+            let teamName = $('#team_name').val().trim();
+
+            if (0 == teamName.length) {
+                alert("{{ 'name_must_be_set'|trans({}, 'errors') }}", "{{ 'error_team_save'|trans({}, 'titles') }}");
+                return false;
+            }
+
             formData.push({name: "team[id]", value: $('#team_id').val()});
-            formData.push({name: "team[name]", value: $('#team_name').val()});
+            formData.push({name: "team[name]", value: teamName});
+
+            let memberCount = 0;
+            $('.member-container.team-admins-container span[data-state="changed"]').each(function() {
+                formData.push({name: "team[members]["+memberCount+"][userId]", value: $(this).attr('data-user-id')});
+                formData.push({name: "team[members]["+memberCount+"][teamMemberId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "team[members]["+memberCount+"][roles]", value: 'ROLE_ADMIN'});
+                formData.push({name: "team[members]["+memberCount+"][identifier]", value: $(this).attr('data-identifier')});
+                ++memberCount;
+            })
+
+            $('.member-container.team-users-container span[data-state="changed"]').each(function() {
+                formData.push({name: "team[members]["+memberCount+"][userId]", value: $(this).attr('data-user-id')});
+                formData.push({name: "team[members]["+memberCount+"][teamMemberId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "team[members]["+memberCount+"][roles]", value: 'ROLE_USER'});
+                formData.push({name: "team[members]["+memberCount+"][identifier]", value: $(this).attr('data-identifier')});
+                ++memberCount;
+            })
+
+            let invitationCount = 0;
+            $('.team-invitations-container li[data-state="changed"]').each(function() {
+                formData.push({name: "team[invitations]["+invitationCount+"][teamInvitationId]", value: "undefined" == $(this).attr('data-id') ? '' : $(this).attr('data-id')});
+                formData.push({name: "team[invitations]["+invitationCount+"][email]", value: $(this).text().trim()});
+                formData.push({name: "team[invitations]["+invitationCount+"][identifier]", value: $(this).attr('data-identifier')});
+                ++invitationCount;
+            })
 
             formData.push({name: "team[_token]", value: $('#team__token').val()});
 
             $.post("{{ path('team_save') }}", formData, function(response) {
+                handleSaveResult(response);
                 if (true == response.success) {
-                    window.location.href="/team/"+response.id;
+                    success(response.content, "{{ 'team_save_success'|trans({}, 'titles') }}");
+//                    window.location.href="/team/"+response.id;
+                } else {
+                    alert(response.content, "{{ 'error_team_save'|trans({}, 'titles') }}");
                 }
             });
         }
 
-        function addInvitation(email, id, token) {
-            let invitationRow = $(
-                '<li class="small">'+email+'\
-                    <span class="btn-remove btn-invitation-remove" data-id="'+id+'">\
-                    <icon class="fas fa-minus-circle"></icon></span>\
-                    <span class="btn-resend btn-invitation-resend" data-id="'+id+'">\
-                    <icon class="fas fa-sync-alt"></icon></span>\
-                    <span class="btn-copy btn-invitation-link-copy" data-token="'+token+'">\
-                    <icon class="fas fa-copy"></icon></span>\
+        function handleSaveResult(json) {
+            $('#team_id').val(json.data.id);
+            if (undefined !== json.data.members) {
+                handleMemberSaveResult(json.data.members);
+            }
+            if (undefined !== json.data.invitations) {
+                handleInvitationSaveResult(json.data.invitations);
+            }
+        }
+
+        function handleMemberSaveResult(members) {
+            for (let membersCount = 0; membersCount < members.length; membersCount++) {
+                let container = $('li.team-member[data-identifier="'+members[membersCount]['identifier']+'"]');
+                $(container).attr('data-id', members[membersCount]['teamMemberId']);
+                $(container).find('span.btn-membership-remove').attr('data-id', members[membersCount]['teamMemberId']);
+                $(container).find('span.btn-membership-remove').attr('data-user-id', members[membersCount]['userId']);
+                $(container).find('span.btn-membership-remove').attr('data-state-changed', '');
+            }
+        }
+
+        function handleInvitationSaveResult(invitations) {
+            for (let invitationsCount = 0; invitationsCount < invitations.length; invitationsCount++) {
+                let container = $('li.team-invitation[data-identifier="'+invitations[invitationsCount]['identifier']+'"]');
+                $(container).attr('data-id', invitations[invitationsCount]['teamInvitationId']);
+                $(container).attr('data-state-changed', '');
+                $(container).find('span.btn-invitation-remove').attr('data-id', invitations[invitationsCount]['teamInvitationId']);
+                $(container).find('span.btn-invitation-remove').attr('data-state-changed', '');
+            }
+        }
+
+        function addMembership(name, id, userRole, userId, state) {
+            let identifier = makeid();
+            let translatedRemove = "{{ 'remove_member_from_team'|trans({'%name%': 'placeholder_name'}, 'titles') }}";
+            translatedRemove.replace('placeholder_name', name);
+            let membershipRow = $(
+                '<li class="team-member small" data-id="'+id+'">'+name+'\
+                    <span class="btn-remove btn-membership-remove" data-toggle="tooltip" title="'+translatedRemove+'" data-id="'+id+'" data-user-id="'+userId+'" data-state="'+state+'" data-identifier="'+identifier+'">\
+                        <icon class="fas fa-minus-circle"></icon>\
+                    </span>\
                 </li>'
             );
 
-            $('.bord-invitations-container ul').append(invitationRow);
+            $(membershipRow).tooltip();
+            $('ul.member-container[data-role="'+userRole+'"]').append(membershipRow);
+        }
+
+        function addInvitation(email, id, token, state) {
+            let identifier = makeid();
+            let translatedRemove = "{{ 'remove_invitation'|trans({'%email%': 'placeholder_email'}, 'titles') }}";
+            translatedRemove = translatedRemove.replace('placeholder_email', email);
+            let translatedResend = "{{ 'resend_invitation'|trans({'%email%': 'placeholder_email'}, 'titles') }}";
+            translatedResend = translatedResend.replace('placeholder_email', email);
+            let translatedCopy = "{{ 'copy_invitation_to_clipboard'|trans({'%email%': 'placeholder_email'}, 'titles') }}";
+            translatedCopy = translatedCopy.replace('placeholder_email', email);
+            let invitationRow = $(
+                '<li class="small" data-id="'+id+'" data-state="'+state+'" data-identifier="'+identifier+'">'+email+'\
+                    <span class="btn-remove btn-invitation-remove" data-toggle="tooltip" title="'+translatedRemove+'" data-id="'+id+'">\
+                        <icon class="fas fa-minus-circle"></icon> \
+                    </span>\
+                    <span class="btn-resend btn-invitation-resend" data-toggle="tooltip" title="'+translatedResend+'" data-id="'+id+'">\
+                        <icon class="fas fa-sync-alt"></icon>\
+                    </span>\
+                    <span class="btn-copy btn-invitation-link-copy" data-toggle="tooltip" title="'+translatedCopy+'" data-token="'+token+'">\
+                        <icon class="fas fa-copy"></icon>\
+                    </span>\
+                </li>'
+            );
+
+            if ('changed' == state
+                || "undefined" == id
+                || "undefined" == token
+            ) {
+                $(invitationRow).find('.btn-resend').hide();
+                $(invitationRow).find('.btn-copy').hide();
+            }
+
+            $(invitationRow).tooltip();
+            $('.team-invitations-container ul').append(invitationRow);
         }
 
         function removeColumn(target) {
             $(target).parent().data('deleted', true);
             $(target).parent().fadeOut();
+        }
+
+        function makeid(length = 12) {
+            let result = '';
+            let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#_-';
+            let charactersLength = characters.length;
+            for (let i = 0; i < length; i++ ) {
+                result += characters.charAt(Math.floor(Math.random() * charactersLength));
+            }
+            return result;
         }
 
         function init() {
@@ -261,21 +450,28 @@
                     },
                     stop: function(event, ui) {
                         $('.member-container').removeClass('hover');
-                        if (0 < $(oldList).find('li').length || "ROLE_ADMIN" != oldList.attr('data-role')) {
-
-                            $.ajax({
-                                url: '/team-member/role',
-                                type: 'PUT',
-                                data: {
-                                    id: item.data('id'),
-                                    newRole: newList.attr('data-role'),
-                                    oldRole: oldList.attr('data-role')
-                                },
-                                success: function(response) {
-                                }
-                            });
+                        if (0 < $(oldList).find('li').length 
+                            || "ROLE_ADMIN" != oldList.attr('data-role')
+                        ) {
+                            // only save, is teamMember already known
+                            if ("undefined" != $(item).attr('data-id')
+                                && 0 < $(item).attr('data-id').length
+                            ) {
+                                $.ajax({
+                                    url: '/team-member/role',
+                                    type: 'PUT',
+                                    data: {
+                                        id: $(item).data('id'),
+                                        newRole: newList.attr('data-role'),
+                                        oldRole: oldList.attr('data-role')
+                                    },
+                                    success: function(response) {
+                                        console.log("TODO: implement team save success message");
+                                    }
+                                });
+                            }
                         } else {
-                            console.log("Letzter Admin, geht nicht!");
+//                            console.log("Letzter Admin, geht nicht!");
                             $(this).sortable('cancel');
                         }
                     },
@@ -298,15 +494,20 @@
             $('.btn-copy').unbind('click').on('click', function() {
                 /* Get the text field */
                 var copyText = $(this).data('token');
-                const el = document.createElement('textarea');
-                el.value = "https://retro.byte-artist.de/team/member/"+copyText;
-                el.setAttribute('readonly', '');
-                el.style.position = 'absolute';
-                el.style.left = '-9999px';
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
+
+                if ("undefined" != copyText
+                    && 0 < copyText.length
+                ) {
+                    const el = document.createElement('textarea');
+                    el.value = "https://retro.byte-artist.de/team/member/"+copyText;
+                    el.setAttribute('readonly', '');
+                    el.style.position = 'absolute';
+                    el.style.left = '-9999px';
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                }
             });
 
             $('.btn-resend').unbind('click').on('click', function() {
@@ -315,107 +516,271 @@
                 let invitationId = $(this).data('id');
                 let self = this;
 
-                $.post("{{ path('team_invite') }}", {email: email, id: teamId, invitationId: invitationId}, function(response) {
-                    if (200 === response.code) {
-                        $(self).parent().find('.btn-copy').attr('data-token', response.token);
-                    } else {
-                        alert(response.message);
-                    }
-                });
+                if (0 < teamId.length
+                    && "undefined" != invitationId
+                    && 0 < invitationId.length
+                ) {
+                    $.post("{{ path('team_invite') }}", {email: email, id: teamId, invitationId: invitationId}, function(response) {
+                        if (200 === response.code) {
+                            $(self).parent().find('.btn-copy').attr('data-token', response.token);
+                        } else {
+                            alert(response.content);
+                        }
+                    });
+                }
+            });
+
+            $('.btn-delete').unbind('click').on('click', function() {
+                $('#team_remove_modal').modal();
+            });
+
+            $('.btn-membership-add').unbind('click').on('click', function() {
+                $('#membership_modal').modal();
             });
 
             $('.btn-invitation-add').unbind('click').on('click', function() {
-                let inivitationModal = $('#invitation_modal');
-                $(inivitationModal).modal();
-
-                $(inivitationModal).on('shown.bs.modal', function () {
-                    $(inivitationModal).find('#invitation_email').trigger('focus');
-                });
-
-                $(inivitationModal).on('hidden.bs.modal', function () {
-                    $(inivitationModal).find('#invitation_email').val("");
-                    $(inivitationModal).find('.error').html("").css({"display": "none"});
-                });
+                $('#invitation_modal').modal();
             });
 
             $('.btn-invitation-remove').unbind('click').on('click', function() {
-                let invitationRemoveModal = $('#invitation_remove_modal');
                 invitationDeleteId = $(this).data('id');
-                $(invitationRemoveModal).modal();
-
-                $(invitationRemoveModal).on('hidden.bs.modal', function () {
-                    $(invitationRemoveModal).find('.error').html("").css({"display": "none"});
-                });
+                elementIdentifier = $(this).closest('li').data('identifier');
+                invitationDeleteId = $(this).data('id');
+                $('#invitation_remove_modal').modal();
             });
 
-            $('.btn-member-remove').unbind('click').on('click', function() {
-                let membershipRemoveModal = $('#membership_remove_modal');
-                membershipDeleteId = $(this).data('id');
-                $(membershipRemoveModal).modal();
+            $('.btn-invitation-link-copy').unbind('click').on('click', function() {
+                /* Get the text field */
+                var copyText = $(this).data('token');
 
-                $(membershipRemoveModal).on('hidden.bs.modal', function () {
-                    $(membershipRemoveModal).find('.error').html("").css({"display": "none"});
-                });
+                if ("undefined" != copyText
+                    && 0 < copyText.length
+                ) {
+                    const el = document.createElement('textarea');
+                    el.value = "https://retro.byte-artist.de/team/member/"+copyText;
+                    el.setAttribute('readonly', '');
+                    el.style.position = 'absolute';
+                    el.style.left = '-9999px';
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                }
             });
 
-            $('#invitation_remove_modal .btn-primary').unbind('click').on('click', function() {
-//                if ($('#invitation_modal #invitation_email').val().valid()) {
-                $.ajax({
-                    url: '/team/invitation/'+invitationDeleteId,
-                    type: 'DELETE',
-                    success: function(response) {
-                        if (true == response.success) {
-                            $('span.btn-invitation-remove[data-id="'+invitationDeleteId+'"]').closest('li').fadeOut(500, function() {
-                                $('span.btn-invitation-remove[data-id="'+invitationDeleteId+'"]').closest('li').remove();
-                                $('#invitation_remove_modal').modal('hide');
-                                invitationDeleteId = undefined;
-                            });
+            $('.btn-invitation-resend').unbind('click').on('click', function() {
+                let email = $(this).data('email');
+                let teamId = $('#team_id').val();
+                let invitationId = $(this).data('id');
+                let self = this;
+
+                if (0 < teamId.length
+                    && "undefined" != invitationId
+                    && (0 < invitationId.length || 0 < invitationId)
+                ) {
+                    console.log("!!");
+                    $.post("{{ path('team_invite') }}", {email: email, id: teamId, invitationId: invitationId}, function(response) {
+                        if (200 === response.code) {
+                            $(self).parent().find('.btn-copy').attr('data-token', response.token);
                         } else {
-                            $('#invitation_remove_modal .error').html(response.message).fadeIn();
+                            alert(response.content);
                         }
+                    });
+                }
+            });
+
+            $('.btn-membership-remove').unbind('click').on('click', function() {
+                membershipDeleteId = $(this).data('id');
+                elementIdentifier = $(this).closest('li').data('identifier');
+                $('#membership_remove_modal').modal();
+            });
+
+            $('#team_remove_modal .btn-ok').unbind('click').on('click', function() {
+                let teamId = $('#team_id').val();
+
+                if (0 < teamId.length) {
+                    $.ajax({
+                        url: '/team/'+teamId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            window.location.href="/teams";
+                        }
+                    });
+                }
+            });
+
+            $("#membership_name").autocomplete({
+                source: knownMembers
+            });
+
+            $("#membership_name").on('keyup', function() {
+                $('#membership_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#membership_modal').on('shown.bs.modal', function () {
+                $('#membership_modal').find('#membership_name').trigger('focus');
+            });
+
+            $('#membership_modal').on('hidden.bs.modal', function () {
+                $('#membership_modal').find('#membership_name').val("");
+                $('#membership_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#invitation_modal').on('shown.bs.modal', function () {
+                $('#invitation_modal').find('#invitation_email').trigger('focus');
+            });
+
+            $('#invitation_modal').on('hidden.bs.modal', function () {
+                $('#invitation_modal').find('#invitation_email').val("");
+                $('#invitation_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#invitation_email').on('keyup', function() {
+                $('#invitation_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#invitation_remove_modal').on('hidden.bs.modal', function () {
+                $('#invitation_remove_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#membership_remove_modal').on('hidden.bs.modal', function () {
+                $('#membership_remove_modal').find('.error').html("").css({"display": "none"});
+            });
+
+            $('#membership_modal .btn-primary').unbind('click').on('click', function() {
+                let userName = $('#membership_modal #membership_name').val().trim();
+                let userId = knownMemberIds[userName];
+                let userRole = "ROLE_USER";
+                let teamId = $('#team_id').val();
+
+                if (undefined === userId) {
+                    $('#membership_modal .error').html("{{ 'user_unknown'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                }
+
+                let userExists = 0 < $('.member-container span[data-user-id="'+userId+'"]').length;
+
+                if (userExists) {
+                    $('#membership_modal .error').html("{{ 'user_already_added'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                }
+
+                if (0 == teamId.length) {
+                    addMembership(userName, undefined, userRole, userId, 'changed');
+                    $('#membership_modal').modal('hide');
+                    init();
+                    return true;
+                }
+
+                $.post("{{ path('team_add_member') }}", {userId: userId, teamId: teamId, userRole: userRole}, function(response) {
+                    if (200 === response.code) {
+                        addMembership(userName, response.id, userRole, userId);
+                        $('#membership_modal').modal('hide');
+                        init();
+                    } else {
+                        $('#membership_modal .error').html(response.content).fadeIn(function() {
+                            $(this).css({'visibility': 'visible'});
+                        });
                     }
                 });
-//                }
             });
 
             $('#membership_remove_modal .btn-primary').unbind('click').on('click', function() {
-                if (1 < $('.member-container.team-admins-container li').length || "ROLE_ADMIN" != $('.team-member[data-id="'+membershipDeleteId+'"]').closest('.member-container').attr('data-role')) {
-                    $.ajax({
-                        url: '/team/member/'+membershipDeleteId,
-                        type: 'DELETE',
-                        success: function(response) {
-                            if (true == response.success) {
-                                $('span.btn-member-remove[data-id="'+membershipDeleteId+'"]').closest('li').fadeOut(500, function() {
-                                    $('span.btn-member-remove[data-id="'+membershipDeleteId+'"]').closest('li').remove();
-                                    $('#membership_remove_modal').modal('hide');
-                                    membershipDeleteId = undefined;
-                                });
-                            } else {
-                                $('#membership_remove_modal .error').html(response.message).fadeIn();
+                if (1 < $('.member-container.team-admins-container li').length 
+                    || "ROLE_ADMIN" != $('.team-member[data-identifier="'+elementIdentifier+'"]').closest('.member-container').attr('data-role')
+                ) {
+                    // @TODO hier über identifier arbeiten statt über konkrete IDs, da diese unter umständen noch nicht gesetzt sind!
+                    if ("undefined" == membershipDeleteId) {
+                        $('.member-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                        $('#membership_remove_modal').modal('hide');
+                        membershipDeleteId = undefined;
+                        elementIdentifier = undefined;
+                    } else {
+                        $.ajax({
+                            url: '/team/member/'+membershipDeleteId,
+                            type: 'DELETE',
+                            success: function(response) {
+                                if (true == response.success) {
+                                    $('.member-container li[data-identifier="'+elementIdentifier+'"]').fadeOut(500, function() {
+                                        $('.member-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                                        $('#membership_remove_modal').modal('hide');
+                                        membershipDeleteId = undefined;
+                                        elementIdentifier = undefined;
+                                    });
+                                } else {
+                                    $('#membership_remove_modal .error').html(response.content).fadeIn();
+                                }
                             }
-                        }
-                    })
+                        })
+                    }
                 } else {
-                    $('#membership_remove_modal .error').html("Only one admin left, deletion rejected!").fadeIn();
+                    $('#membership_remove_modal .error').html("{{ 'only_one_admin_left'|trans({}, 'errors') }}").fadeIn();
                 }
             });
 
             $('#invitation_modal .btn-primary').unbind('click').on('click', function() {
-//                if ($('#invitation_modal #invitation_email').val().valid()) {
                 let email = $('#invitation_modal #invitation_email').val().trim();
                 let teamId = $('#team_id').val();
+                let inputValid = $('#invitation_modal #invitation_email')[0].checkValidity() && 0 < email.length;
 
-                $.post("{{ path('team_invite') }}", {email: email, id: teamId}, function(response) {
-                    if (200 === response.code) {
-                        addInvitation(email, response.id, response.token);
-                        $('#invitation_modal').modal('hide');
-                        init();
-                    } else {
-                        $('#invitation_modal .error').html(response.message).fadeIn();
-                    }
-                });
-//                }
+                if (0 == teamId.length
+                    && inputValid
+                ) {
+                    addInvitation(email, undefined, undefined, 'changed');
+                    $('#invitation_modal').modal('hide');
+                    init();
+                    return true;
+                } else if (inputValid) {
+                    $.post("{{ path('team_invite') }}", {email: email, id: teamId}, function(response) {
+                        if (200 === response.code) {
+                            addInvitation(email, response.id, response.token);
+                            $('#invitation_modal').modal('hide');
+                            init();
+                        } else {
+                            $('#invitation_modal .error').html(response.content).fadeIn(function() {
+                                $(this).css({'visibility': 'visible'});
+                            });
+                        }
+                    });
+                } else if (!inputValid) {
+                    $('#invitation_modal .error').html("{{ 'email_invalid'|trans({}, 'errors') }}").fadeIn(function() {
+                        $(this).css({'visibility': 'visible'});
+                    });
+                    return false;
+                }
             });
+
+            $('#invitation_remove_modal .btn-primary').unbind('click').on('click', function() {
+                if ("undefined" == invitationDeleteId) {
+                    $('.team-invitations-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                    $('#invitation_remove_modal').modal('hide');
+                    invitationDeleteId = undefined;
+                    elementIdentifier = undefined;
+                } else {
+                    $.ajax({
+                        url: '/team/invitation/'+invitationDeleteId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if (true == response.success) {
+                                $('.team-invitations-container li[data-identifier="'+elementIdentifier+'"]').fadeOut(500, function() {
+                                    $('.team-invitations-container li[data-identifier="'+elementIdentifier+'"]').remove();
+                                    $('#invitation_remove_modal').modal('hide');
+                                    invitationDeleteId = undefined;
+                                    elementIdentifier = undefined;
+                                });
+                            } else {
+                                $('#invitation_remove_modal .error').html(response.content).fadeIn();
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
         }
     </script>
 {% endblock %}

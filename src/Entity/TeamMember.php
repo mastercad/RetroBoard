@@ -163,6 +163,9 @@ class TeamMember
 
     public function setRoles($roles)
     {
+        if (!is_array($roles)) {
+            $roles = [$roles];
+        }
         $this->roles = $roles;
         return $this;
     }

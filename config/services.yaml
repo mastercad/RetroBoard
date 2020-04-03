@@ -25,12 +25,18 @@ services:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
 
-#    Symfony\Components\Security\Core\Encoder\PasswordEncoderInterface:
-#        class: 
-
     App\Listener\LocaleListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 110 }
+
+#    App\Form\BoardMemberType:
+#        arguments:  ['@security']
+#        arguments:  ['@security.token_storage']
+#        tags: [form.type]
+
+#    App\Entity\BoardMember:
+#        arguments:  ['@security.token_storage']
+#        tags: [form.type.entity]
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

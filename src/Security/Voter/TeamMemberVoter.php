@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Team;
 use App\Entity\TeamMember;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -10,7 +9,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class TeamVoter extends Voter
+class TeamMemberVoter extends Voter
 {
     private $security;
     private $logger;
@@ -25,8 +24,8 @@ class TeamVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['edit', 'create', 'show', 'delete', 'archive'])
-            && $subject instanceof Team;
+        return in_array($attribute, ['edit_role', 'edit', 'create', 'show', 'delete', 'archive'])
+            && $subject instanceof TeamMember;
     }
 
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -40,13 +39,13 @@ class TeamVoter extends Voter
         switch ($attribute) {
             case 'create':
                 return $user instanceof UserInterface;
-            case 'delete':
             case 'edit':
+            case 'edit_role':
                 if (!$user instanceof UserInterface) {
                     return false;
                 }
 
-                $results = $subject->getTeamMembers()->filter(
+                $results = $subject->getTeam()->getTeamMembers()->filter(
                     function(TeamMember $teamMember) use ($user) {
                         return $teamMember->getMember() === $user
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());
@@ -59,14 +58,14 @@ class TeamVoter extends Voter
                     return true;
                 }
 
-                $results = $subject->getTeamMembers()->filter(
+                $results = $subject->getTeam()->getTeamMembers()->filter(
                         function (TeamMember $teamMember) use ($user) {
                             return $teamMember->getMember() === $user;
                     }
                 );
                 return 0 < count($results);
             case 'archive':
-                $results = $subject->getTeamMembers()->filter(
+                $results = $subject->getTeam()->getTeamMembers()->filter(
                     function(TeamMember $teamMember) use ($user) {
                         return $teamMember->getMember() === $user
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());

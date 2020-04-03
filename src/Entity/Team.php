@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -72,6 +73,18 @@ class Team
      * @ORM\OneToMany(targetEntity="TeamMember", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $members;
+
+    /**
+     * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     */
+    private $boardTeams;
+
+    public function __construct()
+    {
+        $this->invitations = new ArrayCollection();
+        $this->members = new ArrayCollection();
+        $this->boardTeams = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -184,7 +197,7 @@ class Team
     /**
      * @return Collection|TeamMember[]
      */
-    public function getTeamMembers(): Collection
+    public function getTeamMembers(): ?Collection
     {
         return $this->members;
     }
@@ -215,7 +228,7 @@ class Team
     /**
      * @return Collection|TeamInvitation[]
      */
-    public function getTeamInvitations(): Collection
+    public function getTeamInvitations(): ?Collection
     {
         return $this->invitations;
     }
@@ -237,6 +250,37 @@ class Team
             // set the owning side to null (unless already changed)
             if ($teamInvitation->getTeam() === $this) {
                 $teamInvitation->setTeam(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TeamMember[]
+     */
+    public function getBoardTeams(): ?Collection
+    {
+        return $this->boardTeams;
+    }
+
+    public function addBoardTeam(BoardTeam $boardTeam): self
+    {
+        if (!$this->boardTeams->contains($boardTeam)) {
+            $this->boardTeams[] = $boardTeam;
+            $boardTeam->setTeam($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBoardTeam(BoardTeam $boardTeam): self
+    {
+        if ($this->boardTeams->contains($boardTeam)) {
+            $this->boardTeams->removeElement($boardTeam);
+            // set the owning side to null (unless already changed)
+            if ($boardTeam->getTeam() === $this) {
+                $boardTeam->setTeam(null);
             }
         }
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reset Password{% endblock %}
+{% block title %}{{ 'reset_password'|trans({}, 'titles') }}{% endblock %}
 
 {% block body %}
 <div class="container">
@@ -10,7 +10,7 @@
                 <img src="/images/logo.png" id="icon" alt="User Icon" />
             </div>
                 <div class="mb-3 alert alert-error font-weight-normal">
-                    <strong>Error!</strong> An error has occurred, please repeat the process!
+                    <strong>{{ 'error'|trans({}, 'titles') }}</strong>{{ 'error_occurred'|trans({}, 'messages') }}
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TicketController!{% endblock %}
+{% block title %}{{ 'ticket_overview'|trans({}, 'titles') }}{% endblock %}
 
 {% block body %}
 {% for ticket in tickets %}

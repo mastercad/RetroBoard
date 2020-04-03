@@ -6,8 +6,8 @@
     </header>
     <body>
       <trans-unit id="salutation" resname="salutation">
-        <source>Hello %invitationUsername%</source>
-        <target>Pozdravljeni %invitationUsername%</target>
+        <source><![CDATA[Hello %invitationUsername%]]></source>
+        <target><![CDATA[Pozdravljeni %invitationUsername%]]></target>
       </trans-unit>
       <trans-unit id="ending" resname="ending">
         <source><![CDATA[Yours sincerely<br />

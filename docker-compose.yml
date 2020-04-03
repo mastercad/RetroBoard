@@ -30,6 +30,7 @@ services:
     command: --default-authentication-plugin=mysql_native_password
     volumes:
       - .docker/data/db:/var/lib/mysql
+      - .:/application
 #    network_mode: host
     networks:
       retro_board_net:

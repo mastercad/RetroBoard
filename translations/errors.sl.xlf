@@ -5,6 +5,122 @@
       <tool tool-id="symfony" tool-name="Symfony"/>
     </header>
     <body>
+      <trans-unit id="user_unknown" resname="user_unknown">
+        <source><![CDATA[User unknown]]></source>
+        <target><![CDATA[Uporabnik ni znan]]></target>
+      </trans-unit>
+      <trans-unit id="board_not_found" resname="board_not_found">
+        <source><![CDATA[Board not found]]></source>
+        <target><![CDATA[Tabele ni mogoče najti]]></target>
+      </trans-unit>
+      <trans-unit id="error_one_column_needed_in_board" resname="error_one_column_needed_in_board">
+        <source><![CDATA[At least one column is required]]></source>
+        <target><![CDATA[Potreben je vsaj en stolpec]]></target>
+      </trans-unit>
+      <trans-unit id="one_or_more_columns_already_exists_in_board" resname="one_or_more_columns_already_exists_in_board">
+        <source><![CDATA[One or more columns already exist on this board]]></source>
+        <target><![CDATA[Na tej plošči že obstaja en ali več stolpcev]]></target>
+      </trans-unit>
+      <trans-unit id="email_invalid" resname="email_invalid">
+        <source><![CDATA[Email invalid]]></source>
+        <target><![CDATA[E-pošta je neveljavna]]></target>
+      </trans-unit>
+      <trans-unit id="invitation_not_found" resname="invitation_not_found">
+        <source><![CDATA[Invitation not found]]></source>
+        <target><![CDATA[Povabila ni bilo mogoče najti]]></target>
+      </trans-unit>
+      <trans-unit id="team_not_found_for_board" resname="team_not_found_for_board">
+        <source><![CDATA[This team was not found for this board]]></source>
+        <target><![CDATA[Te skupine ni bilo mogoče najti za ta odbor]]></target>
+      </trans-unit>
+      <trans-unit id="member_not_found_for_board" resname="member_not_found_for_board">
+        <source><![CDATA[This member was not found for this board]]></source>
+        <target><![CDATA[Ta član ni bil najden za ta odbor]]></target>
+      </trans-unit>
+      <trans-unit id="member_already_exists" resname="member_already_exists">
+        <source><![CDATA[This member already exists]]></source>
+        <target><![CDATA[Ta član že obstaja]]></target>
+      </trans-unit>
+      <trans-unit id="member_already_added" resname="member_already_added">
+        <source><![CDATA[Member already added]]></source>
+        <target><![CDATA[Član je že dodan]]></target>
+      </trans-unit>
+      <trans-unit id="team_unknown" resname="team_unknown">
+        <source><![CDATA[The team was not found.]]></source>
+        <target><![CDATA[Moštva ni bilo mogoče najti.]]></target>
+      </trans-unit>
+      <trans-unit id="team_already_added" resname="team_already_added">
+        <source><![CDATA[Team already added]]></source>
+        <target><![CDATA[Ekipa je že dodana]]></target>
+      </trans-unit>
+      <trans-unit id="board_member_not_found" resname="board_member_not_found">
+        <source><![CDATA[This Member for this board not found]]></source>
+        <target><![CDATA[Člana tega odbora ni bilo mogoče najti]]></target>
+      </trans-unit>
+      <trans-unit id="team_not_found" resname="team_not_found">
+        <source><![CDATA[Team not found]]></source>
+        <target><![CDATA[Skupine ni mogoče najti]]></target>
+      </trans-unit>
+      <trans-unit id="team_already_invited" resname="team_already_invited">
+        <source><![CDATA[Team already invited]]></source>
+        <target><![CDATA[Ekipa je že povabljena]]></target>
+      </trans-unit>
+      <trans-unit id="team_member_already_invited" resname="team_member_already_invited">
+        <source><![CDATA[The member has already been invited to this team]]></source>
+        <target><![CDATA[Član je že bil povabljen v to ekipo]]></target>
+      </trans-unit>
+      <trans-unit id="member_not_found" resname="member_not_found">
+        <source><![CDATA[The member was not found]]></source>
+        <target><![CDATA[Član ni bil najden]]></target>
+      </trans-unit>
+      <trans-unit id="team_member_not_found" resname="team_member_not_found">
+        <source><![CDATA[The member was not found for this team]]></source>
+        <target><![CDATA[Član te skupine ni bil najden]]></target>
+      </trans-unit>
+      <trans-unit id="ticket_not_found" resname="ticket_not_found">
+        <source><![CDATA[Ticket not found]]></source>
+        <target><![CDATA[Vstopnice ni mogoče najti]]></target>
+      </trans-unit>
+      <trans-unit id="ticket_deletion_not_allowed" resname="ticket_deletion_not_allowed">
+        <source><![CDATA[Deleting the ticket is not permitted]]></source>
+        <target><![CDATA[Brisanje vozovnice ni dovoljeno]]></target>
+      </trans-unit>
+      <trans-unit id="something_went_wrong" resname="something_went_wrong">
+        <source><![CDATA[Something went wrong]]></source>
+        <target><![CDATA[Nekaj je šlo narobe]]></target>
+      </trans-unit>
+      <trans-unit id="only_one_admin_left" resname="only_one_admin_left">
+        <source><![CDATA[There is only one admin left]]></source>
+        <target><![CDATA[Ostala je samo ena skrbnica]]></target>
+      </trans-unit>
+      <trans-unit id="only_this_types_accepted" resname="only_this_types_accepted">
+        <source><![CDATA[Only these types are allowed: %types%]]></source>
+        <target><![CDATA[Dovoljene so samo te vrste: %types%]]></target>
+      </trans-unit>
+      <trans-unit id="max_upload_limit" resname="max_upload_limit">
+        <source><![CDATA[The maximum upload limit is %limit%]]></source>
+        <target><![CDATA[Najvišja omejitev nalaganja je %limit%]]></target>
+      </trans-unit>
+      <trans-unit id="email_already_invited" resname="email_already_invited">
+        <source><![CDATA[A user with this email has already been invited.]]></source>
+        <target><![CDATA[Uporabnik s tem e-poštnim sporočilom je že povabljen.]]></target>
+      </trans-unit>
+      <trans-unit id="error_ticket_creation" resname="error_ticket_creation">
+        <source><![CDATA[There was an error creating this ticket.]]></source>
+        <target><![CDATA[Pri ustvarjanju te vozovnice je prišlo do napake.]]></target>
+      </trans-unit>
+      <trans-unit id="error_ticket_deletion" resname="error_ticket_deletion">
+        <source><![CDATA[There was an error deleting this ticket.]]></source>
+        <target><![CDATA[Pri brisanju te vozovnice je prišlo do napake.]]></target>
+      </trans-unit>
+      <trans-unit id="user_already_added" resname="user_already_added">
+        <source><![CDATA[This user has already been added.]]></source>
+        <target><![CDATA[Ta uporabnik je že dodan.]]></target>
+      </trans-unit>
+      <trans-unit id="name_must_be_set" resname="name_must_be_set">
+        <source>A name must be set</source>
+        <target>Ime mora biti nastavljeno</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

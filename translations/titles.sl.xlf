@@ -37,6 +37,170 @@
         <source>Archive of</source>
         <target>Arhiv</target>
       </trans-unit>
+      <trans-unit id="add_membership" resname="add_membership">
+        <source>Add Membership</source>
+        <target>Dodajte članstvo</target>
+      </trans-unit>
+      <trans-unit id="add_team" resname="add_team">
+        <source>Add Team</source>
+        <target>Dodaj ekipo</target>
+      </trans-unit>
+      <trans-unit id="remove_team" resname="remove_team">
+        <source>Remove Team</source>
+        <target>Odstrani ekipo</target>
+      </trans-unit>
+      <trans-unit id="information" resname="information">
+        <source>Information</source>
+        <target>Informacije</target>
+      </trans-unit>
+      <trans-unit id="alert" resname="alert">
+        <source>Alert</source>
+        <target>Opozorilo</target>
+      </trans-unit>
+      <trans-unit id="warning" resname="warning">
+        <source>Warning</source>
+        <target>Opozorilo</target>
+      </trans-unit>
+      <trans-unit id="success" resname="success">
+        <source>Success</source>
+        <target>Uspeh</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_new_column_to_board" resname="click_to_add_new_column_to_board">
+        <source>Click here to add a new column to the board.</source>
+        <target>Kliknite tukaj, če želite dodati nov stolpec na tablo.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_existing_user_to_board" resname="click_to_add_existing_user_to_board">
+        <source>Click here to add an existing user to the board.</source>
+        <target>Kliknite tukaj, da v odbor dodate obstoječega člana.</target>
+      </trans-unit>
+      <trans-unit id="remove_user_from_board" resname="remove_user_from_board">
+        <source>Click here to remove member %name% from the board.</source>
+        <target>Kliknite tukaj, da odstranite člansko% name% s plošče.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_existing_team_to_board" resname="click_to_add_existing_team_to_board">
+        <source>Click here to add an existing team to the board.</source>
+        <target>Kliknite tukaj, če želite dodati obstoječo ekipo v odbor.</target>
+      </trans-unit>
+      <trans-unit id="remove_team_from_board" resname="remove_team_from_board">
+        <source>Click here to remove team %team% from the board.</source>
+        <target>Kliknite tukaj, da odstranite ekipo% team% iz plošče.</target>
+      </trans-unit>
+      <trans-unit id="click_to_invite_new_member_via_email" resname="click_to_invite_new_member_via_email">
+        <source>Click here to invite a user to the board via email.</source>
+        <target>Kliknite tukaj, da povabite uporabnika na tablo po e-pošti.</target>
+      </trans-unit>
+      <trans-unit id="remove_invitation" resname="remove_invitation">
+        <source>Click here to remove the invitation.</source>
+        <target>Kliknite tukaj, da odstranite povabilo.</target>
+      </trans-unit>
+      <trans-unit id="resend_invitation" resname="resend_invitation">
+        <source>Click here to resend the invitation.</source>
+        <target>Kliknite tukaj, če želite ponovno poslati vabilo.</target>
+      </trans-unit>
+      <trans-unit id="copy_invitation_to_clipboard" resname="copy_invitation_to_clipboard">
+        <source>Click here to copy the invitation link to the clipboard.</source>
+        <target>Kliknite tukaj, da kopirate vabilo v odložišče.</target>
+      </trans-unit>
+      <trans-unit id="remove_board" resname="remove_board">
+        <source>Delete board</source>
+        <target>Izbriši ploščo</target>
+      </trans-unit>
+      <trans-unit id="error_board_save" resname="error_board_save">
+        <source>Error! Board could not be saved!</source>
+        <target>Napaka! Tabla ni bilo mogoče shraniti!</target>
+      </trans-unit>
+      <trans-unit id="board_save_success" resname="board_save_success">
+        <source>Board was saved successfully!</source>
+        <target>Tabla je bila uspešno shranjena!</target>
+      </trans-unit>
+      <trans-unit id="error_board_deletion" resname="error_board_deletion">
+        <source>Error! Board could not be deleted!</source>
+        <target>Napaka! Tabla ni bilo mogoče izbrisati!</target>
+      </trans-unit>
+      <trans-unit id="delete_ticket" resname="delete_ticket">
+        <source>Delete ticket</source>
+        <target>Izbriši vozovnico</target>
+      </trans-unit>
+      <trans-unit id="error_ticket_creation" resname="error_ticket_creation">
+        <source>Error! Ticket could not be created!</source>
+        <target>Napaka! Vozovnice ni bilo mogoče ustvariti!</target>
+      </trans-unit>
+      <trans-unit id="error_ticket_deletion" resname="error_ticket_deletion">
+        <source>Error! Ticket could not be deleted!</source>
+        <target>Napaka! Vozovnice ni bilo mogoče izbrisati!</target>
+      </trans-unit>
+      <trans-unit id="reset_password" resname="reset_password">
+        <source>Reset Password</source>
+        <target>Ponastavitev gesla</target>
+      </trans-unit>
+      <trans-unit id="error" resname="error">
+        <source>Error</source>
+        <target>Napaka</target>
+      </trans-unit>
+      <trans-unit id="forgot_password" resname="forgot_password">
+        <source>Forgot Password</source>
+        <target>Ste pozabili geslo</target>
+      </trans-unit>
+      <trans-unit id="login" resname="login">
+        <source>Login</source>
+        <target>Vpiši se</target>
+      </trans-unit>
+      <trans-unit id="new_password_is_set" resname="new_password_is_set">
+        <source>A new password has been set</source>
+        <target>Nastavljeno je novo geslo</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_existing_user_to_team" resname="click_to_add_existing_user_to_team">
+        <source>Click here to add an existing member to the team.</source>
+        <target>Kliknite tukaj, če želite dodati obstoječega člana v ekipo.</target>
+      </trans-unit>
+      <trans-unit id="remove_member_from_team" resname="remove_member_from_team">
+        <source>Click here to remove member %name% from the team.</source>
+        <target>Kliknite tukaj, da odstranite člana% name% iz ekipe.</target>
+      </trans-unit>
+      <trans-unit id="ticket_overview" resname="ticket_overview">
+        <source>Ticket Overview</source>
+        <target>Pregled vstopnic</target>
+      </trans-unit>
+      <trans-unit id="remove_column" resname="remove_column">
+        <source>Click here to remove column %column% from Board.</source>
+        <target>Kliknite tukaj, da odstranite stolpec% stolpec% iz plošče.</target>
+      </trans-unit>
+      <trans-unit id="request_new_password" resname="request_new_password">
+        <source>Request new password</source>
+        <target>Zahtevajte novo geslo</target>
+      </trans-unit>
+      <trans-unit id="new_password" resname="new_password">
+        <source>New password</source>
+        <target>Novo geslo</target>
+      </trans-unit>
+      <trans-unit id="click_to_invite_member_via_email" resname="click_to_invite_member_via_email">
+        <source>Click here to invite a user via email.</source>
+        <target>Kliknite tukaj, da uporabnika povabite po e-pošti.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_new_board" resname="click_to_add_new_board">
+        <source>Click here to add new board.</source>
+        <target>Kliknite tukaj, da ustvarite novo tablo.</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_new_team" resname="click_to_add_new_team">
+        <source>Click here to add new team.</source>
+        <target>Kliknite tukaj, če želite ustvariti novo skupino.</target>
+      </trans-unit>
+      <trans-unit id="click_to_edit_board" resname="click_to_edit_board">
+        <source>Click here to edit this board.</source>
+        <target>Kliknite tukaj za urejanje te plošče.</target>
+      </trans-unit>
+      <trans-unit id="click_to_edit_team" resname="click_to_edit_team">
+        <source>Click here to edit this team.</source>
+        <target>Kliknite tukaj, če želite urediti to ekipo.</target>
+      </trans-unit>
+      <trans-unit id="team_save_success" resname="team_save_success">
+        <source>Team was saved successfully!</source>
+        <target>Ekipa je bila uspešno shranjena!</target>
+      </trans-unit>
+      <trans-unit id="error_team_save" resname="error_team_save">
+        <source>Error! Team could not be saved!</source>
+        <target>Napaka! Skupine ni bilo mogoče shraniti!</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -18,7 +18,7 @@ class BoardMemberVoter extends Voter
         $this->security = $security;
         $this->logger = $logger;
     }
-    
+
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
@@ -49,7 +49,7 @@ class BoardMemberVoter extends Voter
         case 'edit_role':
             $results = $subject->getBoard()->getBoardMembers()->filter(
                 function ($boardMember) use ($user) {
-                    return $boardMember->getUser() === $user 
+                    return $boardMember->getUser() === $user
                         && in_array('ROLE_ADMIN', $boardMember->getRoles());
                 }
             );
@@ -57,7 +57,7 @@ class BoardMemberVoter extends Voter
         case 'delete':
             $results = $subject->getBoard()->getBoardMembers()->filter(
                 function ($boardMember) use ($user) {
-                    return $boardMember->getUser() === $user 
+                    return $boardMember->getUser() === $user
                         && in_array('ROLE_ADMIN', $boardMember->getRoles());
                 }
             );

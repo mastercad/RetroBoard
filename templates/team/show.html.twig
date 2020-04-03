@@ -4,7 +4,6 @@
 {% block navigation_title %}{{ team.name }}{% endblock %}
 
 {% block navigation_additions %}
-
     {% if is_granted('edit', team) %}
         <a href="/team/create/{{ team.id }}" class="m-2 btn-edit-team">
             <icon class="fas fa-edit"></icon>
@@ -27,35 +26,22 @@
 {% endblock %}
 
 {% block body %}
-<div class="team-content container-fluid h-100 mt-3">
+<div class="team-content container-fluid mt-3">
     <div class="row h-100">
-    </div>
-</div>
-
-<div id="ticket_remove_modal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete Ticket</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    Should this ticket really be removed from the board?
-                </div>
-                <div class="error alert alert-danger" style="display: none;" role="alert">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Remove</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+        <div class="col-sm-12">
+            <h3>
+                {{ team.name }}
+            </h3>
+        </div>
+        <div class="col-sm-12">
+            <ul>
+            {% for teamMember in team.teamMembers %}
+                <li>{{ teamMember.member.name }}</li>
+            {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block javascripts %}

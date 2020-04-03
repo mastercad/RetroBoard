@@ -13,7 +13,8 @@
         "symfony/monolog-bundle": "^3.4",
         "symfony/mercure-bundle": "^0.1.2",
         "symfony/swiftmailer-bundle": "^3.2",
-        "symfony/translation": "^4.3"
+        "symfony/translation": "^4.3",
+        "doctrine/annotations": "^1.10"
     },
     "scripts": {
         "auto-scripts": {

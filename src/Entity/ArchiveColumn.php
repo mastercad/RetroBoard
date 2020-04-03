@@ -136,8 +136,8 @@ class ArchiveColumn
     /**
      * Get the value of board
      *
-     * @return  Board
-     */ 
+     * @return ArchiveBoard
+     */
     public function getBoard()
     {
         return $this->board;
@@ -146,11 +146,11 @@ class ArchiveColumn
     /**
      * Set the value of board
      *
-     * @param Board $board
+     * @param ArchiveBoard $board
      *
      * @return  self
-     */ 
-    public function setBoard(?Board $board)
+     */
+    public function setBoard(?ArchiveBoard $board)
     {
         $this->board = $board;
 

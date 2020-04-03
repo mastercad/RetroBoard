@@ -54,6 +54,7 @@ input[type="text"],
 body {
   margin: 0;
   padding: 0;
+  padding-top: 80px;
   background-color: white;
   height: 100vh;
   font-family: 'Pontano Sans', cursive !important;
@@ -78,6 +79,92 @@ h2 {
   color: #00334E;
 }
 
+header nav {
+    -webkit-transition: all 0.6s ease-out;
+    -moz-transition: all 0.6s ease-out;
+    -o-transition: all 0.6s ease-out;
+    -ms-transition: all 0.6s ease-out;
+    transition: all 0.6s ease-out;
+}
+
+header.sticky nav {
+    font-size: 1rem;
+/*    font-size: 12px;*/
+/*    background: rgb(68, 68, 68); *//* IE */
+/*    background: rgba(153, 219, 245, .95); *//* NON-IE */
+/*    opacity: 0.95;*/
+}
+
+header.sticky input,
+header.sticky button {
+    font-size: inherit;
+}
+
+header.sticky .navbar-header {
+    width: 20%;
+    margin-bottom: 0px;
+    float: left;
+}
+
+header.sticky .navbar-brand {
+    height: auto;
+    margin: 0;
+    padding: 0;
+}
+
+header.sticky .navbar-brand img {
+    padding-top: 11px;
+    width: 32px;
+    margin-right: 15px;
+}
+
+header.sticky .navbar-right {
+    width: 80%;
+    background: none;
+}
+
+header.sticky .navbar-nav {
+    float: right;
+}
+
+header.sticky .social {
+    display: none;
+}
+
+header.sticky .navbar-toggle {
+    float: right;
+    margin-top: 7px;
+}
+
+header.sticky h3 {
+  font-size: 1.4rem;
+}
+
+.navbar-brand {
+    padding: 10px 0;
+}
+
+.navbar-brand > img {
+    display: block;
+    margin: 0 -5px;
+    float: left;
+    transition: all 500ms cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+.navbar-toggle {
+  float: right;
+  margin: 25px 0 -15px;
+  transition: all 500ms cubic-bezier(0.55, 0, 0.1, 1);
+}
+
+header nav > a {
+  color: #FFFFFF;
+}
+
+header nav > a:hover {
+  color: #8DC4E2;
+}
+
 /* STRUCTURE */
 .wrapper {
   display: flex;
@@ -95,7 +182,7 @@ h2 {
   background: #fff;
   padding: 30px;
   width: 90%;
-  max-width: 450px;
+  max-width: 500px;
   position: relative;
   padding: 0px;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
@@ -138,7 +225,7 @@ input[type=button], input[type=submit], input[type=reset], button  {
   box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
   -webkit-border-radius: 5px 5px 5px 5px;
   border-radius: 5px 5px 5px 5px;
-  margin: 5px 20px 40px 20px;
+  margin: 5px 20px 5px 20px;
   -webkit-transition: all 0.3s ease-in-out;
   -moz-transition: all 0.3s ease-in-out;
   -ms-transition: all 0.3s ease-in-out;

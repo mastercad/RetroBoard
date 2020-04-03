@@ -10,16 +10,15 @@
                 <img src="/images/logo.png" id="icon" alt="User Icon" />
             </div>
 
-
             {{ form_start(registrationForm) }}
-                <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+                <h1 class="h3 mb-3 font-weight-normal">{{ 'register'|trans({}, 'labels') }}</h1>
 
                 {{ form_row(registrationForm.name) }}
                 {{ form_row(registrationForm.email) }}
                 {{ form_row(registrationForm.password) }}
                 {{ form_row(registrationForm.agreeTerms) }}
 
-                <button class="btn fadeIn fourth">Register</button>
+                <button class="btn fadeIn fourth">{{ 'register'|trans({}, 'labels') }}</button>
             {{ form_end(registrationForm) }}
         </div>
     </div>

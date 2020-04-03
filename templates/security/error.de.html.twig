@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ 'error'|trans({}, 'titles') }}{% endblock %}
+{% block title %}{{ 'error'|trans({}, 'labels') }}{% endblock %}
 
 {% block body %}
 <div class="container">
@@ -10,7 +10,7 @@
                 <img src="/images/logo.png" id="icon" alt="User Icon" />
             </div>
                 <div class="mb-3 alert alert-error font-weight-normal">
-                    <strong>{{ 'error'|trans({}, 'label') }}!</strong>
+                    <strong>{{ 'error'|trans({}, 'labels') }}!</strong>
                     {{ 'error_occurred_please_repeat'|trans({}, 'messages') }}
                 </div>
             </div>
