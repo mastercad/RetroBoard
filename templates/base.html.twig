@@ -48,9 +48,13 @@
                                     <span data-toggle="tooltip" title="{{ app.user.email }}">{{ app.user.username }}</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
+                                {% if is_granted("ROLE_USER") %}
                                     {% block navigation_additions_user_options %}{% endblock %}
                                     <a class="dropdown-item user-profile" href="{{ path('user_profile') }}" data-toggle="tooltip" title="{{ 'click_edit_profil'|trans({}, 'titles') }}">{{ 'profile'|trans({}, 'labels') }}</a>
                                     <a class="dropdown-item user-logout" href="{{ path('app_logout') }}" data-toggle="tooltip" title="{{ 'click_to_logout'|trans({}, 'titles') }}">{{ 'logout'|trans({}, 'labels') }}</a>
+                                {% else %}
+                                    <a class="dropdown-item user-login" href="{{ path('app_login') }}" data-toggle="tooltip" title="{{ 'click_to_login'|trans({}, 'titles') }}">{{ 'login'|trans({}, 'labels') }}</a>
+                                {% endif %}
                                 </div>
                             </li>
                         </ul>
@@ -64,8 +68,6 @@
         {% endblock %}
 
         {% block sidebar %}
-            {# only logged in user can see sidebar  #}
-            {% if app.user.name is defined %}
             <ul class="sidebar navbar-nav mr-auto">
                 <li class="nav-item" data-toggle="tooltip" title="{{ 'board_overview'|trans({}, 'titles') }}">
                     <a href="/boards" >
@@ -83,6 +85,7 @@
                         </span>
                     </a>
                 </li>
+                {% if is_granted("ROLE_USER") %}
                 <li class="nav-item btn-adds dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fas fa-fw fa-plus"></i>
@@ -98,9 +101,9 @@
                         </a>
                     </div>
                 </li>
+                {% endif %}
                 <li class="btn-sidebar"><i class="fas fa-arrow-right"></i></li>
             </ul>
-            {% endif %}
         {% endblock %}
 
         {% block body %}{% endblock %}

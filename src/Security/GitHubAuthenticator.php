@@ -3,20 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
-use League\OAuth2\Client\Provider\GithubResourceOwner;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use League\OAuth2\Client\Provider\GithubResourceOwner;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
 
 class GitHubAuthenticator extends SocialAuthenticator
 {
@@ -71,7 +72,11 @@ class GitHubAuthenticator extends SocialAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        // this method is only called if supports() returns true
+        $request->getSession()->set(
+            Security::LAST_USERNAME,
+            "GITHUB_SESSION_USER"
+        );
+
         return $this->fetchAccessToken($this->getGitHubClient());
     }
 
@@ -93,7 +98,7 @@ class GitHubAuthenticator extends SocialAuthenticator
         $this->logger->info("NickName: ".$gitHubUser->getNickName());
         $this->logger->info("Url: ".$gitHubUser->getUrl());
         $gitHubResponse = $gitHubUser->toArray();
-    
+
         $this->logger->info("Response: ".print_r($gitHubResponse, true));
 
         $name = $gitHubUser->getName();

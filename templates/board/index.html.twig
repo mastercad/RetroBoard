@@ -22,6 +22,8 @@
             {% endif %}
             {% set boardCount = boardCount + 1 %}
         {% endfor %}
+
+        {% if is_granted("ROLE_USER") %}
             {% if boardCount is divisible by(2) %}
                 <div class="row">
             {% endif %}
@@ -40,5 +42,6 @@
             {% if boardCount is divisible by(2) %}
                 </div>
             {% endif %}
+        {% endif %}
     </div>
 {% endblock %}

@@ -3,20 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
-use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
-use League\OAuth2\Client\Provider\GenericResourceOwner;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use League\OAuth2\Client\Provider\GenericResourceOwner;
+use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
 
 // &error=invalid_scope&error_description=The+authorization+server+resource+does+not+have+any+configured+default+scopes%2C+'scope'+must+be+provided.
 // -> https://support.okta.com/help/s/article/How-do-I-create-a-scope-for-my-Authorization-Server
@@ -75,6 +76,10 @@ class OktaAuthenticator extends SocialAuthenticator
      */
     public function getCredentials(Request $request)
     {
+        $request->getSession()->set(
+            Security::LAST_USERNAME,
+            "OKTA_SESSION_USER"
+        );
         return $this->fetchAccessToken($this->getOktaClient());
     }
 

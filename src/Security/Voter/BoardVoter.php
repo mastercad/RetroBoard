@@ -38,7 +38,7 @@ class BoardVoter extends Voter
 
         switch ($attribute) {
             case 'create':
-                return $user instanceof UserInterface;
+                return $user instanceof UserInterface && in_array('ROLE_USER', $user->getRoles());
             case 'delete':
             case 'edit':
                 if (!$user instanceof UserInterface) {

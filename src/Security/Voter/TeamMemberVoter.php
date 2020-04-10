@@ -38,7 +38,7 @@ class TeamMemberVoter extends Voter
 
         switch ($attribute) {
             case 'create':
-                return $user instanceof UserInterface;
+                return $user instanceof UserInterface && in_array('ROLE_USER', $user->getRoles());
             case 'edit':
             case 'edit_role':
                 if (!$user instanceof UserInterface) {

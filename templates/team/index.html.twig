@@ -23,23 +23,25 @@
         {% endif %}
         {% set teamCount = teamCount + 1 %}
     {% endfor %}
-    {% if teamCount is divisible by(2) %}
-        <div class="row">
-    {% endif %}
-            <div class="preview col-sm-6 col-md-5 col-xs-5 m-5 p-2 border rounded">
-                <a href="/team/create">
-                    <div class="row mr-2">
-                        <div class="col-sm-12 colm-md-12 col-xs-12 h3">
-                            {{ 'add_new_team'|trans({}, 'labels') }}
+    {% if is_granted("ROLE_USER") %}
+        {% if teamCount is divisible by(2) %}
+            <div class="row">
+        {% endif %}
+                <div class="preview col-sm-6 col-md-5 col-xs-5 m-5 p-2 border rounded">
+                    <a href="/team/create">
+                        <div class="row mr-2">
+                            <div class="col-sm-12 colm-md-12 col-xs-12 h3">
+                                {{ 'add_new_team'|trans({}, 'labels') }}
+                            </div>
+                            <div class="col-sm-12 colm-md-12 col-xs-12">
+                                <icon class="fas fa-plus-circle display-2 w-100 p-2"></icon>
+                            </div>
                         </div>
-                        <div class="col-sm-12 colm-md-12 col-xs-12">
-                            <icon class="fas fa-plus-circle display-2 w-100 p-2"></icon>
-                        </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+        {% if teamCount is divisible by(2) %}
             </div>
-    {% if teamCount is divisible by(2) %}
-        </div>
+        {% endif %}
     {% endif %}
     </div>
 {% endblock %}

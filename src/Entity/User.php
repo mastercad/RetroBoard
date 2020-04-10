@@ -174,7 +174,7 @@ class User implements UserInterface, EquatableInterface, Serializable
         $this->teams = new ArrayCollection();
         $this->creations = new ArrayCollection();
         $this->modifications = new ArrayCollection();
-        $this->roles = ['ROLE_USER'];
+        $this->roles = ['ROLE_GUEST'];
     }
 
     public function getPassword()
@@ -201,7 +201,7 @@ class User implements UserInterface, EquatableInterface, Serializable
         /** @var array $roles */
         $roles = $this->roles;
         // damit mindestens eine Rolle gesetzt wird
-        $roles[] = 'ROLE_USER';
+        $roles[] = 'ROLE_GUEST';
 
         return array_unique($roles);
     }

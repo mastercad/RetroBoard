@@ -3,20 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\Provider\MicrosoftClient;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
 use Psr\Log\LoggerInterface;
-use Stevenmaguire\OAuth2\Client\Provider\MicrosoftResourceOwner;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
+use KnpU\OAuth2ClientBundle\Client\Provider\MicrosoftClient;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Stevenmaguire\OAuth2\Client\Provider\MicrosoftResourceOwner;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
 
 class MicrosoftAuthenticator extends SocialAuthenticator
 {
@@ -71,6 +72,10 @@ class MicrosoftAuthenticator extends SocialAuthenticator
      */
     public function getCredentials(Request $request)
     {
+        $request->getSession()->set(
+            Security::LAST_USERNAME,
+            "MICROSOFT_SESSION_USER"
+        );
         // this method is only called if supports() returns true
         return $this->fetchAccessToken($this->getMicrosoftClient());
     }

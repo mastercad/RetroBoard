@@ -39,7 +39,7 @@ class TeamVoter extends Voter
 
         switch ($attribute) {
             case 'create':
-                return $user instanceof UserInterface;
+                return $user instanceof UserInterface && in_array('ROLE_USER', $user->getRoles());
             case 'delete':
             case 'edit':
                 if (!$user instanceof UserInterface) {
@@ -55,7 +55,7 @@ class TeamVoter extends Voter
 
                 return 0 < count($results);
             case 'show':
-                if ("Demo Board" === $subject->getName()) {
+                if ("Demo Team" === $subject->getName()) {
                     return true;
                 }
 
