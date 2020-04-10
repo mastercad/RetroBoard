@@ -131,7 +131,7 @@
         let ticketDeleteId = undefined;
         let sort_type = undefined;
         let sort_direction = undefined;
-        let live_notify = (true == {{ live_notify }});
+        let live_notify = (true == "{{ live_notify }}");
         let prevClicked = undefined;
         let sameClicked = 0;
 
@@ -510,6 +510,7 @@
 
                 $('.ticket .options .btn-ticket-delete').unbind('click').on('click', function() {
                     ticketDeleteId = $(this).closest(".ticket").data('id');
+                    $('#ticket_remove_modal .btn-primary').attr("disabled", false);
                     let inivitationModal = $('#ticket_remove_modal');
                     $(inivitationModal).modal();
 
@@ -703,6 +704,10 @@
                     type: 'info'
                 });
             }
+
+            if (eventMessagePart.ownerId !== current_user_id) {
+                notificationToDesktop("{{ 'ticket_created'|trans({}, 'messages') }}", 'Retro Board "{{ board.name }}"');
+            }
         }
 
         function handleTicketUpdateEvent(eventMessagePart) {
@@ -727,6 +732,10 @@
                     // settings
                     type: 'info'
                 });
+            }
+
+            if (eventMessagePart.ownerId !== current_user_id) {
+                notificationToDesktop("{{ 'ticket_updated'|trans({}, 'messages') }}", 'Retro Board "{{ board.name }}"');
             }
         }
 

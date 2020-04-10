@@ -46,9 +46,9 @@ class TicketVoter extends Voter
                 );
                 return 0 < count($results);
             case 'delete':
-                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
-                    return true;
-                }
+//                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
+//                    return true;
+//                }
                 if ($subject->getCreator() === $user) {
                     return true;
                 }
@@ -71,9 +71,9 @@ class TicketVoter extends Voter
                 );
                 return 0 < count($results);
             case 'edit':
-                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
-                    return true;
-                }
+//                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
+//                    return true;
+//                }
                 if (!$user instanceof UserInterface) {
                     return false;
                 }

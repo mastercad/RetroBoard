@@ -6,6 +6,7 @@ use App\Entity\Board;
 use App\Entity\BoardMember;
 use App\Entity\BoardTeam;
 use App\Entity\Team;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,11 +21,12 @@ class IndexController extends AbstractController
     {
         $boards = [];
 
-        $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
+        if  ($this->getUser() instanceof User) {
+            $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
 
-        foreach ($boardMembers as $boardMember) {
-            $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
-        }
+            foreach ($boardMembers as $boardMember) {
+                $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
+            }
 //        \Doctrine\Common\Util\Debug::dump($boardMembers);
 /*
         $teams = $this->getDoctrine()->getRepository(Team::class)->findAllTeamsForUser($this->getUser());
@@ -38,11 +40,12 @@ class IndexController extends AbstractController
             }
         }
 */
-        $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser($this->getUser());
+            $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser($this->getUser());
 
-        foreach ($boardTeams as $boardTeam) {
-            $board = $this->getDoctrine()->getRepository(Board::class)->find($boardTeam['board']);
-            $boards[$board->getName()] = $board;
+            foreach ($boardTeams as $boardTeam) {
+                $board = $this->getDoctrine()->getRepository(Board::class)->find($boardTeam['board']);
+                $boards[$board->getName()] = $board;
+            }
         }
 
         if (empty($boards)) {

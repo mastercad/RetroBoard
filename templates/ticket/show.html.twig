@@ -55,7 +55,7 @@
         </div>
     </div>
     <div class="col-md-12 text-right color-inactive" >
-        <span class="date" data-identifier="{{ 12|uuid() }}" data-timestamp="{{ ticket.created.timestamp }}"data-toggle="tooltip" title="{{ ticket.created|date('date_format'|trans({}, 'labels')) }}">{{ ticket.created|date('F jS \\a\\t g:ia') }}</span>
+        <span class="date" data-identifier="{{ 12|uuid() }}" data-timestamp="{{ ticket.created.timestamp }}"data-toggle="tooltip" title="{{ ticket.created|date('date_format'|trans({}, 'labels')) }}">{{ ticket.created|date('date_format'|trans({}, 'labels')) }}</span>
     </div>
 
     {% if 0 == archived and (app.user.id == ticket.creator.id or is_granted('archive', ticket) or is_granted('edit', ticket) or is_granted('delete', ticket)) %}

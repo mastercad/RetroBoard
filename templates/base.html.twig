@@ -187,6 +187,40 @@
             </script>
         {% endblock %}
 
+        {% block desktop_notifications %}
+        <script type="text/javascript">
+            let notificationsAllowed = false;
+
+            function notificationToDesktop(message, title) {
+                if ('Notification' in window) {
+                    if (Notification.permission === 'granted') {
+                        let note = new Notification(title, {
+                            icon: 'https://retro.byte-artist.de/images/logo.png',
+                            body: message,
+                            tag: Math.random()
+                        });
+                    } else {
+                        Notification.requestPermission().then(function(permissionResponse) {
+                            if(permissionResponse === 'granted') {
+                                let note = new Notification(title, {
+                                    icon: 'https://retro.byte-artist.de/images/logo.png',
+                                    body: message,
+                                    tag: Math.random()
+                                });
+                            } else {
+                                console.log('User blocked notifications.');
+                            }
+                        }).catch(function(err) {
+                            console.error(err);
+                        });
+                    }
+                } else {
+                    console.log("No notifications available!");
+                }
+            }
+        </script>
+        {% endblock %}
+
         {% block message_modal %}
 
             <div id="message_modal" class="modal fade" tabindex="-1" role="dialog">
