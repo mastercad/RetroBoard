@@ -10,43 +10,80 @@
             <div class="fadeIn first">
                 <img src="/images/logo.png" id="icon" alt="User Icon" />
             </div>
+            <div class="fadeIn first">
+            {% if app.user %}
+                <div class="checkbox mb-3">{{ 'logged_in_as'|trans({'%name%': app.user.name }, 'labels') }},
+                    <a href="{{ path('app_logout') }}">{{ 'logout'|trans({}, 'labels') }}</a>
+                </div>
+            {% endif %}
+            </div>
 
-            <form method="post">
-                {% if error %}
-                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                {% endif %}
+            <div class="row">
+                <div class="col-md-6">
+                    <a href="{{ path('connect_github_start') }}">
+                        <button class="login github fadeIn" style="background-color: rgb(21, 170, 191); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 40px; width: 100%; padding: 15px 20px;">
+                            <i class="fab fa-github"></i>
+                            <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                            <span class="" style="color: #FFFFFF; font-weight: bold;">Github {{ 'login'|trans({}, 'labels') }}</span>
+                        </button>
+                    </a>
+                    <a href="{{ path('connect_google_start') }}">
+                        <button class="login google fadeIn" style="background-color: rgb(224, 74, 50); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; width: 100%; padding: 15px 20px;">
+                            <i class="fab fa-google-plus"></i>
+                            <span class="" style="border-left: 1px solid gray; margin: 1rem  5px; height: 100%; width: 1px;"></span>
+                            <span class="" style="color: #FFFFFF; font-weight: bold;">Google+ {{ 'login'|trans({}, 'labels') }}</span>
+                        </button>
+                    </a>
+                    <a href="{{ path('connect_microsoft_start') }}">
+                        <button class="login microsoft fadeIn" style="background-color: rgb(130, 201, 30); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; width: 100%; padding: 15px 20px;">
+                            <i class="fab fa-microsoft"></i>
+                            <span class="" style="border-left: 1px solid gray; margin: 1rem  5px; height: 100%; width: 1px;"></span>
+                            <span class="" style="color: #FFFFFF; font-weight: bold;">Microsoft {{ 'login'|trans({}, 'labels') }}</span>
+                        </button>
+                    </a>
+                    {#
+                    <a href="{{ path('connect_okta_start') }}">
+                        <button class="login okta fadeIn" style="background-color: rgb(32, 49, 59); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; width: 100%; padding: 15px 20px;">
+                            <span class="">{okta}</span>
+                            <span class="" style="border-left: 1px solid gray; margin: 1rem  5px; height: 100%; width: 1px;"></span>
+                            <span class="" style="color: #FFFFFF; font-weight: bold;"> {{ 'login'|trans({}, 'labels') }}</span>
+                        </button>
+                    </a>
+                    #}
+                </div>
 
-                <?php if ($logout_setup): ?>
-                    {% if app.user %}
-                        <div class="checkbox mb-3">{{ 'logged_in_as'|trans({'%name%': app.user.name }, 'labels') }},
-                        <a href="{{ path('app_logout') }}">{{ 'logout'|trans({}, 'labels') }}</a>
-                    {% endif %}
-                <?php endif; ?>
+                <div class="col-md-6" style="padding-bottom: 25px;">
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
 
-                <h1 class="h3 mb-3 font-weight-normal">{{ 'sign_in'|trans({}, 'labels') }}</h1>
-                <label for="inputEmail" class="sr-only">{{ 'email'|trans({}, 'labels') }}</label>
-                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="fadeIn second" placeholder="E-Mail" required autofocus>
-                <label for="inputPassword" class="sr-only">{{ 'password'|trans({}, 'labels') }}</label>
-                <input type="password" name="password" id="inputPassword" class="fadeIn third" placeholder="{{ 'password'|trans({}, 'labels') }}" required>
+                        <h1 class="h3 mb-3 font-weight-normal">{{ 'sign_in'|trans({}, 'labels') }}</h1>
+                        <label for="inputEmail" class="sr-only">{{ 'email'|trans({}, 'labels') }}</label>
+                        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="fadeIn second" placeholder="E-Mail" required autofocus>
+                        <label for="inputPassword" class="sr-only">{{ 'password'|trans({}, 'labels') }}</label>
+                        <input type="password" name="password" id="inputPassword" class="fadeIn third" placeholder="{{ 'password'|trans({}, 'labels') }}" required>
 
-                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-{#                <input type="hidden" name="_target_path" value="{{ path('account') }}"/> #}
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        {#                <input type="hidden" name="_target_path" value="{{ path('account') }}"/> #}
 
-                {#
-                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                    See https://symfony.com/doc/current/security/remember_me.html
+                        {#
+                            Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                            See https://symfony.com/doc/current/security/remember_me.html
 
-                    <div class="checkbox mb-3">
-                        <label>
-                            <input type="checkbox" name="_remember_me"> Remember me
-                        </label>
-                    </div>
-                #}
+                            <div class="checkbox mb-3">
+                                <label>
+                                    <input type="checkbox" name="_remember_me"> Remember me
+                                </label>
+                            </div>
+                        #}
 
-                <button class="fadeIn fourth" type="submit">
-                    {{ 'sign_in'|trans({}, 'labels') }}
-                </button>
-            </form>
+                        <button class="fadeIn fourth" type="submit">
+                            {{ 'sign_in'|trans({}, 'labels') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
 
             <div class="row" id="formFooter">
                 <div class="col-md-6 col-sm-6 col-xl-6">

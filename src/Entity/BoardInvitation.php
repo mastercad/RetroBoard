@@ -22,7 +22,7 @@ class BoardInvitation
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -57,7 +57,7 @@ class BoardInvitation
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -74,7 +74,7 @@ class BoardInvitation
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id", nullable=true)
      * })
      */
     private $modifier;

@@ -29,6 +29,30 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, priority: 110 }
 
+    App\Security\GoogleAuthenticator:
+        calls:
+            - [setLogger, ['@logger']]
+
+    App\Security\GitHubAuthenticator:
+        calls:
+            - [setLogger, ['@logger']]
+
+    App\Security\MicrosoftAuthenticator:
+        calls:
+            - [setLogger, ['@logger']]
+
+    App\Security\OktaAuthenticator:
+        calls:
+            - [setLogger, ['@logger']]
+
+    App\Security\LoginFormAuthenticator:
+        calls:
+            - [setLogger, ['@logger']]
+
+    App\Security\Provider\OktaProvider:
+        calls:
+            - [setLogger, ['@logger']]
+
 #    App\Form\BoardMemberType:
 #        arguments:  ['@security']
 #        arguments:  ['@security.token_storage']
@@ -40,3 +64,4 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+#    FOS\UserBundle\Model\UserManagerInterface: '@fos_user.user_manager.default'

@@ -22,7 +22,7 @@ class Voting
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -33,7 +33,7 @@ class Voting
      *
      * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="votings")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ticket_fk", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ticket_fk", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $ticket;
@@ -50,7 +50,7 @@ class Voting
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -67,7 +67,7 @@ class Voting
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
@@ -83,7 +83,7 @@ class Voting
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;

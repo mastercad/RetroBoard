@@ -2,14 +2,12 @@
 
 {% block title %}{% if 0 < team.id %}{{ 'edit_team'|trans({}, 'labels') }} "{{ team.name }}" {% else %} {{ 'create_new_team'|trans({}, 'labels') }} {% endif %}{% endblock %}
 
-{#
 {% block navigation_additions %}
-    <a href="/team/{{ team.id }}" class="m-2 btn-archive-team">
+    <a href="/team/{{ team.id }}" class="m-2 btn-archive-team" data-toggle="tooltip" title="{{ 'click_to_show_team'|trans({}, 'titles') }}">
         <icon class="fas fa-user-friends"></icon>
     </a>
     {{ parent() }}
 {% endblock %}
-#}
 
 {% block navigation_title %}{% if 0 < team.id %}{{ 'edit_team'|trans({}, 'labels') }} "{{ team.name }}" {% else %} {{ 'create_new_team'|trans({}, 'labels') }} {% endif %}{% endblock %}
 

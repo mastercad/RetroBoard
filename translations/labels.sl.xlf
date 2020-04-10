@@ -150,8 +150,8 @@
         <target>Vaše besedilo tukaj ...</target>
       </trans-unit>
       <trans-unit id="logged_in_as" resname="logged_in_as">
-        <source>Logged in as</source>
-        <target>Prijavljen kot</target>
+        <source>Logged in as %name%</source>
+        <target>Prijavljen kot %name%</target>
       </trans-unit>
       <trans-unit id="enter_email_reset_password" resname="enter_email_reset_password">
         <source>Enter email for reset password</source>
@@ -196,6 +196,74 @@
       <trans-unit id="agree_terms" resname="agree_terms">
         <source>Agree terms</source>
         <target>Strinjam se s pogoji</target>
+      </trans-unit>
+      <trans-unit id="date_format" resname="date_format">
+        <source><![CDATA[Y-m-d H:i:s]]></source>
+        <target><![CDATA[d.m.Y H:i:s]]></target>
+      </trans-unit>
+      <trans-unit id="yesterday" resname="yesterday">
+        <source>yesterday</source>
+        <target>včeraj</target>
+      </trans-unit>
+      <trans-unit id="the_day_before_yesterday" resname="the_day_before_yesterday">
+        <source>the day before yesterday</source>
+        <target>predvčerajšnjim</target>
+      </trans-unit>
+      <trans-unit id="create_second_ago" resname="create_second_ago">
+        <source>%seconds% second ago</source>
+        <target>%seconds% sekundo nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_seconds_ago" resname="create_seconds_ago">
+        <source>%seconds% seconds ago</source>
+        <target>%seconds% sekundi nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_minute_ago" resname="create_minute_ago">
+        <source>%minutes% minute ago</source>
+        <target>pred %minutes% minuto</target>
+      </trans-unit>
+      <trans-unit id="create_minutes_ago" resname="create_minutes_ago">
+        <source>%minutes% minutes ago</source>
+        <target>%minutes% minuti nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_hour_ago" resname="create_hour_ago">
+        <source>%hours% hour ago</source>
+        <target>pred %hours% uro</target>
+      </trans-unit>
+      <trans-unit id="create_hours_ago" resname="create_hours_ago">
+        <source>%hours% hours ago</source>
+        <target>%hours% uri nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_day_ago" resname="create_day_ago">
+        <source>%days% day ago</source>
+        <target>pred %days% dnevom</target>
+      </trans-unit>
+      <trans-unit id="create_days_ago" resname="create_days_ago">
+        <source>%days% days ago</source>
+        <target>%days% dni nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_week_ago" resname="create_week_ago">
+        <source>%weeks% week ago</source>
+        <target>pred %weeks% tednom</target>
+      </trans-unit>
+      <trans-unit id="create_weeks_ago" resname="create_weeks_ago">
+        <source>%weeks% weeks ago</source>
+        <target>%weeks% tedna nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_month_ago" resname="create_month_ago">
+        <source>%months% month ago</source>
+        <target>pred %months% mesecem</target>
+      </trans-unit>
+      <trans-unit id="create_months_ago" resname="create_months_ago">
+        <source>%months% months ago</source>
+        <target>%months% meseca nazaj</target>
+      </trans-unit>
+      <trans-unit id="create_year_ago" resname="create_year_ago">
+        <source>%years% year ago</source>
+        <target>pred %years% letom</target>
+      </trans-unit>
+      <trans-unit id="create_years_ago" resname="create_years_ago">
+        <source>%years% years ago</source>
+        <target>%years% leti nazaj</target>
       </trans-unit>
     </body>
   </file>

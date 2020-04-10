@@ -22,7 +22,7 @@ class Column
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -48,7 +48,7 @@ class Column
      * @ORM\ManyToOne(targetEntity="Board", inversedBy="columns")
      * @ORM\OrderBy({"priority" = "ASC"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="board_fk", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="board_fk", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $board;

@@ -21,7 +21,7 @@ final class Version20200214164444 extends AbstractMigration
     {
         $this->addSql("INSERT INTO `boards` (`id`, `name`, `creator`, `created`, `modifier`, `modified`) VALUES (1, 'Demo Board', 1, '2019-09-05 21:50:57', NULL, NULL);");
 
-        $this->addSql("INSERT INTO `columns` (`id`, `name`, `priority`, `board_fk`) VALUES (5, 'What worked', 0, 1), (6, 'What didn\'t work', 1, 1), (7, 'Ideas', 2, 1), (8, 'Appreciations', 3, 1);");
+        $this->addSql("INSERT INTO `columns` (`id`, `name`, `priority`, `board_fk`) VALUES (1, 'What worked', 0, 1), (2, 'What didn\'t work', 1, 1), (3, 'Ideas', 2, 1), (4, 'Appreciations', 3, 1);");
 
 
     }

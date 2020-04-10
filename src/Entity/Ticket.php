@@ -23,7 +23,7 @@ class Ticket
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -48,7 +48,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="Column", inversedBy="tickets")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="column_fk", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="column_fk", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $column;
@@ -58,7 +58,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -75,7 +75,7 @@ class Ticket
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
@@ -89,12 +89,12 @@ class Ticket
 
     /**
      * @var Voting
-     * 
+     *
      * One user has Many tickets.
      * @ORM\OneToMany(targetEntity="Voting", mappedBy="ticket", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $votings;
-    
+
     public function __construct()
     {
         $this->votings = new ArrayCollection();
@@ -320,7 +320,7 @@ class Ticket
 
         return $this;
     }
-    
+
     public function removeVoting(Voting $voting): self
     {
         if ($this->votings->contains($voting)) {

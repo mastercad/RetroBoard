@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Security\Authenticator;
+use App\Security\LoginFormAuthenticator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,12 +13,14 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use DateTime;
 
+// a:1:{i:1;s:11:"SUPER_ADMIN";}
+
 class RegistrationController extends AbstractController
 {
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, Authenticator $authenticator): Response
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
         $rootUser = $entityManager->getRepository(User::class)->find(1);
@@ -26,6 +28,8 @@ class RegistrationController extends AbstractController
         $user = new User();
         $user->setCreated(new DateTime());
         $user->setCreator($rootUser);
+        $user->setActivityToken(uniqid('_TOKEN_'));
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 

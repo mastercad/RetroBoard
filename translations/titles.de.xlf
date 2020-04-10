@@ -201,6 +201,62 @@
         <source>Error! Team could not be saved!</source>
         <target>Fehler! Die Gruppe konnte nicht gespeichert werden!</target>
       </trans-unit>
+      <trans-unit id="click_to_show_archived_board" resname="click_to_show_archived_board">
+        <source>Click here to view the archived version of this board</source>
+        <target>Hier klicken um die archivierte Version dieses Boards anzuzeigen</target>
+      </trans-unit>
+      <trans-unit id="click_to_sort_by_date" resname="click_to_sort_by_date">
+        <source>Click here to sort the tickets by date</source>
+        <target>Hier klicken um die Tickets nach Datum zu sortieren</target>
+      </trans-unit>
+      <trans-unit id="click_to_sort_by_username" resname="click_to_sort_by_username">
+        <source>Click here to sort the tickets by the name of the creator</source>
+        <target>Hier klicken um die Tickets nach dem Namen der Ersteller zu sortieren</target>
+      </trans-unit>
+      <trans-unit id="click_to_sort_by_votes" resname="click_to_sort_by_votes">
+        <source>Click here to sort the tickets by votes (up + down)</source>
+        <target>Hier klicken um die Tickets nach den Stimmen zu sortieren (positive + negative)</target>
+      </trans-unit>
+      <trans-unit id="click_to_vote_up" resname="click_to_vote_up">
+        <source>Click here to support for this ticket</source>
+        <target>Hier klicken, wenn sie dieses Ticket unterstützen</target>
+      </trans-unit>
+      <trans-unit id="click_to_vote_down" resname="click_to_vote_down">
+        <source>Click here to not support for this ticket</source>
+        <target>Hier klicken um dieses Ticket nicht unterstützen</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_ticket_to_column" resname="click_to_add_ticket_to_column">
+        <source>Click here to add new ticket to column %name%</source>
+        <target>Hier klicken, um der Spalte %name% ein neues Ticket hinzuzufügen</target>
+      </trans-unit>
+      <trans-unit id="click_to_show_ticketoptions" resname="click_to_show_ticketoptions">
+        <source>Click here to see the options for this ticket</source>
+        <target>Hier klicken um die Optionen für dieses Ticket anzuzeigen</target>
+      </trans-unit>
+      <trans-unit id="click_to_show_board" resname="click_to_show_board">
+        <source>Click here to show the board</source>
+        <target>Hier klicken um das Board anzuzeigen</target>
+      </trans-unit>
+      <trans-unit id="click_to_show_team" resname="click_to_show_team">
+        <source>Click here to show the team</source>
+        <target>Hier klicken um die Gruppe anzuzeigen</target>
+      </trans-unit>
+      <trans-unit id="click_to_subscribe_board" resname="click_to_subscribe_board">
+        <source>Click here to subscribe to this board</source>
+        <target>Hier klicken um dieses Board zu abbonieren</target>
+      </trans-unit>
+      <trans-unit id="click_to_get_live_notifications" resname="click_to_get_live_notifications">
+        <source>Click here to get real-time notifications</source>
+        <target>Hier klicken um Benachrichtigungen in Echtzeit zu erhalten</target>
+      </trans-unit>
+      <trans-unit id="click_edit_profil" resname="click_edit_profil">
+        <source>Click here to edit your profile</source>
+        <target>Hier klicken um das Profil zu berarbeiten</target>
+      </trans-unit>
+      <trans-unit id="click_to_logout" resname="click_to_logout">
+        <source>Click here to log out</source>
+        <target>Hier klicken um sich abzumelden</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

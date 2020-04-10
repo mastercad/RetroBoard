@@ -5,23 +5,10 @@
 
 {% block navigation_additions %}
     {% if is_granted('edit', team) %}
-        <a href="/team/create/{{ team.id }}" class="m-2 btn-edit-team">
+        <a href="/team/create/{{ team.id }}" class="m-2 btn-edit-team" data-toggle="tooltip" title="{{ 'click_to_edit_team'|trans({}, 'titles') }}">
             <icon class="fas fa-edit"></icon>
         </a>
     {% endif %}
-
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                {{ 'order'|trans({}, 'labels') }}
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item order-by-date" href="#">{{ 'date'|trans({}, 'labels') }}</a>
-                <a class="dropdown-item order-by-user" href="#">{{ 'user'|trans({}, 'labels') }}</a>
-                <a class="dropdown-item order-by-votes" href="#">{{ 'votes'|trans({}, 'labels') }}</a>
-            </div>
-        </li>
-    </ul>
     {{ parent() }}
 {% endblock %}
 

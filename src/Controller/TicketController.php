@@ -27,7 +27,7 @@ class TicketController extends AbstractController
     {
         $this->translator = $translator;
     }
-    
+
     /*
     public function __invoke(Publisher $publisher) : Response
     {
@@ -44,7 +44,7 @@ class TicketController extends AbstractController
 
     /**
      * @Route("/tickets", name="app_tickets")
-     * 
+     *
      * @return Response
      */
     public function index()

@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\BoardTeam;
 use App\Entity\User;
 use App\Entity\Team;
-use App\Entity\TeamMember;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -268,6 +267,8 @@ class BoardController extends AbstractController
         $boardTeamsSuccess = $this->manageBoardTeams($request, $board);
         $boardColumnsSuccess = $this->manageBoardColumns($request, $board);
 
+        $boardRequestData = $request->request->get('board');
+
 //        $boardRequestData = $request->request->get('board');
 
         if (!$boardMemberSuccess
@@ -299,8 +300,9 @@ class BoardController extends AbstractController
                 && is_array($boardRequestData['columns'])
             ) {
                 foreach ($boardRequestData['columns'] as &$column) {
-                    if ($column['columnId'] instanceof Column) {
-                        $column['columnId'] = $column['columnId']->getId();
+                    if ($column['id'] instanceof Column) {
+                        $column['id'] = $column['id']->getId();
+                        var_dump("HABE COLUMN MIT ID ".$column['id']);
                     }
                 }
             }
@@ -320,98 +322,63 @@ class BoardController extends AbstractController
             }
             return new JsonResponse(['success' => false, 'data' => $boardRequestData]);
         }
-/*
-        $members = [];
-        if (isset($boardRequestData['members'])) {
-            $members = $boardRequestData['members'];
-            unset($boardRequestData['members']);
-        }
-
-        $teams = [];
-        if (isset($boardRequestData['teams'])) {
-            $teams = $boardRequestData['teams'];
-            unset($boardRequestData['teams']);
-        }
-
-        $invitations = [];
-        if (isset($boardRequestData['invitations'])) {
-            $invitations = $boardRequestData['invitations'];
-            unset($boardRequestData['invitations']);
-        }
-
-        $columns = [];
-        if (isset($boardRequestData['columns'])) {
-            $columns = $boardRequestData['columns'];
-            unset($boardRequestData['columns']);
-        }
-        $request->request->set('board', $boardRequestData);
-*/
-
-//        $form = $this->createForm(BoardType::class, $board, ['creator' => $this->getUser()]);
-//        $form->handleRequest($request);
 
         $errors = $this->validator->validate($board);
 
+        // @TODO: workaround because here throws every time errors without real errors. i have to investigate the validator result
         if (1 || 0 < count($errors)) {
             try {
-                /** @var ArrayCollection */
-//                $columns = $board->getColumns();
+                $this->entityManager->persist($board);
+                $this->entityManager->persist($boardOwner);
+                $this->entityManager->flush();
 
-//                if ($columns->isEmpty()) {
-//                    $errors = [['content' => $this->translator->trans('error_one_column_needed_in_board', [], 'errors')]];
-//                } else {
-                    $this->entityManager->persist($board);
-                    $this->entityManager->persist($boardOwner);
-                    $this->entityManager->flush();
+                $success = true;
 
-                    $success = true;
+                $boardRequestData['id'] = $board->getId();
 
-                    if (isset($boardRequestData['columns'])
-                        && is_array($boardRequestData['columns'])
-                    ) {
-                        foreach ($boardRequestData['columns'] as &$column) {
-                            if ($column['id'] instanceof Column) {
-                                $column['id'] = $column['id']->getId();
-                            }
+                if (isset($boardRequestData['columns'])
+                    && is_array($boardRequestData['columns'])
+                ) {
+                    foreach ($boardRequestData['columns'] as &$column) {
+                        if ($column['id'] instanceof Column) {
+                            $column['id'] = $column['id']->getId();
                         }
                     }
+                }
 
-                    $boardRequestData['id'] = $board->getId();
-
-                    if (isset($boardRequestData['members'])
-                        && is_array($boardRequestData['members'])
-                    ) {
-                        foreach ($boardRequestData['members'] as &$member) {
-                            if ($member['boardMemberId'] instanceof BoardMember) {
-                                $member['boardMemberId'] = $member['boardMemberId']->getId();
-                            }
+                if (isset($boardRequestData['members'])
+                    && is_array($boardRequestData['members'])
+                ) {
+                    foreach ($boardRequestData['members'] as &$member) {
+                        if ($member['boardMemberId'] instanceof BoardMember) {
+                            $member['boardMemberId'] = $member['boardMemberId']->getId();
                         }
                     }
+                }
 
-                    if (isset($boardRequestData['teams'])
-                        && is_array($boardRequestData['teams'])
-                    ) {
-                        foreach ($boardRequestData['teams'] as &$team) {
-                            if ($team['boardTeamId'] instanceof BoardTeam) {
-                                $team['boardTeamId'] = $team['boardTeamId']->getId();
-                            }
+                if (isset($boardRequestData['teams'])
+                    && is_array($boardRequestData['teams'])
+                ) {
+                    foreach ($boardRequestData['teams'] as &$team) {
+                        if ($team['boardTeamId'] instanceof BoardTeam) {
+                            $team['boardTeamId'] = $team['boardTeamId']->getId();
                         }
                     }
+                }
 
-                    if (isset($boardRequestData['invitations'])
-                        && is_array($boardRequestData['invitations'])
-                    ) {
-                        foreach ($boardRequestData['invitations'] as &$invitation) {
-                            if ($invitation['boardInvitationId'] instanceof BoardInvitation) {
-                                $this->sendInvitationEmail($invitation['boardInvitationId']);
+                if (isset($boardRequestData['invitations'])
+                    && is_array($boardRequestData['invitations'])
+                ) {
+                    foreach ($boardRequestData['invitations'] as &$invitation) {
+                        if ($invitation['boardInvitationId'] instanceof BoardInvitation) {
+                            $this->sendInvitationEmail($invitation['boardInvitationId']);
 
-                                $invitation['id'] = $invitation['boardInvitationId']->getId();
-                                $invitation['token'] = $invitation['boardInvitationId']->getToken();
-                                $invitation['boardInvitationId'] = $invitation['boardInvitationId']->getId();
-                            }
+                            $invitation['id'] = $invitation['boardInvitationId']->getId();
+                            $invitation['token'] = $invitation['boardInvitationId']->getToken();
+                            $invitation['boardInvitationId'] = $invitation['boardInvitationId']->getId();
                         }
                     }
-//                }
+                }
             } catch (UniqueConstraintViolationException $exception) {
                 $errors = [['content' => $this->translator->trans('one_or_more_columns_already_exists_in_board', [], 'errors')]];
             }
@@ -424,8 +391,8 @@ class BoardController extends AbstractController
         }
 
         return new JsonResponse([
-            'success' => $success, 
-            'id' => $board->getId(), 
+            'success' => $success,
+            'id' => $board->getId(),
             'data' => $boardRequestData,
             'content' => $success ? $this->translator->trans('board_saved', [], 'messages') : json_encode($errors)
 //            'content' => $success ? $this->translator->trans('board_saved', [], 'messages') : (string) $errors
@@ -570,7 +537,11 @@ class BoardController extends AbstractController
             $column->setName($name);
             $column->setPriority($priority);
 
-            $this->entityManager->persist($column);
+            if (true == $currentColumn['deleted']) {
+                $this->entityManager->remove($column);
+            } else {
+                $this->entityManager->persist($column);
+            }
         }
 
         $request->request->set('board', $boardRequestData);

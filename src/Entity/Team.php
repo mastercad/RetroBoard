@@ -17,7 +17,7 @@ class Team
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false, options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -49,7 +49,7 @@ class Team
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=true)
      * })
      */
     private $creator;
@@ -59,7 +59,7 @@ class Team
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id", nullable=true)
      * })
      */
     private $modifier;

@@ -12,37 +12,38 @@
             {% set subscribed = true %}
         {% endif %}
     {% endfor %}
-    {% block navigation_additions_user_options %}
+{% endif %}
+
+{% block navigation_additions_user_options %}
+    {% if app.user.name is defined %}
         <div class="form-check">
             <input type="checkbox" class="form-check-input ml-1" id="board_subscribe" {% if subscribed %} checked="checked" {% endif %}>
-            <label class="board-subscribe dropdown-item form-check-label" for="board_subscribe">{{ 'subscribe'|trans({}, 'labels') }}</label>
+            <label class="board-subscribe dropdown-item form-check-label" for="board_subscribe" data-toggle="tooltip" title="{{ 'click_to_subscribe_board'|trans({}, 'titles') }}">{{ 'subscribe'|trans({}, 'labels') }}</label>
         </div>
         <div class="form-check">
             <input type="checkbox" class="form-check-input ml-1" id="board_live_notify" {% if live_notify %} checked="checked" {% endif %}>
-            <label class="board-live-notify dropdown-item form-check-label" for="board_live_notify">{{ 'live_notify'|trans({}, 'labels') }}</label>
+            <label class="board-live-notify dropdown-item form-check-label" for="board_live_notify" data-toggle="tooltip" title="{{ 'click_to_get_live_notifications'|trans({}, 'titles') }}">{{ 'live_notify'|trans({}, 'labels') }}</label>
         </div>
-
-        </a>
         {{ parent() }}
-    {% endblock %}
-{% endif %}
+    {% endif %}
+{% endblock %}
 
 {% block navigation_additions %}
 
     {% if 0 == archived %}
-        <a href="/board/archive/{{ board.id }}" class="m-2 btn-archive-board">
+        <a href="/board/archive/{{ board.id }}" class="m-2 btn-archive-board" data-toggle="tooltip" title="{{ 'click_to_show_archived_board'|trans({}, 'titles') }}">
             <icon class="fas fa-archive"></icon>
         {# <button class="btn m-0"><icon class="fas fa-archive"></icon></button> #}
         </a>
     {% else %}
-        <a href="/board/{{ board.id }}" class="m-2 btn-archive-board">
+        <a href="/board/{{ board.id }}" class="m-2 btn-archive-board" data-toggle="tooltip" title="{{ 'board_overview'|trans({}, 'titles') }}">
             <icon class="fas fa-chalkboard"></icon>
         {# <button class="btn m-0"><icon class="fas fa-archive"></icon></button> #}
         </a>
     {% endif %}
 
     {% if is_granted('edit', board) %}
-        <a href="/board/create/{{ board.id }}" class="m-2 btn-edit-board">
+        <a href="/board/create/{{ board.id }}" class="m-2 btn-edit-board" data-toggle="tooltip" title="{{ 'click_to_edit_board'|trans({}, 'titles') }}">
             <icon class="fas fa-edit"></icon>
         </a>
     {% endif %}
@@ -53,9 +54,9 @@
                 {{ 'order'|trans({}, 'labels') }}
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <a class="dropdown-item order-by-date" href="#">{{ 'date'|trans({}, 'labels') }}</a>
-                <a class="dropdown-item order-by-user" href="#">{{ 'user'|trans({}, 'labels') }}</a>
-                <a class="dropdown-item order-by-votes" href="#">{{ 'votes'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-date" href="#" data-toggle="tooltip" title="{{ 'click_to_sort_by_date'|trans({}, 'titles') }}">{{ 'date'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-user" href="#" data-toggle="tooltip" title="{{ 'click_to_sort_by_username'|trans({}, 'titles') }}">{{ 'user'|trans({}, 'labels') }}</a>
+                <a class="dropdown-item order-by-votes" href="#" data-toggle="tooltip" title="{{ 'click_to_sort_by_votes'|trans({}, 'titles') }}">{{ 'votes'|trans({}, 'labels') }}</a>
             </div>
         </li>
     </ul>
@@ -73,7 +74,7 @@
                     {# prüfung der rechte auf create_ticket erstmal weg gelassen, weil jeder der für das board registriert ist, auch
                        tickets erstellen soll und wer nicht registriert ist, sieht das board auch nicht #}
                     {% if 0 == archived %}
-                        <div class="add">
+                        <div class="add" data-toggle="tooltip" title="{{ 'click_to_add_ticket_to_column'|trans({'%name%': column.name }, 'titles') }}">
                             <i class="fas fa-plus-circle"></i>
                         </div>
                     {% endif %}
@@ -123,6 +124,8 @@
 {% block javascripts %}
     {{ parent() }}
 
+{#    <script src="/js/EventSource.js"></script>#}
+
     <script type="text/javascript" language="javascript">
         let current_user_id = parseInt("{{ app.user.id }}");
         let ticketDeleteId = undefined;
@@ -131,6 +134,10 @@
         let live_notify = (true == {{ live_notify }});
         let prevClicked = undefined;
         let sameClicked = 0;
+
+        // container for all tickets new then specific time (maybee 1 hour?)
+        let tickets = [];
+        let ticketTimer = [];
 
         const SORT_DIRECTION_ASC = 'asc';
         const SORT_DIRECTION_DESC = 'desc';
@@ -150,9 +157,145 @@
                 init_options();
             {% endif %}
 
+            init_create_timer();
             init_tickets();
             init_sorting();
         });
+
+        function init_create_timer() {
+            $('.ticket').filter(function() {
+                let dateElement = $(this).find('.date');
+                let identifier = $(dateElement).attr('data-identifier');
+
+                if (undefined !== ticketTimer[identifier]) {
+                    return true;
+                }
+
+                let current_time_milliseconds = parseInt(new Date().getTime() / 1000);
+                let createDate = $(dateElement).attr('data-timestamp');
+                let diff = current_time_milliseconds - createDate;
+
+//                if (diff < 31536000) {
+                    tickets[identifier] = $(dateElement);
+                    refresh_created(dateElement);
+//                }
+            })
+        }
+
+        function refresh_created(element) {
+            let current_time_milliseconds = parseInt(new Date().getTime() / 1000);
+            let createDate = $(element).attr('data-timestamp');
+            let diff = current_time_milliseconds - createDate;
+            let nextTick = 1000;
+            let identifier = $(element).attr('data-identifier');
+
+//            if (diff >= 31536000
+//                && undefined !== ticketTimer[identifier]
+//            ) {
+//                clearTimeout(ticketTimer[identifier]);
+//                $(element).text(convertSecondsToDateString(createDate));
+//                return true;
+//            } else if (diff > 86400) {
+            if (diff > 86400) {
+                clearTimeout(ticketTimer[identifier]);
+                nextTick = 86400000;
+            } else if (diff > 3600) {
+                clearTimeout(ticketTimer[identifier]);
+                nextTick = 3600000;
+            } else if (diff > 60
+            ) {
+                clearTimeout(ticketTimer[identifier]);
+                nextTick = 60000;
+            }
+
+            let dateString = convertSecondsToReadableTimeString(diff);
+            $(element).text(dateString);
+
+            ticketTimer[identifier] = setTimeout(
+                function() {
+                    refresh_created(element);
+                }, nextTick
+            );
+        }
+
+        function convertSecondsToReadableTimeString(seconds) {
+            let years = Math.floor(seconds / 31536000);
+            translatedDateString = '';
+            if (years) {
+                if (1 === years) {
+                    translatedDateString = "{{ 'create_year_ago'|trans({'%years%': 'years_placeholder'}, 'labels') }}";
+                } else {
+                    translatedDateString = "{{ 'create_years_ago'|trans({'%years%': 'years_placeholder'}, 'labels') }}";
+                }
+                return translatedDateString.replace('years_placeholder', years);
+            }
+
+            let months = Math.floor((seconds %= 31536000) / 2592000);
+            if (months) {
+                if (1 === months) {
+                    translatedDateString = "{{ 'create_month_ago'|trans({'%months%': 'months_placeholder'}, 'labels') }}";
+                } else {
+                    translatedDateString = "{{ 'create_months_ago'|trans({'%months%': 'months_placeholder'}, 'labels') }}";
+                }
+                return translatedDateString.replace('months_placeholder', months);
+            }
+
+            let weeks = Math.floor((seconds %= 2592000) / 604800);
+            if (weeks) {
+                if (1 === weeks) {
+                    translatedDateString = "{{ 'create_weeks_ago'|trans({'%weeks%': 'weeks_placeholder'}, 'labels') }}";
+                } if (2 == weeks) {
+                } else {
+                    translatedDateString = "{{ 'create_week_ago'|trans({'%weeks%': 'weeks_placeholder'}, 'labels') }}";
+                }
+                return translatedDateString.replace('weeks_placeholder', weeks);
+            }
+
+            let days = Math.floor((seconds %= 604800) / 86400);
+            if (days) {
+                if (1 === days) {
+                    translatedDateString = "{{ 'yesterday'|trans({'%days%': 'days_placeholder'}, 'labels') }}";
+                } if (2 == days) {
+                    translatedDateString = "{{ 'the_day_before_yesterday'|trans({'%days%': 'days_placeholder'}, 'labels') }}";
+                } else {
+                    translatedDateString = "{{ 'create_days_ago'|trans({'%days%': 'days_placeholder'}, 'labels') }}";
+                }
+                return translatedDateString.replace('days_placeholder', days);
+            }
+
+            let hours = Math.floor((seconds %= 86400) / 3600);
+            if (hours) {
+                if (1 === hours) {
+                    translatedDateString = "{{ 'create_hour_ago'|trans({'%hours%': 'hours_placeholder'}, 'labels') }}";
+                } else {
+                    translatedDateString = "{{ 'create_hours_ago'|trans({'%hours%': 'hours_placeholder'}, 'labels') }}";
+                }
+                return translatedDateString.replace('hours_placeholder', hours);
+            }
+
+            let minutes = Math.floor((seconds %= 3600) / 60);
+            if (minutes) {
+                if (1 === minutes) {
+                    translatedDateString = "{{ 'create_minute_ago'|trans({'%minutes%': 'minutes_placeholder'}, 'labels') }}";
+                } else {
+                    translatedDateString = "{{ 'create_minutes_ago'|trans({'%minutes%': 'minutes_placeholder'}, 'labels') }}";
+                }
+                return translatedDateString.replace('minutes_placeholder', minutes);
+            }
+
+            if (1 === seconds) {
+                translatedDateString = "{{ 'create_second_ago'|trans({'%seconds%': 'seconds_placeholder'}, 'labels') }}";
+            } else {
+                translatedDateString = "{{ 'create_seconds_ago'|trans({'%seconds%': 'seconds_placeholder'}, 'labels') }}";
+            }
+            return translatedDateString.replace('seconds_placeholder', seconds);
+        }
+
+        function convertSecondsToDateString(seconds) {
+            var dateTime = new Date(1970, 0, 1); // Epoch
+            dateTime.setSeconds(seconds);
+            return dateTime;
+        }
 
         function init_tickets() {
             $('.ticket').unbind('click').on('click', function(ui) {
@@ -215,9 +358,7 @@
                     });
                 });
             }
-        {% endif %}
 
-        {% if 0 == archived %}
             function init_voting() {
                 $('.btn-vote').unbind('click').on('click', function() {
                     // prevent multi click on came item
@@ -252,18 +393,21 @@
             $('.order-by-date').unbind('click').on('click', function() {
                 sort_type = SORT_TYPE_DATE;
                 sort_direction = SORT_DIRECTION_ASC;
+                $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
                 considerCurrentSortConditions();
             });
 
             $('.order-by-user').unbind('click').on('click', function() {
                 sort_type = SORT_TYPE_NAME;
                 sort_direction = SORT_DIRECTION_ASC;
+                $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
                 considerCurrentSortConditions();
             });
 
             $('.order-by-votes').unbind('click').on('click', function() {
                 sort_type = SORT_TYPE_VOTINGS;
                 sort_direction = SORT_DIRECTION_ASC;
+                $('[data-toggle="tooltip"], .tooltip').tooltip("hide");
                 considerCurrentSortConditions();
             });
         }
@@ -469,9 +613,7 @@
         }
 */
         function checkEventSourceSupported() {
-            return (undefined !== "EvenSource"
-                || "EventSource" in document.createElement('div')
-                || (undefined !== global && ("EventSource" in global)));
+            return typeof(EventSource) !== "undefined";
         }
 
         let eventSource = undefined;
@@ -492,6 +634,11 @@
                 {% endif %}
 
                 eventSource = new EventSource(url);
+
+//                urlString = "https://mercure-hub.byte-artist.de/hub?topic=https://retro.byte-artist.de/voting/{id}&topic=https://retro.byte-artist.de/ticket/{id}"
+//                urlString = "https://mercure-hub.byte-artist.de/hub?topic=https%3A%2F%2Fretro.byte-artist.de%2Fvoting%2F%7Bid%7D&topic=https%3A%2F%2Fretro.byte-artist.de%2Fticket%2F%7Bid%7D"
+//                eventSource = new EventSource(urlString);
+
                 eventSource.onmessage = eventMessage => handleEventMessage(eventMessage); // do something with the payload
 
                 eventSource.addEventListener('error', function(event) {
@@ -542,6 +689,7 @@
                 init_voting();
                 init_options();
                 init_tickets();
+                refresh_created(ticket_content.find('.date'));
             });
 
             if (true === live_notify

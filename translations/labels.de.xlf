@@ -154,8 +154,8 @@
         <target>Dein Inhalt hier…</target>
       </trans-unit>
       <trans-unit id="logged_in_as" resname="logged_in_as">
-        <source>Logged in as</source>
-        <target>Angemeldet als</target>
+        <source>Logged in as %name%</source>
+        <target>Angemeldet als %name%</target>
       </trans-unit>
       <trans-unit id="enter_email_reset_password" resname="enter_email_reset_password">
         <source>Enter email for reset password</source>
@@ -200,6 +200,74 @@
       <trans-unit id="agree_terms" resname="agree_terms">
         <source>Agree terms</source>
         <target>Bedingungen zustimmen</target>
+      </trans-unit>
+      <trans-unit id="date_format" resname="date_format">
+        <source><![CDATA[Y-m-d H:i:s]]></source>
+        <target><![CDATA[d.m.Y H:i:s]]></target>
+      </trans-unit>
+      <trans-unit id="yesterday" resname="yesterday">
+        <source>yesterday</source>
+        <target>gestern</target>
+      </trans-unit>
+      <trans-unit id="the_day_before_yesterday" resname="the_day_before_yesterday">
+        <source>the day before yesterday</source>
+        <target>vorgestern</target>
+      </trans-unit>
+      <trans-unit id="create_second_ago" resname="create_second_ago">
+        <source>%seconds% second ago</source>
+        <target>vor %seconds% Sekunde</target>
+      </trans-unit>
+      <trans-unit id="create_seconds_ago" resname="create_seconds_ago">
+        <source>%seconds% seconds ago</source>
+        <target>vor %seconds% Sekunden</target>
+      </trans-unit>
+      <trans-unit id="create_minute_ago" resname="create_minute_ago">
+        <source>%minutes% minute ago</source>
+        <target>vor %minutes% Minute</target>
+      </trans-unit>
+      <trans-unit id="create_minutes_ago" resname="create_minutes_ago">
+        <source>%minutes% minutes ago</source>
+        <target>vor %minutes% Minuten</target>
+      </trans-unit>
+      <trans-unit id="create_hour_ago" resname="create_hour_ago">
+        <source>%hours% hour ago</source>
+        <target>vor %hours% Stunde</target>
+      </trans-unit>
+      <trans-unit id="create_hours_ago" resname="create_hours_ago">
+        <source>%hours% hours ago</source>
+        <target>vor %hours% Stunden</target>
+      </trans-unit>
+      <trans-unit id="create_day_ago" resname="create_day_ago">
+        <source>%days% day ago</source>
+        <target>vor %days% Tag</target>
+      </trans-unit>
+      <trans-unit id="create_days_ago" resname="create_days_ago">
+        <source>%days% days ago</source>
+        <target>vor %days% Tagen</target>
+      </trans-unit>
+      <trans-unit id="create_week_ago" resname="create_week_ago">
+        <source>%weeks% week ago</source>
+        <target>vor %weeks% Woche</target>
+      </trans-unit>
+      <trans-unit id="create_weeks_ago" resname="create_weeks_ago">
+        <source>%weeks% weeks ago</source>
+        <target>vor %weeks% Wochen</target>
+      </trans-unit>
+      <trans-unit id="create_month_ago" resname="create_month_ago">
+        <source>%months% month ago</source>
+        <target>vor %months% Monat</target>
+      </trans-unit>
+      <trans-unit id="create_months_ago" resname="create_months_ago">
+        <source>%months% months ago</source>
+        <target>vor %months% Monaten</target>
+      </trans-unit>
+      <trans-unit id="create_year_ago" resname="create_year_ago">
+        <source>%years% year ago</source>
+        <target>vor %years% Jahr</target>
+      </trans-unit>
+      <trans-unit id="create_years_ago" resname="create_years_ago">
+        <source>%years% years ago</source>
+        <target>vor %years% Jahren</target>
       </trans-unit>
     </body>
   </file>

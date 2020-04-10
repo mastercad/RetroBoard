@@ -16,7 +16,7 @@ class ArchiveTicket
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -44,7 +44,7 @@ class ArchiveTicket
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -61,7 +61,7 @@ class ArchiveTicket
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
@@ -75,12 +75,12 @@ class ArchiveTicket
 
     /**
      * @var ArchiveVoting
-     * 
+     *
      * One user has Many tickets.
      * @ORM\OneToMany(targetEntity="ArchiveVoting", mappedBy="ticket", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $votings;
-    
+
     public function __construct()
     {
         $this->votings = new ArrayCollection();
@@ -90,7 +90,7 @@ class ArchiveTicket
      * Get the value of id
      *
      * @return int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -102,7 +102,7 @@ class ArchiveTicket
      * @param int $id
      *
      * @return self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -114,7 +114,7 @@ class ArchiveTicket
      * Get the value of content
      *
      * @return string
-     */ 
+     */
     public function getContent()
     {
         return $this->content;
@@ -126,7 +126,7 @@ class ArchiveTicket
      * @param string $content
      *
      * @return self
-     */ 
+     */
     public function setContent(string $content)
     {
         $this->content = $content;
@@ -138,7 +138,7 @@ class ArchiveTicket
      * Get the value of column
      *
      * @return Column
-     */ 
+     */
     public function getColumn(): ArchiveColumn
     {
         return $this->column;
@@ -150,7 +150,7 @@ class ArchiveTicket
      * @param Column $column
      *
      * @return self
-     */ 
+     */
     public function setColumn(?ArchiveColumn $column): self
     {
         $this->column = $column;
@@ -162,7 +162,7 @@ class ArchiveTicket
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator(): User
     {
         return $this->creator;
@@ -174,7 +174,7 @@ class ArchiveTicket
      * @param User $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -186,7 +186,7 @@ class ArchiveTicket
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -210,7 +210,7 @@ class ArchiveTicket
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -222,7 +222,7 @@ class ArchiveTicket
      * @param User $modifier
      *
      * @return self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -256,7 +256,7 @@ class ArchiveTicket
 
     /**
      * Get one user has Many tickets.
-     */ 
+     */
     public function getVotings(): ArchiveVoting
     {
         return $this->votings;
@@ -266,7 +266,7 @@ class ArchiveTicket
      * Set one user has Many tickets.
      *
      * @return self
-     */ 
+     */
     public function setVotings($votings): self
     {
         $this->votings = $votings;
@@ -283,7 +283,7 @@ class ArchiveTicket
 
         return $this;
     }
-    
+
     public function removeVoting(ArchiveVoting $voting): self
     {
         if ($this->votings->contains($voting)) {

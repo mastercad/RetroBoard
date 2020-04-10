@@ -182,7 +182,7 @@ header nav > a:hover {
   background: #fff;
   padding: 30px;
   width: 90%;
-  max-width: 500px;
+  max-width: 550px;
   position: relative;
   padding: 0px;
   -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
@@ -472,7 +472,7 @@ input[type=password]:placeholder {
 
 .ticket .date {
   margin-top: 10px;
-  font-size: 85%;
+  font-size: 70%;
 }
 
 /*

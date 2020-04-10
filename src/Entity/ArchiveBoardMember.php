@@ -17,7 +17,7 @@ class ArchiveBoardMember
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", length=11, columnDefinition="integer unsigned", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -45,17 +45,17 @@ class ArchiveBoardMember
      *
      * @ORM\ManyToOne(targetEntity="ArchiveBoard", inversedBy="members")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="board", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="archive_board", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
-    private $archiveBoard;
+    private $board;
 
     /**
      * @var User
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -72,7 +72,7 @@ class ArchiveBoardMember
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id", nullable=true)
      * })
      */
     private $modifier;
@@ -93,7 +93,7 @@ class ArchiveBoardMember
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -105,7 +105,7 @@ class ArchiveBoardMember
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -117,7 +117,7 @@ class ArchiveBoardMember
      * Get the value of User
      *
      * @return User
-     */ 
+     */
     public function getUser()
     {
         return $this->user;
@@ -129,7 +129,7 @@ class ArchiveBoardMember
      * @param User $user
      *
      * @return  self
-     */ 
+     */
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -141,7 +141,7 @@ class ArchiveBoardMember
      * Get the value of board
      *
      * @return ArchiveBoard
-     */ 
+     */
     public function getBoard()
     {
         return $this->board;
@@ -153,7 +153,7 @@ class ArchiveBoardMember
      * @param ArchiveBoard $archiveBoard
      *
      * @return  self
-     */ 
+     */
     public function setBoard(?ArchiveBoard $archiveBoard)
     {
         $this->board = $archiveBoard;

@@ -19,7 +19,7 @@ class ArchiveColumn
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -35,7 +35,7 @@ class ArchiveColumn
     /**
      * @var int|null
      *
-     * @ORM\Column(name="priority", type="integer", nullable=true)
+     * @ORM\Column(name="priority", length=2, type="integer", nullable=true)
      */
     private $priority = '0';
 
@@ -45,7 +45,7 @@ class ArchiveColumn
      * @ORM\ManyToOne(targetEntity="ArchiveBoard", inversedBy="columns")
      * @ORM\OrderBy({"priority" = "ASC"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="board", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="board", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $board;

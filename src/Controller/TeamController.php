@@ -165,7 +165,7 @@ class TeamController extends AbstractController
         $teamMemberSuccess = $this->manageTeamMember($request, $team);
         $teamInvitationsSuccess = $this->manageTeamInvitations($request, $team);
 
-//        $teamRequestData = $request->request->get('team');
+        $teamRequestData = $request->request->get('team');
 
         if (!$teamMemberSuccess
             || !$teamInvitationsSuccess

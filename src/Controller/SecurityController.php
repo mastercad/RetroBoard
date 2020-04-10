@@ -30,7 +30,9 @@ class SecurityController extends AbstractController
     public function login(Request $request, LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
     {
         $redirectUri = null;
-        if (preg_match('/sf_redirect=(.*)/', $_SERVER['HTTP_COOKIE'], $matches)) {
+        if (isset($_SERVER['HTTP_COOKIE']) 
+            && preg_match('/sf_redirect=(.*)/', $_SERVER['HTTP_COOKIE'], $matches)
+        ) {
             $redirectUri = $matches[1];
         }
         // get the login error if there is one
@@ -38,8 +40,6 @@ class SecurityController extends AbstractController
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
-        $logger->debug($authenticationUtils->getLastUsername());
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername,

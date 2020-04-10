@@ -45,12 +45,12 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbar_drop_profile" data-toggle="dropdown" >
                                     <icon class="fas fa-user mr-1"></icon>
-                                    <span data-toggle="tooltip" title="{{ app.user.email }}">{{ app.user.name }}</span>
+                                    <span data-toggle="tooltip" title="{{ app.user.email }}">{{ app.user.username }}</span>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     {% block navigation_additions_user_options %}{% endblock %}
-                                    <a class="dropdown-item user-profile" href="{{ path('user_profile') }}" >{{ 'profile'|trans({}, 'labels') }}</a>
-                                    <a class="dropdown-item user-logout" href="{{ path('app_logout') }}">{{ 'logout'|trans({}, 'labels') }}</a>
+                                    <a class="dropdown-item user-profile" href="{{ path('user_profile') }}" data-toggle="tooltip" title="{{ 'click_edit_profil'|trans({}, 'titles') }}">{{ 'profile'|trans({}, 'labels') }}</a>
+                                    <a class="dropdown-item user-logout" href="{{ path('app_logout') }}" data-toggle="tooltip" title="{{ 'click_to_logout'|trans({}, 'titles') }}">{{ 'logout'|trans({}, 'labels') }}</a>
                                 </div>
                             </li>
                         </ul>

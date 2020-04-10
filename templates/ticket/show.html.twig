@@ -35,7 +35,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <span class="{% if 0 == archived %} btn-vote {% if true == neg_owner %} color-heightligth {% endif %}{% endif %}" data-value="-1" data-id="{{ ticket.id }}">
+                <span class="{% if 0 == archived %} btn-vote {% if true == neg_owner %} color-heightligth {% endif %}{% endif %}" data-value="-1" data-id="{{ ticket.id }}" data-toggle="tooltip" title="{{ 'click_to_vote_down'|trans({}, 'titles') }}">
                     <i class="fas fa-thumbs-down"></i>
                 </span>
                 <span class="vote-count" data-value="-1" data-id="{{ ticket.id }}">
@@ -43,7 +43,7 @@
                     {{ neg_voter }}
                 {% endif %}
                 </span>
-                <span class="{% if 0 == archived %} btn-vote {% if true == pos_owner %} color-heightligth {% endif %}{% endif %}" data-value="1" data-id="{{ ticket.id }}">
+                <span class="{% if 0 == archived %} btn-vote {% if true == pos_owner %} color-heightligth {% endif %}{% endif %}" data-value="1" data-id="{{ ticket.id }}" data-toggle="tooltip" title="{{ 'click_to_vote_up'|trans({}, 'titles') }}">
                     <i class="fas fa-thumbs-up"></i>
                 </span>
                 <span class="vote-count" data-value="1" data-id="{{ ticket.id }}">
@@ -54,15 +54,17 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 date text-right color-inactive">
-        {{ ticket.created|date('F jS \\a\\t g:ia') }}
+    <div class="col-md-12 text-right color-inactive" >
+        <span class="date" data-identifier="{{ 12|uuid() }}" data-timestamp="{{ ticket.created.timestamp }}"data-toggle="tooltip" title="{{ ticket.created|date('date_format'|trans({}, 'labels')) }}">{{ ticket.created|date('F jS \\a\\t g:ia') }}</span>
     </div>
 
     {% if 0 == archived and (app.user.id == ticket.creator.id or is_granted('archive', ticket) or is_granted('edit', ticket) or is_granted('delete', ticket)) %}
         <ul class="options navbar-nav mr-auto">
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                    <icon class="fas fa-ellipsis-h color-inactive"></icon>
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown" >
+                    <span data-toggle="tooltip" title="{{ 'click_to_show_ticketoptions'|trans({}, 'titles') }}">
+                        <icon class="fas fa-ellipsis-h color-inactive"></icon>
+                    </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     {% if is_granted('delete', ticket) %}

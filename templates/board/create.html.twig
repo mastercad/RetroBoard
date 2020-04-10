@@ -4,7 +4,7 @@
 
 {% block navigation_additions %}
     {% if 0 < board.id %}
-    <a href="/board/{{ board.id }}" class="m-2 btn-archive-board">
+    <a href="/board/{{ board.id }}" class="m-2 btn-archive-board" data-toggle="tooltip" title="{{ 'click_to_show_board'|trans({}, 'titles') }}">
         <icon class="fas fa-chalkboard"></icon>
     </a>
     {% endif %}
@@ -40,7 +40,7 @@
             <div class="col-sm-10">
                 <div class="d-flex columns-container">
                     {% for column in board.columns %}
-                    <div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="{{ column.id }}">
+                    <div class="board-column border rounded flex-fill align-self-stretch bd-highlight p-2 m-2" data-id="{{ column.id }}" data-identifier="{{ 12|uuid() }}">
                         <span class="board-column-name">
                             {{ column.name }}
                         </span>
@@ -406,18 +406,17 @@
             let columnsCount = 0;
             let priority = 0;
             $('.columns-container .board-column').each(function() {
-                if (true !== $(this).data('deleted')) {
-                    let name = $(this).find('.board-column-name').text().trim();
+                let name = $(this).find('.board-column-name').text().trim();
 
-                    if (0 < name.length) {
-                        formData.push({name: "board[columns]["+columnsCount+"][name]", value: name});
-                        formData.push({name: "board[columns]["+columnsCount+"][priority]", value: priority});
-                        formData.push({name: "board[columns]["+columnsCount+"][id]", value: $(this).attr('data-id')});
-                        formData.push({name: "board[columns]["+columnsCount+"][identifier]", value: $(this).closest('div').attr('data-identifier')});
-                        ++priority;
-                    }
+                if (0 < name.length) {
+                    formData.push({name: "board[columns]["+columnsCount+"][name]", value: name});
+                    formData.push({name: "board[columns]["+columnsCount+"][deleted]", value: $(this).data('deleted')});
+                    formData.push({name: "board[columns]["+columnsCount+"][priority]", value: priority});
+                    formData.push({name: "board[columns]["+columnsCount+"][id]", value: $(this).attr('data-id')});
+                    formData.push({name: "board[columns]["+columnsCount+"][identifier]", value: $(this).closest('div').attr('data-identifier')});
+                    ++priority;
+                    ++columnsCount;
                 }
-                ++columnsCount;
             });
 
             if (0 == columnsCount) {
@@ -775,7 +774,7 @@
 
             $('.columns-container .board-column-name').unbind('click').on('click', function() {
                 if (!$(this).is('input')) {
-                    let currentValue = $(this).text();
+                    let currentValue = $(this).text().trim();
                     let inputElement = $('<input type="text" class="form-control board-column-name edit-mode" value="'+currentValue+'">')
                     $(this).replaceWith(inputElement);
                     $(inputElement).focus();

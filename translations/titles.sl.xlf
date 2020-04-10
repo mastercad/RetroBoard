@@ -201,6 +201,62 @@
         <source>Error! Team could not be saved!</source>
         <target>Napaka! Skupine ni bilo mogoče shraniti!</target>
       </trans-unit>
+      <trans-unit id="click_to_show_archived_board" resname="click_to_show_archived_board">
+        <source>Click here to view the archived version of this board</source>
+        <target>Kliknite tukaj, če si želite ogledati arhivirano različico te plošče</target>
+      </trans-unit>
+      <trans-unit id="click_to_sort_by_date" resname="click_to_sort_by_date">
+        <source>Click here to sort the tickets by date</source>
+        <target>Kliknite tukaj, če želite vstopnice razvrstiti po datumu</target>
+      </trans-unit>
+      <trans-unit id="click_to_sort_by_username" resname="click_to_sort_by_username">
+        <source>Click here to sort the tickets by the name of the creator</source>
+        <target>Kliknite tukaj, da vstopnice razvrstite po imenu ustvarjalca</target>
+      </trans-unit>
+      <trans-unit id="click_to_sort_by_votes" resname="click_to_sort_by_votes">
+        <source>Click here to sort the tickets by votes (up + down)</source>
+        <target>Kliknite tukaj, če želite vstopnice razvrstiti po glasov (navzgor + navzdol)</target>
+      </trans-unit>
+      <trans-unit id="click_to_vote_up" resname="click_to_vote_up">
+        <source>Click here to support this ticket</source>
+        <target>Kliknite tukaj za podporo te vozovnice</target>
+      </trans-unit>
+      <trans-unit id="click_to_vote_down" resname="click_to_vote_down">
+        <source>Click here to not support this ticket</source>
+        <target>Kliknite tukaj, da te vozovnice ne podpirate</target>
+      </trans-unit>
+      <trans-unit id="click_to_add_ticket_to_column" resname="click_to_add_ticket_to_column">
+        <source>Click here to add new ticket to column %name%</source>
+        <target>Kliknite tukaj, če želite dodati novo vozovnico v stolpec %name%</target>
+      </trans-unit>
+      <trans-unit id="click_to_show_ticketoptions" resname="click_to_show_ticketoptions">
+        <source>Click here to see the options for this ticket</source>
+        <target>Kliknite tukaj, če si želite ogledati možnosti za to vozovnico</target>
+      </trans-unit>
+      <trans-unit id="click_to_show_board" resname="click_to_show_board">
+        <source>Click here to show the board</source>
+        <target>Kliknite tukaj, če želite pokazati tablo</target>
+      </trans-unit>
+      <trans-unit id="click_to_show_team" resname="click_to_show_team">
+        <source>Click here to show the team</source>
+        <target>Kliknite tukaj, da pokažete ekipo</target>
+      </trans-unit>
+      <trans-unit id="click_to_subscribe_board" resname="click_to_subscribe_board">
+        <source>Click here to subscribe to this board</source>
+        <target>Kliknite tukaj, če se želite naročiti na to ploščo</target>
+      </trans-unit>
+      <trans-unit id="click_to_get_live_notifications" resname="click_to_get_live_notifications">
+        <source>Click here to get real-time notifications</source>
+        <target>Kliknite tukaj, če želite dobiti obvestila v realnem času</target>
+      </trans-unit>
+      <trans-unit id="click_edit_profil" resname="click_edit_profil">
+        <source>Click here to edit your profile</source>
+        <target>Kliknite tukaj, če želite urediti svoj profil</target>
+      </trans-unit>
+      <trans-unit id="click_to_logout" resname="click_to_logout">
+        <source>Click here to log out</source>
+        <target>Kliknite tukaj, da se odjavite</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

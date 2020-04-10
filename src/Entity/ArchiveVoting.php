@@ -17,7 +17,7 @@ class ArchiveVoting
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,7 +26,7 @@ class ArchiveVoting
     /**
      * @var ArchiveTicket
      *
-     * @ORM\ManyToOne(targetEntity="ArchiveTicket", inversedBy="archive_votings")
+     * @ORM\ManyToOne(targetEntity="ArchiveTicket", inversedBy="votings")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="archive_ticket_fk", referencedColumnName="id")
      * })
@@ -45,7 +45,7 @@ class ArchiveVoting
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -62,7 +62,7 @@ class ArchiveVoting
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
@@ -78,7 +78,7 @@ class ArchiveVoting
      * Get the value of id
      *
      * @return int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -90,7 +90,7 @@ class ArchiveVoting
      * @param int  $id
      *
      * @return self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -102,7 +102,7 @@ class ArchiveVoting
      * Get the value of points
      *
      * @return int
-     */ 
+     */
     public function getPoints()
     {
         return $this->points;
@@ -112,22 +112,22 @@ class ArchiveVoting
      * Get the value of ticket
      *
      * @return ArchiveTicket
-     */ 
+     */
     public function getTicket(): ?ArchiveTicket
     {
-        return $this->archiveTicket;
+        return $this->ticket;
     }
 
     /**
      * Set the value of ticket
      *
-     * @param ArchiveTicket  $archiveTicket
+     * @param ArchiveTicket  $ticket
      *
      * @return self
-     */ 
-    public function setTicket(?ArchiveTicket $archiveTicket)
+     */
+    public function setTicket(?ArchiveTicket $ticket)
     {
-        $this->archiveTicket = $archiveTicket;
+        $this->ticket = $ticket;
 
         return $this;
     }
@@ -138,7 +138,7 @@ class ArchiveVoting
      * @param  int  $points
      *
      * @return self
-     */ 
+     */
     public function setPoints(int $points)
     {
         $this->points = $points;
@@ -150,7 +150,7 @@ class ArchiveVoting
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -162,7 +162,7 @@ class ArchiveVoting
      * @param  User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -174,7 +174,7 @@ class ArchiveVoting
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -186,7 +186,7 @@ class ArchiveVoting
      * @param \DateTime  $created
      *
      * @return self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -198,7 +198,7 @@ class ArchiveVoting
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -210,7 +210,7 @@ class ArchiveVoting
      * @param  User  $modifier
      *
      * @return self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -222,7 +222,7 @@ class ArchiveVoting
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -234,7 +234,7 @@ class ArchiveVoting
      * @param \DateTime|null  $modified
      *
      * @return self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;

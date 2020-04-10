@@ -24,7 +24,7 @@ class Board
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -42,7 +42,7 @@ class Board
      * @var \DateTime
      *
      * @Constraints\NotBlank
-     * 
+     *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
@@ -58,10 +58,10 @@ class Board
      * @var User
      *
      * @Constraints\NotBlank
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -71,7 +71,7 @@ class Board
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
@@ -108,7 +108,7 @@ class Board
      * @var Collection
      *
      * @Constraints\NotBlank
-     * 
+     *
      * @ORM\OneToMany(targetEntity="Column", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      * @ORM\OrderBy({"priority" = "ASC"})
      */

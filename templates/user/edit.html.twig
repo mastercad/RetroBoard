@@ -16,7 +16,7 @@
 {% block body %}
 
 <div class="container mt-5">
-    <form id="user_profile_form" method="post" action="/user/edit">
+   <form id="user_profile_form" method="post" action="/user/edit">
         <div class="row">
             <div id="avatar_container" class="col-md-3" style="position: relative;">
                 <span class="btn-remove-avatar" style="z-index: 3; position: absolute; top: 10px; right: 10px; {% if user.avatarPath is empty %} opacity: 0;{% endif %}">
@@ -44,6 +44,63 @@
                             <i class="fas fa-undo-alt"></i>
                         </span>
                     </div>
+
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="login google btn btn-google-disconnect fadeIn" data-disconnect-path="{{ path('connect_google_delete') }}" style="{% if user.googleId is empty %} display: none;{% endif %} background-color: rgb(224, 74, 50); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <i class="fab fa-google-plus"></i>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem  5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Google+ {{ 'disconnect'|trans({}, 'labels') }}</span>
+                                </div>
+                                <div class="login google btn btn-google-connect fadeIn" data-connect-path="{{ path('connect_google_start') }}" style="{% if user.googleId %} display: none;{% endif %} background-color: rgb(224, 74, 50); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <i class="fab fa-google-plus"></i>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem  5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Google+ {{ 'connect'|trans({}, 'labels') }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="login github btn btn-github-disconnect fadeIn" data-disconnect-path="{{ path('connect_github_delete') }}" style="{% if user.githubId is empty %} display: none;{% endif %} background-color: rgb(21, 170, 191); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <i class="fab fa-github"></i>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Github {{ 'disconnect'|trans({}, 'labels') }}</span>
+                                </div>
+                                <div class="login github btn btn-github-connect fadeIn" data-connect-path="{{ path('connect_github_start') }}" style="{% if user.githubId %} display: none;{% endif %} background-color: rgb(21, 170, 191); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <i class="fab fa-github"></i>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Github {{ 'connect'|trans({}, 'labels') }}</span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="login microsoft btn btn-microsoft-disconnect fadeIn" data-disconnect-path="{{ path('connect_microsoft_delete') }}" style="{% if user.microsoftId is empty %} display: none;{% endif %} background-color: rgb(130, 201, 30); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <i class="fab fa-microsoft"></i>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Microsoft {{ 'disconnect'|trans({}, 'labels') }}</span>
+                                </div>
+                                <div class="login microsoft btn btn-microsoft-connect fadeIn" data-connect-path="{{ path('connect_microsoft_start') }}" style="{% if user.microsoftId %} display: none;{% endif %} background-color: rgb(130, 201, 30); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <i class="fab fa-microsoft"></i>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Microsoft {{ 'connect'|trans({}, 'labels') }}</span>
+                                </div>
+                            </div>
+{#
+                            <div class="col-md-3">
+                                <div class="login okta btn btn-okta-disconnect fadeIn" data-disconnect-path="{{ path('connect_okta_delete') }}" style="{% if user.oktaId is empty %} display: none;{% endif %} background-color: rgb(32, 49, 59); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <span>{okta}</span>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Okta {{ 'disconnect'|trans({}, 'labels') }}</span>
+                                </div>
+                                <div class="login okta btn btn-okta-connect fadeIn" data-connect-path="{{ path('connect_okta_start') }}" style="{% if user.oktaId %} display: none;{% endif %} background-color: rgb(32, 49, 59); color: #FFFFFF; text-align: left; text-transform: none; font-weight: bold; margin-top: 20px; padding: 15px 20px;">
+                                    <span>{okta}</span>
+                                    <span class="" style="border-left: 1px solid gray; margin: 1rem 5px; height: 100%; width: 1px;"></span>
+                                    <span class="" style="color: #FFFFFF; font-weight: bold;">Okta {{ 'connect'|trans({}, 'labels') }}</span>
+                                </div>
+                            </div>
+#}
+                        </div>
+                    </div>
                     <div class="col-md-12" style="margin-top: 25px;">
                         <span class="btn btn-primary btn-save">{{ 'save'|trans({}, 'labels') }}</span>
                     </div>
@@ -52,7 +109,7 @@
         </div>
         <input type="hidden" name="user[id]" value="{{ user.id }}" />
         <input type="hidden" id="avatar_path" name="user[avatar_path]" value="{{ user.avatarPath }}" />
-    </form>
+   </form>
 </div>
 
 {% endblock %}
@@ -79,6 +136,70 @@
                 });
             });
 
+            $('.btn-google-connect').unbind('click').on('click', function() {
+                window.open($(this).attr('data-connect-path'));
+            });
+
+            $('.btn-google-disconnect').unbind('click').on('click', function() {
+                $.ajax({
+                    url: $(this).attr('data-disconnect-path'),
+                    type: 'DELETE',
+                    success: function(response) {
+                        $('.btn-google-disconnect').fadeOut();
+                        $('.btn-google-connect').fadeIn();
+                    }
+                });
+                return false;
+            });
+
+            $('.btn-github-connect').unbind('click').on('click', function() {
+                window.open($(this).attr('data-connect-path'));
+            });
+
+            $('.btn-github-disconnect').unbind('click').on('click', function() {
+                $.ajax({
+                    url: $(this).attr('data-disconnect-path'),
+                    type: 'DELETE',
+                    success: function(response) {
+                        $('.btn-github-disconnect').fadeOut();
+                        $('.btn-github-connect').fadeIn();
+                    }
+                });
+                return false;
+            });
+
+            $('.btn-microsoft-connect').unbind('click').on('click', function() {
+                window.open($(this).attr('data-connect-path'));
+            });
+
+            $('.btn-microsoft-disconnect').unbind('click').on('click', function() {
+                $.ajax({
+                    url: $(this).attr('data-disconnect-path'),
+                    type: 'DELETE',
+                    success: function(response) {
+                        $('.btn-microsoft-disconnect').fadeOut();
+                        $('.btn-microsoft-connect').fadeIn();
+                    }
+                });
+                return false;
+            });
+/*
+            $('.btn-okta-connect').unbind('click').on('click', function() {
+                window.open($(this).attr('data-connect-path'));
+            });
+
+            $('.btn-okta-disconnect').unbind('click').on('click', function() {
+                $.ajax({
+                    url: $(this).attr('data-disconnect-path'),
+                    type: 'DELETE',
+                    success: function(response) {
+                        $('.btn-okta-disconnect').fadeOut();
+                        $('.btn-okta-connect').fadeIn();
+                    }
+                });
+                return false;
+            });
+*/
             $('.btn-remove-color').unbind('click').on('click', function() {
                 $('#color').val('#0298E9');
                 $('#avatar').css({'color': '#0298E9'});

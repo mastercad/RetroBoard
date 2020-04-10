@@ -1,20 +1,25 @@
 {
     "require": {
         "symfony/flex": "^1.4",
-        "symfony/console": "^4.3",
-        "symfony/framework-bundle": "^4.3",
-        "symfony/yaml": "^4.3",
-        "symfony/twig-bundle": "^4.3",
+        "symfony/console": "^4.4",
+        "symfony/framework-bundle": "*",
+        "symfony/yaml": "^4.4",
+        "symfony/twig-bundle": "^4.4",
         "symfony/orm-pack": "^1.0",
-        "symfony/dotenv": "^4.3",
-        "symfony/security-bundle": "^4.3",
-        "symfony/form": "^4.3",
-        "symfony/validator": "^4.3",
+        "symfony/dotenv": "^4.4",
+        "symfony/security-bundle": "^4.4",
+        "symfony/form": "^4.4",
+        "symfony/validator": "^4.4",
         "symfony/monolog-bundle": "^3.4",
         "symfony/mercure-bundle": "^0.1.2",
-        "symfony/swiftmailer-bundle": "^3.2",
-        "symfony/translation": "^4.3",
-        "doctrine/annotations": "^1.10"
+        "symfony/swiftmailer-bundle": "*",
+        "symfony/translation": "^4.4",
+        "doctrine/annotations": "^1.10",
+        "knpuniversity/oauth2-client-bundle": "*",
+        "league/oauth2-google": "*",
+        "directus/oauth2-okta": "dev-master",
+        "league/oauth2-github": "^2.0",
+        "stevenmaguire/oauth2-microsoft": "^2.2"
     },
     "scripts": {
         "auto-scripts": {

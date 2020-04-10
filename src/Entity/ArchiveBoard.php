@@ -19,7 +19,7 @@ class ArchiveBoard
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -51,7 +51,7 @@ class ArchiveBoard
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -61,23 +61,23 @@ class ArchiveBoard
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveBoardInvitation", mappedBy="archive_board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ArchiveBoardInvitation", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $invitations;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveBoardMember", mappedBy="archive_board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ArchiveBoardMember", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      */
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveColumn", mappedBy="archive_board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="ArchiveColumn", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
      * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $columns;
@@ -93,7 +93,7 @@ class ArchiveBoard
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -105,7 +105,7 @@ class ArchiveBoard
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -117,7 +117,7 @@ class ArchiveBoard
      * Get the value of name
      *
      * @return  string
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -129,7 +129,7 @@ class ArchiveBoard
      * @param  string  $name
      *
      * @return  self
-     */ 
+     */
     public function setName(string $name)
     {
         $this->name = $name;
@@ -141,7 +141,7 @@ class ArchiveBoard
      * Get the value of created
      *
      * @return  \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -153,7 +153,7 @@ class ArchiveBoard
      * @param  \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -165,7 +165,7 @@ class ArchiveBoard
      * Get the value of modified
      *
      * @return  \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -177,7 +177,7 @@ class ArchiveBoard
      * @param  \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;
@@ -189,7 +189,7 @@ class ArchiveBoard
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -201,7 +201,7 @@ class ArchiveBoard
      * @param User $creator
      *
      * @return  self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -238,23 +238,23 @@ class ArchiveBoard
      */
     public function getColumns(): Collection
     {
-        return $this->archiveColumns;
+        return $this->columns;
     }
 
     public function addColumn(ArchiveColumn $archiveColumn): self
     {
-        if (!$this->archiveColumns->contains($archiveColumn)) {
-            $this->archiveColumns[] = $archiveColumn;
+        if (!$this->columns->contains($archiveColumn)) {
+            $this->columns[] = $archiveColumn;
             $archiveColumn->setBoard($this);
         }
 
         return $this;
     }
-    
+
     public function removeColumn(ArchiveColumn $archiveColumn): self
     {
-        if ($this->archiveColumns->contains($archiveColumn)) {
-            $this->archiveColumns->removeElement($archiveColumn);
+        if ($this->columns->contains($archiveColumn)) {
+            $this->columns->removeElement($archiveColumn);
             // set the owning side to null (unless already changed)
             if ($archiveColumn->getBoard() === $this) {
                 $archiveColumn->setBoard(null);
@@ -288,7 +288,7 @@ class ArchiveBoard
 
         return $this;
     }
-    
+
     public function removeMember(ArchiveBoardMember $archiveBoardMember): self
     {
         if ($this->members->contains($archiveBoardMember)) {
@@ -326,7 +326,7 @@ class ArchiveBoard
 
         return $this;
     }
-    
+
     public function removeBoardInvitation(ArchiveBoardMember $archiveBoardInvitation): self
     {
         if ($this->invitations->contains($archiveBoardInvitation)) {
@@ -339,7 +339,7 @@ class ArchiveBoard
 
         return $this;
     }
-    
+
     public function __toString()
     {
         return $this->getName();

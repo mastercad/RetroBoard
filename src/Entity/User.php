@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * INSERT INTO `users` (`id`, `creator`, `modifier`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `activity_token`, `avatar_path`, `color`, `created`, `modified`) VALUES ('1', '1', NULL, 'SYSTEM', 'SYSTEM', 'SYSTEM@retro-board.de', 'SYSTEM@retro-board.de', '0', NULL, '', NULL, NULL, NULL, '', NULL, NULL, NULL, '2020-04-06 00:00:00', NULL);
+ *
+ */
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,7 +16,7 @@ use Serializable;
 /**
  * User
  *
- * @ORM\Table(name="users", indexes={
+ * @ORM\Table(name="users", options={"auto_increment": 1}, indexes={
  *     @ORM\Index(name="retro_modifier_fk", columns={"modifier"}),
  *     @ORM\Index(name="retro_creator_fk", columns={"creator"})}
  * )
@@ -24,9 +28,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -68,16 +72,44 @@ class User implements UserInterface, EquatableInterface, Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="avatar_path", type="string", length=250, nullable=false)
+     * @ORM\Column(name="avatar_path", type="string", length=250, nullable=true)
      */
     private $avatarPath;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="color", type="string", length=7, nullable=false)
+     * @ORM\Column(name="color", type="string", length=7, nullable=true)
      */
     private $color;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="google_id", type="string", length=255, nullable=true)
+     */
+    private $googleId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="github_id", type="string", length=255, nullable=true)
+     */
+    private $githubId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="microsoft_id", type="string", length=255, nullable=true)
+     */
+    private $microsoftId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="okta_id", type="string", length=255, nullable=true)
+     */
+    private $oktaId;
 
     /**
      * @var json
@@ -89,9 +121,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="creations")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -106,9 +138,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="modifications")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id")
      * })
      */
     private $modifier;
@@ -120,10 +152,28 @@ class User implements UserInterface, EquatableInterface, Serializable
      */
     private $modified;
 
+    /**
+     * @var User
+     *
+     * One user has Many tickets.
+     * @ORM\OneToMany(targetEntity="User", mappedBy="modifier", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     */
+    private $modifications;
+
+    /**
+     * @var User
+     *
+     * One user has Many tickets.
+     * @ORM\OneToMany(targetEntity="User", mappedBy="creator", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     */
+    private $creations;
+
     public function __construct()
     {
         $this->boards = new ArrayCollection();
         $this->teams = new ArrayCollection();
+        $this->creations = new ArrayCollection();
+        $this->modifications = new ArrayCollection();
         $this->roles = ['ROLE_USER'];
     }
 
@@ -238,10 +288,42 @@ class User implements UserInterface, EquatableInterface, Serializable
         return $this;
     }
 
+    public function getGoogleId() {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId) {
+        $this->googleId = $googleId;
+    }
+
+    public function getGithubId() {
+        return $this->githubId;
+    }
+
+    public function setGithubId(?string $githubId) {
+        $this->githubId = $githubId;
+    }
+
+    public function getMicrosoftId() {
+        return $this->microsoftId;
+    }
+
+    public function setMicrosoftId(?string $microsoftId) {
+        $this->microsoftId = $microsoftId;
+    }
+
+    public function getOktaId() {
+        return $this->oktaId;
+    }
+
+    public function setOktaId(?string $oktaId) {
+        $this->oktaId = $oktaId;
+    }
+
     /**
      * Get the value of email
      *
-     * @return  string
+     * @return string
      */
     public function getEmail()
     {
@@ -251,11 +333,11 @@ class User implements UserInterface, EquatableInterface, Serializable
     /**
      * Set the value of email
      *
-     * @param  string  $email
+     * @param string $email
      *
      * @return  self
      */
-    public function setEmail(string $email)
+    public function setEmail($email)
     {
         $this->email = $email;
 
@@ -356,11 +438,11 @@ class User implements UserInterface, EquatableInterface, Serializable
     /**
      * Set the value of modifier
      *
-     * @param User  $modifier
+     * @param User $modifier
      *
-     * @return  self
+     * @return self
      */
-    public function setModifier(User $modifier)
+    public function setModifier(?User $modifier)
     {
         $this->modifier = $modifier;
 
@@ -384,7 +466,7 @@ class User implements UserInterface, EquatableInterface, Serializable
      *
      * @return  self
      */
-    public function setModified($modified)
+    public function setModified(?\DateTime $modified)
     {
         $this->modified = $modified;
 
@@ -425,6 +507,92 @@ class User implements UserInterface, EquatableInterface, Serializable
             $this->email,
             $this->name,
         ) = unserialize($serialized, array('allowed_classes' => false));
+    }
+
+    /**
+     * Get one user has Many tickets.
+     */
+    public function getModifications()
+    {
+        return $this->modifications;
+    }
+
+    /**
+     * Set one user has Many tickets.
+     *
+     * @return self
+     */
+    public function setModifications($modifications)
+    {
+        $this->modifications = $modifications;
+
+        return $this;
+    }
+
+    public function addModifier(User $modifier): self
+    {
+        if (!$this->modifications->contains($modifier)) {
+            $this->modifications[] = $modifier;
+            $modifier->setModifier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModifier(User $modifier): self
+    {
+        if ($this->modifications->contains($modifier)) {
+            $this->modifications->removeElement($modifier);
+            // set the owning side to null (unless already changed)
+            if ($modifier->getModifier() === $this) {
+                $modifier->setModifier(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get one user has Many tickets.
+     */
+    public function getCreations()
+    {
+        return $this->creations;
+    }
+
+    /**
+     * Set one user has Many tickets.
+     *
+     * @return self
+     */
+    public function setCreations($creations)
+    {
+        $this->creations = $creations;
+
+        return $this;
+    }
+
+    public function addCreator(User $creator): self
+    {
+        if (!$this->creations->contains($creator)) {
+            $this->creations[] = $creator;
+            $creator->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreator(User $creator): self
+    {
+        if ($this->creations->contains($creator)) {
+            $this->creations->removeElement($creator);
+            // set the owning side to null (unless already changed)
+            if ($creator->getCreator() === $this) {
+                $creator->setCreator(null);
+            }
+        }
+
+        return $this;
     }
 
     public function __toString()

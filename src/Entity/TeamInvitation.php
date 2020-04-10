@@ -22,7 +22,7 @@ class TeamInvitation
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -43,11 +43,11 @@ class TeamInvitation
     private $token;
 
     /**
-     * @var Board
+     * @var Team
      *
      * @ORM\ManyToOne(targetEntity="Team", inversedBy="invitations")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="team", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="team", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $team;
@@ -57,7 +57,7 @@ class TeamInvitation
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="creator", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(name="creator", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
      * })
      */
     private $creator;
@@ -74,7 +74,7 @@ class TeamInvitation
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="modifier", referencedColumnName="id", nullable=true)
+     *   @ORM\JoinColumn(name="modifier", columnDefinition="integer unsigned", referencedColumnName="id", nullable=true)
      * })
      */
     private $modifier;
