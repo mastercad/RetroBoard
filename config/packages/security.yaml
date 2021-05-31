@@ -57,6 +57,7 @@ security:
         - { path: ^/forgot-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reset-password-request, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/reset-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/board/invitation, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET]  }
         - { path: ^/connect/google, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/google/check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/connect/github, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -68,4 +69,4 @@ security:
 #        - { path: ^/admin, roles: ROLE_ADMIN }
 #        - { path: ^/profile, roles: ROLE_USER }
 #        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-        - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

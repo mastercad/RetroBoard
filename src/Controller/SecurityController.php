@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
     {
         $this->translator = $translator;
     }
-
+    
     /**
      * @Route("/login", name="app_login", options={"permanent"=true, "keepRequestMethod"=true})
      */
@@ -88,7 +88,7 @@ class SecurityController extends AbstractController
         } else {
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['email' => $email]);
 
-            // ne message, email not exists because no email spoofing allowed!
+            // no message about email not exists because no email spoofing allowed!
             if ($user instanceof User) {
                 $token = sha1(random_bytes(20));
                 $user->setActivityToken($token);

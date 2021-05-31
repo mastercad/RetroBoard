@@ -184,6 +184,7 @@ class BoardController extends AbstractController
         $knownTeams = $this->collectAllKnownTeams();
         $knownMembers = $this->collectAllKnownMembers();
 
+        // @TODO MACHT DAS SINN, WENN BOARD NEU ERSTELLT WURDE?! Woher soll dann ID kommen?
         $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findBy(['board' => $board->getId()]);
 
         $form = $this->createForm(BoardType::class, $board, ['action' => $this->generateUrl('board_save')]);
@@ -748,7 +749,7 @@ class BoardController extends AbstractController
     }
 
     /**
-     * @Route("/board/member/{token}", name="board_member", methods={"GET"})
+     * @Route("/board/invitation/{token}", name="board_invitation", methods={"GET"})
      *
      * @param Request                $request
      */

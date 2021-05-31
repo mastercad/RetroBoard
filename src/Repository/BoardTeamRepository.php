@@ -11,8 +11,8 @@ class BoardTeamRepository extends EntityRepository
     {
         $statement = $this->getEntityManager()->getConnection()->prepare(
             "SELECT board_teams.board FROM board_teams 
-                INNER JOIN teams ON board_teams.team = teams.id
-                INNER JOIN team_members ON board_teams.team = team_members.team AND team_members.member = :userId
+                INNER JOIN teams ON board_teams.team = teams.id 
+                INNER JOIN team_members ON board_teams.team = team_members.team AND team_members.member = :userId 
             GROUP BY board_teams.board"
         );
 
@@ -25,8 +25,8 @@ class BoardTeamRepository extends EntityRepository
     {
         $statement = $this->getEntityManager()->getConnection()->prepare(
             "SELECT board_teams.board FROM board_teams 
-                INNER JOIN teams ON board_teams.team = teams.id
-                INNER JOIN team_members ON board_teams.team = team_members.team AND team_members.member = :userId
+                INNER JOIN teams ON board_teams.team = teams.id 
+                INNER JOIN team_members ON board_teams.team = team_members.team AND team_members.member = :userId 
             GROUP BY board_teams.board"
         );
 

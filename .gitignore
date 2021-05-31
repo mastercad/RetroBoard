@@ -13,3 +13,6 @@
 ###< symfony/framework-bundle ###
 .vscode
 
+###> symfony secrets ###
+*.decrypt.private.php
+###< symfony/secrets ###

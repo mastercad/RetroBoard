@@ -638,7 +638,9 @@
                     stop: function(event, ui) {
                         $('.member-container').removeClass('hover');
                         $(item).attr('data-state', 'changed');
-                        if (0 < $(oldList).find('li').length || "ROLE_ADMIN" != oldList.attr('data-role')) {
+                        if (0 < $(oldList).find('li').length 
+                            || "ROLE_ADMIN" != oldList.attr('data-role')
+                        ) {
 
                             // only save, is boardMember already known
                             if ("undefined" != $(item).attr('data-id')

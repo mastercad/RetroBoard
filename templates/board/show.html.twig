@@ -147,9 +147,9 @@
         const SORT_TYPE_NAME = 'name';
 
         $(document).ready(function() {
-            if (checkEventSourceSupported()) {
-                connect();
-            }
+//        if (checkEventSourceSupported()) {
+//                connect();
+//            }
 
             {% if 0 == archived %}
                 init_ticket_add();
@@ -202,8 +202,7 @@
             } else if (diff > 3600) {
                 clearTimeout(ticketTimer[identifier]);
                 nextTick = 3600000;
-            } else if (diff > 60
-            ) {
+            } else if (diff > 60) {
                 clearTimeout(ticketTimer[identifier]);
                 nextTick = 60000;
             }
@@ -243,10 +242,9 @@
             let weeks = Math.floor((seconds %= 2592000) / 604800);
             if (weeks) {
                 if (1 === weeks) {
-                    translatedDateString = "{{ 'create_weeks_ago'|trans({'%weeks%': 'weeks_placeholder'}, 'labels') }}";
-                } if (2 == weeks) {
-                } else {
                     translatedDateString = "{{ 'create_week_ago'|trans({'%weeks%': 'weeks_placeholder'}, 'labels') }}";
+                } else {
+                    translatedDateString = "{{ 'create_weeks_ago'|trans({'%weeks%': 'weeks_placeholder'}, 'labels') }}";
                 }
                 return translatedDateString.replace('weeks_placeholder', weeks);
             }

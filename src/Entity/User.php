@@ -236,8 +236,8 @@ class User implements UserInterface, EquatableInterface, Serializable
 
     public function eraseCredentials()
     {
-        $this->password = null;
-        $this->salt = null;
+#        $this->password = null;
+#        $this->salt = null;
     }
 
     /**

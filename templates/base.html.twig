@@ -187,12 +187,33 @@
             </script>
         {% endblock %}
 
+        {% block window_state %}
+            <script type="text/javascript">
+                let interval_id;
+                let window_active = false;
+                $(window).focus(function() {
+                    window_active = true;
+//                    if (!interval_id)
+//                        interval_id = setInterval(hard_work, 1000);
+                });
+
+                $(window).blur(function() {
+//                    clearInterval(interval_id);
+//                    interval_id = 0;
+                    window_active = false;
+                });
+            </script>
+        {% endblock %}
+
         {% block desktop_notifications %}
         <script type="text/javascript">
             let notificationsAllowed = false;
 
+            // only show notifications, if window currently not active
             function notificationToDesktop(message, title) {
-                if ('Notification' in window) {
+                if (!window_active
+                    && 'Notification' in window
+                ) {
                     if (Notification.permission === 'granted') {
                         let note = new Notification(title, {
                             icon: 'https://retro.byte-artist.de/images/logo.png',

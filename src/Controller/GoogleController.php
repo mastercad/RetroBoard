@@ -8,7 +8,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GoogleController extends AbstractController
@@ -30,10 +29,7 @@ class GoogleController extends AbstractController
      */
     public function connectAction(ClientRegistry $clientRegistry)
     {
-        return $clientRegistry
-            ->getClient('google')
-            ->redirect()
-        ;
+        return $clientRegistry->getClient('google')->redirect([], []);
     }
 
     /**

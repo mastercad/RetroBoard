@@ -75,15 +75,25 @@ class BoardVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
-
+/*
                 $resultTeamMembers = $subject->getBoardTeams()->filter(
                     function ($boardTeam) use ($user) {
                             return $boardTeam->getTeam()->getTeamMembers()->filter(function($teamMember) use ($user) {
+                                echo "USER: ".$user->getId()." - TeamMember: ".$teamMember->getMember()->getId()."<br />";
                                 return $teamMember->getMember() === $user;
                             }
                         );
                     }
                 );
+*/
+                $resultTeamMembers = [];
+                foreach ($subject->getBoardTeams() as $boardTeam) {
+                    foreach ($boardTeam->getTeam()->getTeamMembers() as $teamMember) {
+                        if ($teamMember->getMember() == $user) {
+                            $resultTeamMembers[] = $teamMember->getMember();
+                        }
+                    }
+                }
 
                 return 0 < count($resultMembers) || 0 < count($resultTeamMembers);
             case 'archive':
