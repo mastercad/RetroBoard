@@ -2,6 +2,7 @@
 
 return array (
   'APP_SECRET' => NULL,
+  'DATABASE_URL' => NULL,
   'MAILER_URL' => NULL,
   'MERCURE_JWT_SECRET' => NULL,
   'OAUTH_GITHUB_CLIENT_ID' => NULL,

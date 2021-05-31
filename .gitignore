@@ -15,4 +15,5 @@
 
 ###> symfony secrets ###
 *.decrypt.private.php
+*.env.*.local
 ###< symfony/secrets ###
