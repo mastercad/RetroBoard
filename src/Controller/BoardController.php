@@ -623,9 +623,9 @@ class BoardController extends AbstractController
      */
     private function sendInvitationEmail(BoardInvitation $boardInvitation)
     {
-        $message = new \Swift_Message(
-                'Invitation request board "'.$boardInvitation->getBoard()->getName().'" on https://retro.byte-artist.de'
-            );
+        $messageSubject = 'Invitation request board "'.$boardInvitation->getBoard()->getName().
+            '" on https://retro.byte-artist.de';
+        $message = new \Swift_Message($messageSubject);
         $message->setFrom('no-reply@byte-artist.de')
                 ->setTo($boardInvitation->getEmail())
                 ->setBcc('andreas.kempe@byte-artist.de')
@@ -658,13 +658,13 @@ class BoardController extends AbstractController
     }
 
     /**
-     * @Route("/board/invitation/{id}", name="board_invite_delete", methods={"DELETE"})
+     * @Route("/board/invitation/{identifier}", name="board_invite_delete", methods={"DELETE"})
      *
      * @return void
      */
-    public function deleteInvitationAction(int $id)
+    public function deleteInvitationAction(int $identifier)
     {
-        $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($id);
+        $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($identifier);
         if (!$boardInvitation instanceof BoardInvitation) {
             return new JsonResponse(
                 [
@@ -692,13 +692,13 @@ class BoardController extends AbstractController
     }
 
     /**
-     * @Route("/board/{id}", name="board_delete", methods={"DELETE"})
+     * @Route("/board/{identifier}", name="board_delete", methods={"DELETE"})
      *
      * @return void
      */
-    public function deleteAction(int $id)
+    public function deleteAction(int $identifier)
     {
-        $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
+        $board = $this->getDoctrine()->getRepository(Board::class)->find($identifier);
         if (!$board instanceof Board) {
             return new JsonResponse(
                 [

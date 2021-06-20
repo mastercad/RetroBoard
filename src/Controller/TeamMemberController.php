@@ -24,13 +24,14 @@ class TeamMemberController extends AbstractController
      */
     public function saveRoleAction(EntityManagerInterface $entityManager, Request $request)
     {
-        $id = (int) $request->request->get('id');
+        $identifier = (int) $request->request->get('id');
         $newRole = $request->request->get('newRole');
 
-        $teamMember = $this->getDoctrine()->getRepository(TeamMember::class)->find($id);
+        $teamMember = $this->getDoctrine()->getRepository(TeamMember::class)->find($identifier);
 
         if (!$teamMember instanceof TeamMember) {
-            throw $this->createNotFoundException($this->translator->trans('team_member_not_found', ['id' => $id], 'errors'));
+            $message = $this->translator->trans('team_member_not_found', ['id' => $identifier], 'errors');
+            throw $this->createNotFoundException($message);
         }
         $this->denyAccessUnlessGranted('edit_role', $teamMember);
 

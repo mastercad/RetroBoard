@@ -30,7 +30,8 @@ class BoardMemberController extends AbstractController
         $boardMember = $this->getDoctrine()->getRepository(BoardMember::class)->find($id);
 
         if (!$boardMember instanceof BoardMember) {
-            throw $this->createNotFoundException($this->translator->trans('board_member_not_found', ['id' => $id], 'errors'));
+            $message = $this->translator->trans('board_member_not_found', ['id' => $id], 'errors');
+            throw $this->createNotFoundException($message);
         }
         $this->denyAccessUnlessGranted('edit_role', $boardMember);
 

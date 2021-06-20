@@ -572,7 +572,8 @@ class TeamController extends AbstractController
         $teamInvitation = $this->getDoctrine()->getRepository(TeamInvitation::class)->findOneBy(['token' => $token]);
 
         if (!$teamInvitation instanceof TeamInvitation) {
-            throw $this->createNotFoundException($this->translator->trans('invitation_not_found', ['id' => $token], 'errors'));
+            $message = $this->translator->trans('invitation_not_found', ['id' => $token], 'errors');
+            throw $this->createNotFoundException($message);
         }
 
         $this->denyAccessUnlessGranted('accept', $teamInvitation);
