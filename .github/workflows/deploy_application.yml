@@ -3,7 +3,7 @@ name: Deploy Application
 on:
   pull_request:
     types: [closed]
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   create-deployment-artifacts:
