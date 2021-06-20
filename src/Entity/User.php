@@ -1,9 +1,5 @@
 <?php
 
-/**
- * INSERT INTO `users` (`id`, `creator`, `modifier`, `username`, `username_canonical`, `email`, `email_canonical`, `enabled`, `salt`, `password`, `last_login`, `confirmation_token`, `password_requested_at`, `roles`, `activity_token`, `avatar_path`, `color`, `created`, `modified`) VALUES ('1', '1', NULL, 'SYSTEM', 'SYSTEM', 'SYSTEM@retro-board.de', 'SYSTEM@retro-board.de', '0', NULL, '', NULL, NULL, NULL, '', NULL, NULL, NULL, '2020-04-06 00:00:00', NULL);
- *
- */
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -156,7 +152,12 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @var User
      *
      * One user has Many tickets.
-     * @ORM\OneToMany(targetEntity="User", mappedBy="modifier", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="User",
+     *  mappedBy="modifier",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $modifications;
 
@@ -164,7 +165,12 @@ class User implements UserInterface, EquatableInterface, Serializable
      * @var User
      *
      * One user has Many tickets.
-     * @ORM\OneToMany(targetEntity="User", mappedBy="creator", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="User",
+     *  mappedBy="creator",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $creations;
 
@@ -288,35 +294,43 @@ class User implements UserInterface, EquatableInterface, Serializable
         return $this;
     }
 
-    public function getGoogleId() {
+    public function getGoogleId()
+    {
         return $this->googleId;
     }
 
-    public function setGoogleId(?string $googleId) {
+    public function setGoogleId(?string $googleId)
+    {
         $this->googleId = $googleId;
     }
 
-    public function getGithubId() {
+    public function getGithubId()
+    {
         return $this->githubId;
     }
 
-    public function setGithubId(?string $githubId) {
+    public function setGithubId(?string $githubId)
+    {
         $this->githubId = $githubId;
     }
 
-    public function getMicrosoftId() {
+    public function getMicrosoftId()
+    {
         return $this->microsoftId;
     }
 
-    public function setMicrosoftId(?string $microsoftId) {
+    public function setMicrosoftId(?string $microsoftId)
+    {
         $this->microsoftId = $microsoftId;
     }
 
-    public function getOktaId() {
+    public function getOktaId()
+    {
         return $this->oktaId;
     }
 
-    public function setOktaId(?string $oktaId) {
+    public function setOktaId(?string $oktaId)
+    {
         $this->oktaId = $oktaId;
     }
 

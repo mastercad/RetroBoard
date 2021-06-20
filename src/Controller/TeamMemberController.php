@@ -30,7 +30,9 @@ class TeamMemberController extends AbstractController
         $teamMember = $this->getDoctrine()->getRepository(TeamMember::class)->find($id);
 
         if (!$teamMember instanceof TeamMember) {
-            throw $this->createNotFoundException($this->translator->trans('team_member_not_found', ['id' => $id], 'errors'));
+            throw $this->createNotFoundException(
+                $this->translator->trans('team_member_not_found', ['id' => $id], 'errors')
+            );
         }
         $this->denyAccessUnlessGranted('edit_role', $teamMember);
 
@@ -41,6 +43,11 @@ class TeamMemberController extends AbstractController
         $entityManager->persist($teamMember);
         $entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('team_member_saved', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('team_member_saved', [], 'messages')
+            ]
+        );
     }
 }

@@ -34,7 +34,12 @@ class BoardSubscriber
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="subscriber", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(
+     *      name="subscriber",
+     *      columnDefinition="integer unsigned",
+     *      referencedColumnName="id",
+     *      nullable=false
+     *  )
      * })
      */
     private $subscriber;
@@ -87,7 +92,7 @@ class BoardSubscriber
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -99,7 +104,7 @@ class BoardSubscriber
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -111,7 +116,7 @@ class BoardSubscriber
      * Get the value of User
      *
      * @return User
-     */ 
+     */
     public function getSubscriber()
     {
         return $this->subscriber;
@@ -123,7 +128,7 @@ class BoardSubscriber
      * @param User  $subscriber
      *
      * @return  self
-     */ 
+     */
     public function setSubscriber(User $subscriber)
     {
         $this->subscriber = $subscriber;
@@ -135,7 +140,7 @@ class BoardSubscriber
      * Get the value of board
      *
      * @return  Board
-     */ 
+     */
     public function getBoard()
     {
         return $this->board;
@@ -147,7 +152,7 @@ class BoardSubscriber
      * @param Board $board
      *
      * @return  self
-     */ 
+     */
     public function setBoard(?Board $board)
     {
         $this->board = $board;
@@ -159,7 +164,7 @@ class BoardSubscriber
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -171,7 +176,7 @@ class BoardSubscriber
      * @param User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -183,7 +188,7 @@ class BoardSubscriber
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -195,7 +200,7 @@ class BoardSubscriber
      * @param \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -207,7 +212,7 @@ class BoardSubscriber
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -219,7 +224,7 @@ class BoardSubscriber
      * @param User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -231,7 +236,7 @@ class BoardSubscriber
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -243,7 +248,7 @@ class BoardSubscriber
      * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;

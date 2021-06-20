@@ -55,7 +55,7 @@ class VotingController extends AbstractController
             $entityManager->persist($voting);
             $entityManager->flush();
         /* voting changed */
-        } else if ($voting->getPoints() != $value) {
+        } elseif ($voting->getPoints() != $value) {
             $currentPoints = $voting->getPoints();
             $voting->setModified(new \DateTime())
                 ->setModifier($this->getUser())

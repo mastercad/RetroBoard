@@ -30,10 +30,11 @@ final class Version20200309204925 extends AbstractMigration
               KEY `teams_id_IDX` (`id`) USING BTREE,
               KEY `teams_creator_IDX` (`creator`) USING BTREE,
               KEY `teams_modifier_IDX` (`modifier`) USING BTREE,
-              CONSTRAINT `teams_FK` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `teams_FK_1` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
-        );
+              CONSTRAINT `teams_FK` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE '.
+                'CASCADE,
+              CONSTRAINT `teams_FK_1` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE '.
+                'CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci');
 
         $this->addSql('CREATE TABLE `team_members` (
               `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -51,12 +52,15 @@ final class Version20200309204925 extends AbstractMigration
               KEY `team_members_creator_IDX` (`creator`) USING BTREE,
               KEY `team_members_modifier_IDX` (`modifier`) USING BTREE,
               KEY `team_members_FK_3` (`team`),
-              CONSTRAINT `team_members_FK` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `team_members_FK_1` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `team_members_FK_2` FOREIGN KEY (`member`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `team_members_FK_3` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
-                    );
+              CONSTRAINT `team_members_FK` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE,
+              CONSTRAINT `team_members_FK_1` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE,
+              CONSTRAINT `team_members_FK_2` FOREIGN KEY (`member`) REFERENCES `users` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE,
+              CONSTRAINT `team_members_FK_3` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci');
 
         $this->addSql('CREATE TABLE `team_invitations` (
               `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -72,11 +76,13 @@ final class Version20200309204925 extends AbstractMigration
               KEY `team_invitations_team_IDX` (`team`) USING BTREE,
               KEY `team_invitations_creator_fk` (`creator`) USING BTREE,
               KEY `team_invitations_modifier_fk` (`modifier`) USING BTREE,
-              CONSTRAINT `team_invitations_team_fk` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `team_invitations_creator_fk` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `team_invitations_modifier_fk` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
-        );
+              CONSTRAINT `team_invitations_team_fk` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE '.
+                'ON UPDATE CASCADE,
+              CONSTRAINT `team_invitations_creator_fk` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE '.
+                'CASCADE ON UPDATE CASCADE,
+              CONSTRAINT `team_invitations_modifier_fk` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE '.
+                'CASCADE ON UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci');
 
         $this->addSql('CREATE TABLE `board_teams` (
               `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -92,12 +98,15 @@ final class Version20200309204925 extends AbstractMigration
               KEY `board_teams_modifier_IDX` (`modifier`) USING BTREE,
               KEY `board_teams_board_IDX` (`board`,`team`) USING BTREE,
               KEY `board_teams_FK_1` (`team`),
-              CONSTRAINT `board_teams_FK` FOREIGN KEY (`board`) REFERENCES `boards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `board_teams_FK_1` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `board_teams_FK_2` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-              CONSTRAINT `board_teams_FK_3` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci'
-        );
+              CONSTRAINT `board_teams_FK` FOREIGN KEY (`board`) REFERENCES `boards` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE,
+              CONSTRAINT `board_teams_FK_1` FOREIGN KEY (`team`) REFERENCES `teams` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE,
+              CONSTRAINT `board_teams_FK_2` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE,
+              CONSTRAINT `board_teams_FK_3` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci');
     }
 
     public function down(Schema $schema) : void

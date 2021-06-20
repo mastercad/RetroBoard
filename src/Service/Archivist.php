@@ -9,7 +9,6 @@ use App\Entity\Board;
 use App\Entity\Column;
 use App\Entity\Ticket;
 use App\Entity\Voting;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use InvalidArgumentException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -19,7 +18,7 @@ class Archivist
     private $user = null;
     private $entityManager = null;
 
-    public function __construct(EntityManagerInterface $entityManager,  UserInterface $user)
+    public function __construct(EntityManagerInterface $entityManager, UserInterface $user)
     {
         $this->entityManager = $entityManager;
         $this->user = $user;
@@ -38,35 +37,12 @@ class Archivist
 
             $this->entityManager->persist($archiveBoard);
         }
-        
+
         foreach ($board->getColumns() as $column) {
             $this->archiveColumn($column, $archiveBoard);
         }
         $this->entityManager->persist($archiveBoard);
         $this->entityManager->flush();
-        /*
-        $columns = $board->getColumns();
-        $archiveColumns = new ArrayCollection();
-        foreach ($columns as $column) {
-            $archiveColumn = new ArchiveColumn();
-            $tickets = $column->getTickets();
-
-            $archiveTickets = new ArrayCollection();
-            foreach ($tickets as $ticket) {
-                $archiveTicket = new ArchiveTicket();
-                $votings = $ticket->getVotings();
-
-                $archiveVotings = new ArrayCollection();
-php deptrac.phar analyze depfile.yml
-                foreach ($votings as $voting) {
-                    $archiveVoting = new ArchiveVoting();
-                    $archiveVoting->setCreator($voting->getCreator());
-                    $archiveVoting->setCreatephp deptrac.phar analyze depfile.ymld($voting->getCreated());
-
-                }
-            }
-        }
-        */
     }
 
     public function archiveColumn(Column $column, $archiveBoard = null)
@@ -75,7 +51,9 @@ php deptrac.phar analyze depfile.yml
         if (null === $archiveBoard) {
             /** aber board in der column */
             if (null !== $column->getBoard()) {
-                $archiveBoard = $this->getDoctrine()->getRepository(ArchiveBoard::class)->find($column->getBoard()->getId());
+                $archiveBoard = $this->getDoctrine()->getRepository(ArchiveBoard::class)->find(
+                    $column->getBoard()->getId()
+                );
 
                 /** board an column noch nicht archiviert */
                 if (null === $archiveBoard) {
@@ -90,12 +68,6 @@ php deptrac.phar analyze depfile.yml
             /** column hat auch kein board */
             } else {
                 throw new InvalidArgumentException("Board in Column not exists!");
-                /*
-                $archiveBoard = new ArchiveBoard();
-                $archiveBoard->setCreator($this->user);
-                $archiveBoard->setCreated(new \DateTime());
-                $archiveBoard->setName("Automatically Created ArchiveBoard");
-                */
             }
         }
 
@@ -123,7 +95,9 @@ php deptrac.phar analyze depfile.yml
         if (null === $archiveColumn) {
             // suche column im archiv mit column id
             if (null != $ticket->getColumn()) {
-                $archiveColumn = $this->getDoctrine()->getRepository(ArchiveColumn::class)->find($ticket->getColumn()->getId());
+                $archiveColumn = $this->getDoctrine()->getRepository(ArchiveColumn::class)->find(
+                    $ticket->getColumn()->getId()
+                );
 
                 // column noch nicht archiviert
                 if (null === $archiveColumn) {
@@ -136,7 +110,9 @@ php deptrac.phar analyze depfile.yml
                     $archiveColumn->setModifier($ticket->getColumn()->getModifier());
                     $archiveColumn->setModified($ticket->getColumn()->getModified());
 
-                    $archiveBoard = $this->getDoctrine()->getRepository(ArchiveBoard::class)->find($ticket->getColumn()->getBoard()->getId());
+                    $archiveBoard = $this->getDoctrine()->getRepository(ArchiveBoard::class)->find(
+                        $ticket->getColumn()->getBoard()->getId()
+                    );
                     $archiveColumn->setBoard($archiveBoard);
                 }
             } else {
@@ -164,8 +140,10 @@ php deptrac.phar analyze depfile.yml
         /** archive ticket nicht übergeben */
         if (null === $archiveTicket) {
             if (null !== $voting->getTicket()) {
-                $archiveTicket = $this->getDoctrine()->getRepository(ArchiveTicket::class)->find($voting->getTicket()->getId());
-            } else if (null === $archiveTicket) {
+                $archiveTicket = $this->getDoctrine()->getRepository(ArchiveTicket::class)->find(
+                    $voting->getTicket()->getId()
+                );
+            } elseif (null === $archiveTicket) {
                 $archiveTicket = new ArchiveTicket();
                 $archiveTicket->setId($voting->getTicket()->getId());
                 $archiveTicket->setColumn($voting->getTicket()->getColumn());
@@ -176,22 +154,17 @@ php deptrac.phar analyze depfile.yml
 
     private function handleColumn($column)
     {
-
     }
 
     private function handleBoard($board)
     {
-
     }
 
     private function handleTicket($ticket)
     {
-
     }
 
     private function handleVoting($voting)
     {
-
     }
-
 }

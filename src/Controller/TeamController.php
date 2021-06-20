@@ -26,8 +26,12 @@ class TeamController extends AbstractController
     private $entityManager;
     private $translator;
 
-    public function __construct(\Swift_Mailer $mailer, ValidatorInterface $validator, EntityManagerInterface $entityManager, TranslatorInterface $translator)
-    {
+    public function __construct(
+        \Swift_Mailer $mailer,
+        ValidatorInterface $validator,
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator
+    ) {
         $this->validator = $validator;
         $this->mailer = $mailer;
         $this->entityManager = $entityManager;
@@ -41,10 +45,6 @@ class TeamController extends AbstractController
     {
         $teamMembers = $entityManager->getRepository(TeamMember::class)->findBy(['member' => $this->getUser()]);
 
-//        if (empty($teamMembers)) {
-//            $teamMembers[]['team'] = $this->getDoctrine()->getRepository(Team::class)->findOneBy(['name' => 'Demo Team']);
-//        }
-
         return $this->render(
             'team/index.html.twig',
             [
@@ -56,7 +56,8 @@ class TeamController extends AbstractController
     /**
      * @Route("/team/{id}", name="team_show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function showAction(int $id) {
+    public function showAction(int $id)
+    {
         $team = $this->getDoctrine()->getRepository(Team::class)->find($id);
 
         if (!$team) {
@@ -78,7 +79,8 @@ class TeamController extends AbstractController
      *
      * @param EntityManagerInterface $entityManager
      */
-    public function create(EntityManagerInterface $entityManager) {
+    public function create(EntityManagerInterface $entityManager)
+    {
         $form = $this->createForm(TeamType::class);
         $team = new Team();
 
@@ -99,7 +101,8 @@ class TeamController extends AbstractController
     /**
      * @Route("/team/create/{id}", name="team_edit", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function editAction($id) {
+    public function editAction($id)
+    {
         $team = $this->getDoctrine()->getRepository(Team::class)->find($id);
 
         if (!$team) {
@@ -127,7 +130,8 @@ class TeamController extends AbstractController
      *
      * @param EntityManagerInterface $entityManager
      */
-    public function save(EntityManagerInterface $entityManager, Request $request) {
+    public function save(EntityManagerInterface $entityManager, Request $request)
+    {
         $teamRequestData = $request->request->get('team');
         $id = (int)$teamRequestData['id'];
 
@@ -138,7 +142,12 @@ class TeamController extends AbstractController
 
         if (0 < $id) {
             $team = $this->getDoctrine()->getRepository(Team::class)->find($id);
-            $teamMember = $this->getDoctrine()->getRepository(TeamMember::class)->findOneBy(['member' => $this->getUser(), 'team' => $team]);
+            $teamMember = $this->getDoctrine()->getRepository(TeamMember::class)->findOneBy(
+                [
+                    'member' => $this->getUser(),
+                    'team' => $team
+                ]
+            );
             $team->setModifier($this->getUser());
             $team->setModified(new \DateTime());
 
@@ -196,67 +205,41 @@ class TeamController extends AbstractController
             return new JsonResponse(['success' => false, 'data' => $teamRequestData]);
         }
 
-/*
-        $members = [];
-        if (isset($teamRequestData['members'])) {
-            $members = $teamRequestData['members'];
-            unset($teamRequestData['members']);
-        }
+        $entityManager->persist($team);
+        $entityManager->persist($teamMember);
+        $entityManager->flush();
 
-        $invitations = [];
-        if (isset($teamRequestData['invitations'])) {
-            $invitations = $teamRequestData['invitations'];
-            unset($teamRequestData['invitations']);
-        }
+        $success = true;
 
-        $request->request->set('team', $teamRequestData);
-
-        $form = $this->createForm(TeamType::class, $team);
-        $form->handleRequest($request);
-*/
-//        if ($form->isSubmitted()
-//            && $form->isValid()
-//        ) {
-//            $team = $form->getData();
-
-            $entityManager->persist($team);
-            $entityManager->persist($teamMember);
-            $entityManager->flush();
-
-            $success = true;
-
-            if (isset($teamRequestData['members'])
+        if (isset($teamRequestData['members'])
                 && is_array($teamRequestData['members'])
             ) {
-                foreach ($teamRequestData['members'] as &$member) {
-                    if ($member['teamMemberId'] instanceof TeamMember) {
-                        $member['teamMemberId'] = $member['teamMemberId']->getId();
-                    }
+            foreach ($teamRequestData['members'] as &$member) {
+                if ($member['teamMemberId'] instanceof TeamMember) {
+                    $member['teamMemberId'] = $member['teamMemberId']->getId();
                 }
             }
+        }
 
-            if (isset($teamRequestData['invitations'])
+        if (isset($teamRequestData['invitations'])
                 && is_array($teamRequestData['invitations'])
             ) {
-                foreach ($teamRequestData['invitations'] as &$invitation) {
-                    if ($invitation['teamInvitationId'] instanceof TeamInvitation) {
-                        $this->sendInvitationEmail($team, $invitation['teamInvitationId']);
+            foreach ($teamRequestData['invitations'] as &$invitation) {
+                if ($invitation['teamInvitationId'] instanceof TeamInvitation) {
+                    $this->sendInvitationEmail($team, $invitation['teamInvitationId']);
 
-                        $invitation['id'] = $invitation['teamInvitationId']->getId();
-                        $invitation['token'] = $invitation['teamInvitationId']->getToken();
-                        $invitation['teamInvitationId'] = $invitation['teamInvitationId']->getId();
-                    }
+                    $invitation['id'] = $invitation['teamInvitationId']->getId();
+                    $invitation['token'] = $invitation['teamInvitationId']->getToken();
+                    $invitation['teamInvitationId'] = $invitation['teamInvitationId']->getId();
                 }
             }
+        }
 
-            $teamRequestData['id'] = $team->getId();
-//        } else {
-//            $errors = $form->getErrors(true);
-//        }
+        $teamRequestData['id'] = $team->getId();
 
         return new JsonResponse([
-            'success' => $success, 
-            'id' => $team->getId(), 
+            'success' => $success,
+            'id' => $team->getId(),
             'data' => $teamRequestData,
             'content' => $success ? $this->translator->trans('team_created', [], 'messages') : json_encode($errors)]);
     }
@@ -268,7 +251,8 @@ class TeamController extends AbstractController
      *
      * @return bool
      */
-    private function manageTeamMember(Request $request, Team $team) : bool {
+    private function manageTeamMember(Request $request, Team $team) : bool
+    {
 
         $success = true;
         $teamRequestData = $request->request->get('team');
@@ -307,7 +291,8 @@ class TeamController extends AbstractController
      *
      * @return bool
      */
-    private function manageTeamInvitations(Request $request, Team $team) : bool {
+    private function manageTeamInvitations(Request $request, Team $team) : bool
+    {
 
         $success = true;
 
@@ -340,10 +325,15 @@ class TeamController extends AbstractController
      *
      * @return JsonResponse
      */
-    public function inviteAction(Request $request) {
+    public function inviteAction(Request $request)
+    {
         $team = $this->getDoctrine()->getRepository(Team::class)->find($request->request->get('id'));
 
-        $data = $this->handleTeamInvitation($team, $request->request->get('email'), $request->request->get('invitationId'));
+        $data = $this->handleTeamInvitation(
+            $team,
+            $request->request->get('email'),
+            $request->request->get('invitationId')
+        );
 
         return new JsonResponse($data);
     }
@@ -358,7 +348,8 @@ class TeamController extends AbstractController
      *
      * @return void
      */
-    private function handleTeamInvitation(Team $team, $email, $invitationId = null, $postProcessed = false) {
+    private function handleTeamInvitation(Team $team, $email, $invitationId = null, $postProcessed = false)
+    {
 
         $teamInvitation = new TeamInvitation();
         $token = sha1(random_bytes(20));
@@ -439,10 +430,13 @@ class TeamController extends AbstractController
      *
      * @return void
      */
-    private function sendInvitationEmail(TeamInvitation $teamInvitation) {
+    private function sendInvitationEmail(TeamInvitation $teamInvitation)
+    {
 
         /** @TODO translate */
-        $message = new \Swift_Message('Invitation request team "'.$teamInvitation->getTeam()->getName().'" on https://retro.byte-artist.de');
+        $message = new \Swift_Message(
+            'Invitation request team "'.$teamInvitation->getTeam()->getName().'" on https://retro.byte-artist.de'
+        );
         $message->setFrom('no-reply@byte-artist.de')
             ->setTo($teamInvitation->getEmail())
             ->setBcc('andreas.kempe@byte-artist.de')
@@ -482,10 +476,16 @@ class TeamController extends AbstractController
      *
      * @return void
      */
-    public function deleteInvitationAction(EntityManagerInterface $entityManager, int $id) {
+    public function deleteInvitationAction(EntityManagerInterface $entityManager, int $id)
+    {
         $teamInvitation = $this->getDoctrine()->getRepository(TeamInvitation::class)->find($id);
         if (!$teamInvitation instanceof TeamInvitation) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('invitation_not_found', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('invitation_not_found', [], 'errors')
+                ]
+            );
         }
 
         $this->denyAccessUnlessGranted('delete', $teamInvitation);
@@ -512,7 +512,12 @@ class TeamController extends AbstractController
     {
         $team = $this->getDoctrine()->getRepository(Team::class)->find($id);
         if (!$team instanceof Team) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('team_not_found', ['id' => $id], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('team_not_found', ['id' => $id], 'errors')
+                ]
+            );
         }
 
         $this->denyAccessUnlessGranted('delete', $team);
@@ -536,7 +541,8 @@ class TeamController extends AbstractController
      *
      * @return void
      */
-    public function addMemberAction(EntityManagerInterface $entityManager, Request $request) {
+    public function addMemberAction(EntityManagerInterface $entityManager, Request $request)
+    {
         $data = [];
         $teamMember = new TeamMember();
 
@@ -548,7 +554,9 @@ class TeamController extends AbstractController
 
         try {
             if (!empty($request->request->get('teamMemberId'))) {
-                $teamMember = $this->getDoctrine()->getRepository(TeamInvitation::class)->find($request->request->get('teamMemberId'));
+                $teamMember = $this->getDoctrine()->getRepository(TeamInvitation::class)->find(
+                    $request->request->get('teamMemberId')
+                );
                 $this->denyAccessUnlessGranted('edit', $teamMember);
                 $teamMember->addRole($request->request->get('userRole'));
                 $teamMember->setModifier($this->getUser());
@@ -591,13 +599,15 @@ class TeamController extends AbstractController
         $teamInvitation = $this->getDoctrine()->getRepository(TeamInvitation::class)->findOneBy(['token' => $token]);
 
         if (!$teamInvitation instanceof TeamInvitation) {
-            throw $this->createNotFoundException($this->translator->trans('invitation_not_found', ['id' => $id], 'errors'));
+            throw $this->createNotFoundException(
+                $this->translator->trans('invitation_not_found', ['id' => $token], 'errors')
+            );
         }
 
         $this->denyAccessUnlessGranted('accept', $teamInvitation);
 
         $teamMember = new TeamMember();
-        $teamMember->setTeam($teamInvitation->get());
+        $teamMember->setTeam($teamInvitation->getTeam());
         $teamMember->setMember($this->getUser());
         $teamMember->setCreator($this->getUser());
         $teamMember->setCreated(new \DateTime());
@@ -608,8 +618,8 @@ class TeamController extends AbstractController
             $entityManager->remove($teamInvitation);
             $entityManager->flush();
         } catch (UniqueConstraintViolationException $exception) {
-            // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig ablief
-            // ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
+            // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig
+            // ablief ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
         }
         return $this->redirectToRoute("team_show", ['id' => $teamMember->getTeam()->getId()]);
     }
@@ -627,16 +637,32 @@ class TeamController extends AbstractController
         $teamMember = $this->getDoctrine()->getRepository(TeamMember::class)->find($id);
 
         if (!$teamMember instanceof TeamMember) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('member_not_found', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('member_not_found', [], 'errors')
+                ]
+            );
         }
 
         $entityManager->remove($teamMember);
         $entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('member_removed', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('member_removed', [], 'messages')
+            ]
+        );
     }
 
-    private function collectAllKnownMembers() {
+    /**
+     * get all known members by user in database.
+     *
+     * @return void
+     */
+    private function collectAllKnownMembers()
+    {
         return $this->getDoctrine()->getRepository(Board::class)->findAllKnownMembers($this->getUser());
     }
 }

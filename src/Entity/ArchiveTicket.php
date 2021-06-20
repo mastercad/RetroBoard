@@ -77,7 +77,12 @@ class ArchiveTicket
      * @var ArchiveVoting
      *
      * One user has Many tickets.
-     * @ORM\OneToMany(targetEntity="ArchiveVoting", mappedBy="ticket", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="ArchiveVoting",
+     *  mappedBy="ticket",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $votings;
 

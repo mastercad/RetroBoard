@@ -28,7 +28,8 @@ class BoardMemberRepository extends EntityRepository
             INNER JOIN board_members ON board_members.board IN (known_boards.board)
             INNER JOIN users ON users.id = board_members.user AND users.id != :userId
 
-            GROUP BY board_members.user, board_members.board, users.id, users.name");
+            GROUP BY board_members.user, board_members.board, users.id, users.name"
+        );
 
         $statement->execute(['userId' => $user->getId()]);
 

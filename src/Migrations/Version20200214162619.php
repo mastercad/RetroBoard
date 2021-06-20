@@ -20,7 +20,10 @@ final class Version20200214162619 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf(
+            $this->connection->getDatabasePlatform()->getName() !== 'mysql',
+            'Migration can only be executed safely on \'mysql\'.'
+        );
 
         $this->addSql('CREATE TABLE `board_members` (
             `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -36,17 +39,24 @@ final class Version20200214162619 extends AbstractMigration
             KEY `board_member_user_fk` (`user`),
             KEY `board_member_creator_fk` (`creator`),
             KEY `board_member_modifier_fk` (`modifier`),
-            CONSTRAINT `board_member_board_fk` FOREIGN KEY (`board`) REFERENCES `boards` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT `board_member_creator_fk` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT `board_member_modifier_fk` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT `board_member_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+            CONSTRAINT `board_member_board_fk` FOREIGN KEY (`board`) REFERENCES `boards` (`id`) ON DELETE CASCADE '.
+                'ON UPDATE CASCADE,
+            CONSTRAINT `board_member_creator_fk` FOREIGN KEY (`creator`) REFERENCES `users` (`id`) ON DELETE CASCADE '.
+                'ON UPDATE CASCADE,
+            CONSTRAINT `board_member_modifier_fk` FOREIGN KEY (`modifier`) REFERENCES `users` (`id`) ON DELETE '.
+                'CASCADE ON UPDATE CASCADE,
+            CONSTRAINT `board_member_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON '.
+                'UPDATE CASCADE
            ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4');
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
+        $this->abortIf(
+            $this->connection->getDatabasePlatform()->getName() !== 'mysql',
+            'Migration can only be executed safely on \'mysql\'.'
+        );
 
         $this->addSql('DROP TABLE board_members');
     }

@@ -53,9 +53,19 @@ class GitHubController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
         } catch (\Exception $exception) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('error_delete_github_connection', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('error_delete_github_connection', [], 'errors')
+                ]
+            );
         }
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('github_connection_deleted', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('github_connection_deleted', [], 'messages')
+            ]
+        );
     }
 
     /**

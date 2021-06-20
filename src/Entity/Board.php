@@ -79,28 +79,48 @@ class Board
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="BoardInvitation", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="BoardInvitation",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $invitations;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="BoardMember", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="BoardMember",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $boardMembers;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="BoardTeam",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $boardTeams;
 
     /**
      * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="BoardSubscriber", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="BoardSubscriber",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $subscribers;
 
@@ -109,7 +129,12 @@ class Board
      *
      * @Constraints\NotBlank
      *
-     * @ORM\OneToMany(targetEntity="Column", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="Column",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $columns;

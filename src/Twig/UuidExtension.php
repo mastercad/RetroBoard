@@ -5,7 +5,8 @@ namespace App\Twig;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
-class UuidExtension extends AbstractExtension {
+class UuidExtension extends AbstractExtension
+{
 
     public function getFilters()
     {

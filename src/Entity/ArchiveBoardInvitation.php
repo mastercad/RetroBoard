@@ -85,7 +85,7 @@ class ArchiveBoardInvitation
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -97,7 +97,7 @@ class ArchiveBoardInvitation
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -109,7 +109,7 @@ class ArchiveBoardInvitation
      * Get the value of board
      *
      * @return ArchiveBoard
-     */ 
+     */
     public function getBoard()
     {
         return $this->board;
@@ -121,7 +121,7 @@ class ArchiveBoardInvitation
      * @param ArchiveBoard $archiveBoard
      *
      * @return  self
-     */ 
+     */
     public function setBoard(?ArchiveBoard $archiveBoard)
     {
         $this->board = $archiveBoard;
@@ -133,7 +133,7 @@ class ArchiveBoardInvitation
      * Get the value of email
      *
      * @return  string
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -145,7 +145,7 @@ class ArchiveBoardInvitation
      * @param  string  $email
      *
      * @return  self
-     */ 
+     */
     public function setEmail(string $email)
     {
         $this->email = $email;
@@ -168,7 +168,7 @@ class ArchiveBoardInvitation
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -180,7 +180,7 @@ class ArchiveBoardInvitation
      * @param User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -192,7 +192,7 @@ class ArchiveBoardInvitation
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -204,7 +204,7 @@ class ArchiveBoardInvitation
      * @param \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -216,7 +216,7 @@ class ArchiveBoardInvitation
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -228,7 +228,7 @@ class ArchiveBoardInvitation
      * @param User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -240,7 +240,7 @@ class ArchiveBoardInvitation
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -252,7 +252,7 @@ class ArchiveBoardInvitation
      * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;

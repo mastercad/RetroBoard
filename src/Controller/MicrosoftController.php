@@ -53,9 +53,19 @@ class MicrosoftController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
         } catch (\Exception $exception) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('error_delete_microsoft_connection', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('error_delete_microsoft_connection', [], 'errors')
+                ]
+            );
         }
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('microsoft_connection_deleted', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('microsoft_connection_deleted', [], 'messages')
+            ]
+        );
     }
 
     /**

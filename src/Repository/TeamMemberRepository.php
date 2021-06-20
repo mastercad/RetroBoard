@@ -27,7 +27,8 @@ class TeamMemberRepository extends EntityRepository
             INNER JOIN team_members ON team_members.team IN (known_teams.team)
             INNER JOIN users ON users.id = team_members.member AND users.id != :userId
 
-            GROUP BY team_members.member, team_members.team, users.id, users.name");
+            GROUP BY team_members.member, team_members.team, users.id, users.name"
+        );
 
         $statement->execute(['userId' => $user->getId()]);
 

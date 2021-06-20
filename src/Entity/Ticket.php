@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Ticket
  *
  * @ORM\Table(
- *  name="tickets", 
+ *  name="tickets",
  *  indexes={
  *      @ORM\Index(name="tickets_modifier_fk", columns={"modifier"}),
  *      @ORM\Index(name="tickets_column_fk", columns={"column_fk"}),
@@ -91,7 +91,12 @@ class Ticket
      * @var Voting
      *
      * One user has Many tickets.
-     * @ORM\OneToMany(targetEntity="Voting", mappedBy="ticket", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="Voting",
+     *  mappedBy="ticket",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $votings;
 
@@ -104,7 +109,7 @@ class Ticket
      * Get the value of id
      *
      * @return int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -116,7 +121,7 @@ class Ticket
      * @param int $id
      *
      * @return self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -128,7 +133,7 @@ class Ticket
      * Get the value of content
      *
      * @return string
-     */ 
+     */
     public function getContent()
     {
         return $this->content;
@@ -140,7 +145,7 @@ class Ticket
      * @param string $content
      *
      * @return self
-     */ 
+     */
     public function setContent(string $content)
     {
         $this->content = $content;
@@ -162,7 +167,7 @@ class Ticket
      * Undocumented function
      *
      * @param boolean $archived
-     * 
+     *
      * @return self
      */
     public function setArchived(bool $archived): self
@@ -175,7 +180,7 @@ class Ticket
      * Get the value of column
      *
      * @return Column
-     */ 
+     */
     public function getColumn()
     {
         return $this->column;
@@ -187,7 +192,7 @@ class Ticket
      * @param Column $column
      *
      * @return self
-     */ 
+     */
     public function setColumn(Column $column)
     {
         $this->column = $column;
@@ -199,7 +204,7 @@ class Ticket
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -211,7 +216,7 @@ class Ticket
      * @param User $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -223,7 +228,7 @@ class Ticket
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -247,7 +252,7 @@ class Ticket
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -259,7 +264,7 @@ class Ticket
      * @param User $modifier
      *
      * @return self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -293,7 +298,7 @@ class Ticket
 
     /**
      * Get one user has Many tickets.
-     */ 
+     */
     public function getVotings()
     {
         return $this->votings;
@@ -303,7 +308,7 @@ class Ticket
      * Set one user has Many tickets.
      *
      * @return self
-     */ 
+     */
     public function setVotings($votings)
     {
         $this->votings = $votings;

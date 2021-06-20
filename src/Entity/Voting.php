@@ -33,7 +33,12 @@ class Voting
      *
      * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="votings")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ticket_fk", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(
+     *      name="ticket_fk",
+     *      columnDefinition="integer unsigned",
+     *      referencedColumnName="id",
+     *      nullable=false
+     *  )
      * })
      */
     private $ticket;
@@ -95,7 +100,7 @@ class Voting
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -107,7 +112,7 @@ class Voting
      * Get the value of points
      *
      * @return  int
-     */ 
+     */
     public function getPoints()
     {
         return $this->points;
@@ -117,7 +122,7 @@ class Voting
      * Get the value of ticket
      *
      * @return  Ticket
-     */ 
+     */
     public function getTicket()
     {
         return $this->ticket;
@@ -129,7 +134,7 @@ class Voting
      * @param  Ticket  $ticket
      *
      * @return  self
-     */ 
+     */
     public function setTicket(Ticket $ticket)
     {
         $this->ticket = $ticket;
@@ -143,7 +148,7 @@ class Voting
      * @param  int  $points
      *
      * @return  self
-     */ 
+     */
     public function setPoints(int $points)
     {
         $this->points = $points;
@@ -155,7 +160,7 @@ class Voting
      * Get the value of creator
      *
      * @return  User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -167,7 +172,7 @@ class Voting
      * @param  User  $creator
      *
      * @return  self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -179,7 +184,7 @@ class Voting
      * Get the value of created
      *
      * @return  \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -191,7 +196,7 @@ class Voting
      * @param  \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -203,7 +208,7 @@ class Voting
      * Get the value of modifier
      *
      * @return  User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -215,7 +220,7 @@ class Voting
      * @param  User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -227,7 +232,7 @@ class Voting
      * Get the value of modified
      *
      * @return  \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -239,7 +244,7 @@ class Voting
      * @param  \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;

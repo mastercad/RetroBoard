@@ -21,26 +21,16 @@ class IndexController extends AbstractController
     {
         $boards = [];
 
-        if  ($this->getUser() instanceof User) {
+        if ($this->getUser() instanceof User) {
             $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
 
             foreach ($boardMembers as $boardMember) {
                 $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
             }
-//        \Doctrine\Common\Util\Debug::dump($boardMembers);
-/*
-        $teams = $this->getDoctrine()->getRepository(Team::class)->findAllTeamsForUser($this->getUser());
 
-        \Doctrine\Common\Util\Debug::dump($teams);
-
-        foreach ($teams as $team) {
-            \Doctrine\Common\Util\Debug::dump($team->getBoardTeams());
-            foreach ($team->getBoardTeams() as $boardTeam) {
-                $boards[$boardTeam->getBoard()->getName()] = $boardTeam->getBoard();
-            }
-        }
-*/
-            $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser($this->getUser());
+            $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser(
+                $this->getUser()
+            );
 
             foreach ($boardTeams as $boardTeam) {
                 $board = $this->getDoctrine()->getRepository(Board::class)->find($boardTeam['board']);
@@ -49,9 +39,11 @@ class IndexController extends AbstractController
         }
 
         if (empty($boards)) {
-            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
-        } else if (isset($boards['Demo Board'])) {
-            unset ($boards['Demo Board']);
+            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(
+                ['name' => 'Demo Board']
+            );
+        } elseif (isset($boards['Demo Board'])) {
+            unset($boards['Demo Board']);
         }
 
         return $this->render(

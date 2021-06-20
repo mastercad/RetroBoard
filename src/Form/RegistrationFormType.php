@@ -19,7 +19,8 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 
+            ->add(
+                'name',
                 TextType::class,
                 [
                     'label' => false,
@@ -35,14 +36,15 @@ class RegistrationFormType extends AbstractType
                         new Length([
                             'min' => 6,
                             'minMessage' => 'Your name should be at least {{ limit }} characters',
-//                            'minMessage' => 'fvxWW3V',
+                //                            'minMessage' => 'fvxWW3V',
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
                     ],
                 ]
             )
-            ->add('email',
+            ->add(
+                'email',
                 TextType::class,
                 [
                     'label' => false,
@@ -62,7 +64,6 @@ class RegistrationFormType extends AbstractType
                             'max' => 4096,
                         ]),
                         new Email(
-
                         )
                     ],
                 ]

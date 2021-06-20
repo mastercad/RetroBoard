@@ -86,11 +86,11 @@ class UserController extends AbstractController
         $location = $uploadDir.'/'.$filename;
 
         /* Upload file */
-        if(move_uploaded_file($_FILES['file']['tmp_name'], $location)){
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
             $src = "default.png";
 
             // checking file is image or not
-            if(is_array(getimagesize($location))){
+            if (is_array(getimagesize($location))) {
                 $src = $location;
             }
 
@@ -131,11 +131,12 @@ class UserController extends AbstractController
         if (0 < count($errorList)) {
 //                throw new InvalidArgumentException("Email ".$email." invalid!");
             return new JsonResponse(
-            [
+                [
                 'code' => 500,
                 'success' => false,
                 'content' => $this->translator->trans('email_invalid', [], 'errors')
-            ]);
+                ]
+            );
         }
 
         $user->setEmail($userRequest['email']);
@@ -167,7 +168,7 @@ class UserController extends AbstractController
                     'success' => false,
                     'content' => $this->translator->trans('something_went_wrong', [], 'errors')
                 ]
-                );
+            );
         }
 
         return new JsonResponse([

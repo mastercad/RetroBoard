@@ -14,7 +14,6 @@ use App\Entity\BoardMember;
 use App\Entity\BoardSubscriber;
 use App\Entity\Column;
 use App\Form\BoardType;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -29,8 +28,12 @@ class BoardController extends AbstractController
     private $entityManager;
     private $translator;
 
-    public function __construct(\Swift_Mailer $mailer, ValidatorInterface $validator, EntityManagerInterface $entityManager, TranslatorInterface $translator)
-    {
+    public function __construct(
+        \Swift_Mailer $mailer,
+        ValidatorInterface $validator,
+        EntityManagerInterface $entityManager,
+        TranslatorInterface $translator
+    ) {
         $this->translator = $translator;
         $this->validator = $validator;
         $this->mailer = $mailer;
@@ -42,43 +45,9 @@ class BoardController extends AbstractController
      */
     public function index(EntityManagerInterface $entityManager)
     {
-        /*
         $boards = [];
 
-        $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
-
-        foreach ($boardMembers as $boardMember) {
-            $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
-        }
-
-        $teamBoards = $this->getDoctrine()->getRepository(Team::class)->findAllTeamsForUser($this->getUser());
-
-//        \Doctrine\Common\Util\Debug::dump($teamBoards->getBoardTeams());
-
-        foreach ($teamBoards as $teamBoard) {
-            foreach ($teamBoard as $currentBoards) {
-                foreach ($currentBoards as $board) {
-                    $boards[$board->getName()] = $board->getBoard();
-                }
-            }
-        }
-
-        if (empty($boards)) {
-            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
-        } else if (isset($boards['Demo Board'])) {
-            unset ($boards['Demo Board']);
-        }
-
-        return $this->render(
-            'index/index.html.twig',
-            [
-                'boards' => $boards,
-            ]
-        );
-        */
-        $boards = [];
-
-        if  ($this->getUser() instanceof User) {
+        if ($this->getUser() instanceof User) {
             $boardMembers = $entityManager->getRepository(BoardMember::class)->findBy(['user' => $this->getUser()]);
 
             foreach ($boardMembers as $boardMember) {
@@ -90,20 +59,10 @@ class BoardController extends AbstractController
             foreach ($boardMembers as $boardMember) {
                 $boards[$boardMember->getBoard()->getName()] = $boardMember->getBoard();
             }
-    //        \Doctrine\Common\Util\Debug::dump($boardMembers);
-    /*
-            $teams = $this->getDoctrine()->getRepository(Team::class)->findAllTeamsForUser($this->getUser());
 
-            \Doctrine\Common\Util\Debug::dump($teams);
-
-            foreach ($teams as $team) {
-                \Doctrine\Common\Util\Debug::dump($team->getBoardTeams());
-                foreach ($team->getBoardTeams() as $boardTeam) {
-                    $boards[$boardTeam->getBoard()->getName()] = $boardTeam->getBoard();
-                }
-            }
-    */
-            $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser($this->getUser());
+            $boardTeams = $this->getDoctrine()->getRepository(BoardTeam::class)->findAllAvailableBoardsByUser(
+                $this->getUser()
+            );
 
             foreach ($boardTeams as $boardTeam) {
                 $board = $this->getDoctrine()->getRepository(Board::class)->find($boardTeam['board']);
@@ -112,9 +71,11 @@ class BoardController extends AbstractController
         }
 
         if (empty($boards)) {
-            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['name' => 'Demo Board']);
-        } else if (isset($boards['Demo Board'])) {
-            unset ($boards['Demo Board']);
+            $boards['Demo Board'] = $this->getDoctrine()->getRepository(Board::class)->findOneBy(
+                ['name' => 'Demo Board']
+            );
+        } elseif (isset($boards['Demo Board'])) {
+            unset($boards['Demo Board']);
         }
 
         return $this->render(
@@ -153,7 +114,6 @@ class BoardController extends AbstractController
      */
     public function showArchiveAction(int $id)
     {
-//        $board = $this->getDoctrine()->getRepository(Board::class)->findActive($id)[0];
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
 
         if (!$board) {
@@ -235,7 +195,8 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/create", name="board_save", methods={"PUT", "POST"})
      */
-    public function saveAction(Request $request) {
+    public function saveAction(Request $request)
+    {
         $boardRequestData = $request->request->get('board');
         $id = (int)$boardRequestData['id'];
 
@@ -247,7 +208,12 @@ class BoardController extends AbstractController
 
         if (0 < $id) {
             $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
-            $boardOwner = $this->getDoctrine()->getRepository(BoardMember::class)->findOneBy(['user' => $this->getUser(), 'board' => $board]);
+            $boardOwner = $this->getDoctrine()->getRepository(BoardMember::class)->findOneBy(
+                [
+                    'user' => $this->getUser(),
+                    'board' => $board
+                ]
+            );
             $board->setModifier($this->getUser());
             $board->setModified(new \DateTime());
 
@@ -311,7 +277,6 @@ class BoardController extends AbstractController
                 foreach ($boardRequestData['columns'] as &$column) {
                     if ($column['id'] instanceof Column) {
                         $column['id'] = $column['id']->getId();
-                        var_dump("HABE COLUMN MIT ID ".$column['id']);
                     }
                 }
             }
@@ -334,7 +299,8 @@ class BoardController extends AbstractController
 
         $errors = $this->validator->validate($board);
 
-        // @TODO: workaround because here throws every time errors without real errors. i have to investigate the validator result
+        // @TODO: workaround because here throws every time errors without real errors. \
+        // i have to investigate the validator result
         if (1 || 0 < count($errors)) {
             try {
                 $this->entityManager->persist($board);
@@ -389,14 +355,16 @@ class BoardController extends AbstractController
                     }
                 }
             } catch (UniqueConstraintViolationException $exception) {
-                $errors = [['content' => $this->translator->trans('one_or_more_columns_already_exists_in_board', [], 'errors')]];
+                $errors = [
+                    [
+                        'content' => $this->translator->trans(
+                            'one_or_more_columns_already_exists_in_board',
+                            [],
+                            'errors'
+                        )
+                    ]
+                ];
             }
-        } else {
-//            $errors = $form->getErrors(true, false);
-            var_dump("FORM INVALID!");
-//            dump($form->getErrors());
-//            dump($form['board']->getErrors());
-            dump($errors);
         }
 
         return new JsonResponse([
@@ -404,7 +372,6 @@ class BoardController extends AbstractController
             'id' => $board->getId(),
             'data' => $boardRequestData,
             'content' => $success ? $this->translator->trans('board_saved', [], 'messages') : json_encode($errors)
-//            'content' => $success ? $this->translator->trans('board_saved', [], 'messages') : (string) $errors
         ]);
     }
 
@@ -415,7 +382,8 @@ class BoardController extends AbstractController
      *
      * @return bool
      */
-    private function manageBoardMember(Request $request, Board $board) : bool {
+    private function manageBoardMember(Request $request, Board $board) : bool
+    {
 
         $success = true;
         $boardRequestData = $request->request->get('board');
@@ -454,7 +422,8 @@ class BoardController extends AbstractController
      *
      * @return bool
      */
-    private function manageBoardTeams(Request $request, Board $board) : bool {
+    private function manageBoardTeams(Request $request, Board $board) : bool
+    {
 
         $success = true;
 
@@ -465,7 +434,7 @@ class BoardController extends AbstractController
 
         foreach ($boardRequestData['teams'] as &$currentTeam) {
             $boardTeam = null;
-            $team = $this->getDoctrine()->getRepository(Team::class)->find($currentTeam['teamId']); 
+            $team = $this->getDoctrine()->getRepository(Team::class)->find($currentTeam['teamId']);
             if (empty($currentTeam['boardTeamId'])) {
                 $boardTeam = new BoardTeam;
                 $boardTeam->setTeam($team);
@@ -492,7 +461,8 @@ class BoardController extends AbstractController
      *
      * @return bool
      */
-    private function manageBoardInvitations(Request $request, Board $board) : bool {
+    private function manageBoardInvitations(Request $request, Board $board) : bool
+    {
 
         $success = true;
 
@@ -502,7 +472,12 @@ class BoardController extends AbstractController
         }
 
         foreach ($boardRequestData['invitations'] as &$invitation) {
-            $result = $this->handleBoardInvitation($board, $invitation['email'], $invitation['boardInvitationId'], true);
+            $result = $this->handleBoardInvitation(
+                $board,
+                $invitation['email'],
+                $invitation['boardInvitationId'],
+                true
+            );
 
             if ($result instanceof BoardInvitation) {
                 $invitation['boardInvitationId'] = $result;
@@ -523,7 +498,8 @@ class BoardController extends AbstractController
      *
      * @return bool
      */
-    private function manageBoardColumns(Request $request, Board $board) : bool {
+    private function manageBoardColumns(Request $request, Board $board) : bool
+    {
 
         $success = true;
 
@@ -570,12 +546,17 @@ class BoardController extends AbstractController
     {
         $board = $this->getDoctrine()->getRepository(Board::class)->find($request->request->get('id'));
 
-        $data = $this->handleBoardInvitation($board, $request->request->get('email'), $request->request->get('invitationId'));
+        $data = $this->handleBoardInvitation(
+            $board,
+            $request->request->get('email'),
+            $request->request->get('invitationId')
+        );
 
         return new JsonResponse($data);
     }
 
-    private function handleBoardInvitation($board, $email, $invitationId = null, $postProcessed = false) {
+    private function handleBoardInvitation($board, $email, $invitationId = null, $postProcessed = false)
+    {
 
         $boardInvitation = new BoardInvitation();
         $token = sha1(random_bytes(20));
@@ -598,7 +579,6 @@ class BoardController extends AbstractController
             );
 
             if (0 < count($errorList)) {
-//                throw new InvalidArgumentException("Email ".$email." invalid!");
                 $data['code'] = 500;
                 $data['content'] = $this->translator->trans('email_invalid', [], 'errors');
                 $data['success'] = false;
@@ -660,9 +640,12 @@ class BoardController extends AbstractController
      *
      * @return void
      */
-    private function sendInvitationEmail(BoardInvitation $boardInvitation) {
+    private function sendInvitationEmail(BoardInvitation $boardInvitation)
+    {
 
-            $message = new \Swift_Message('Invitation request board "'.$boardInvitation->getBoard()->getName().'" on https://retro.byte-artist.de');
+            $message = new \Swift_Message(
+                'Invitation request board "'.$boardInvitation->getBoard()->getName().'" on https://retro.byte-artist.de'
+            );
             $message->setFrom('no-reply@byte-artist.de')
                 ->setTo($boardInvitation->getEmail())
                 ->setBcc('andreas.kempe@byte-artist.de')
@@ -705,7 +688,16 @@ class BoardController extends AbstractController
     {
         $boardInvitation = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($id);
         if (!$boardInvitation instanceof BoardInvitation) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('invitation_not_found', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans(
+                        'invitation_not_found',
+                        [],
+                        'errors'
+                    )
+                ]
+            );
         }
 
         $this->denyAccessUnlessGranted('delete', $boardInvitation);
@@ -732,7 +724,12 @@ class BoardController extends AbstractController
     {
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
         if (!$board instanceof Board) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('board_not_found', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('board_not_found', [], 'errors')
+                ]
+            );
         }
 
         $this->denyAccessUnlessGranted('delete', $board);
@@ -782,8 +779,8 @@ class BoardController extends AbstractController
             $this->entityManager->remove($boardInvitation);
             $this->entityManager->flush();
         } catch (UniqueConstraintViolationException $exception) {
-            // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig ablief
-            // ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
+            // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig
+            // ablief ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
         }
         return $this->redirectToRoute("board_show", ['id' => $boardMember->getBoard()->getId()]);
     }
@@ -800,13 +797,23 @@ class BoardController extends AbstractController
         $boardTeam = $this->getDoctrine()->getRepository(BoardTeam::class)->find($id);
 
         if (!$boardTeam instanceof BoardTeam) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('team_not_found_for_board', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('team_not_found_for_board', [], 'errors')
+                ]
+            );
         }
 
         $this->entityManager->remove($boardTeam);
         $this->entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('team_removed_from_board', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('team_removed_from_board', [], 'messages')
+            ]
+        );
     }
 
     /**
@@ -821,13 +828,23 @@ class BoardController extends AbstractController
         $boardMember = $this->getDoctrine()->getRepository(BoardMember::class)->find($id);
 
         if (!$boardMember instanceof BoardMember) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('member_not_found_for_board', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('member_not_found_for_board', [], 'errors')
+                ]
+            );
         }
 
         $this->entityManager->remove($boardMember);
         $this->entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('member_removed_from_board', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('member_removed_from_board', [], 'messages')
+            ]
+        );
     }
 
     /**
@@ -843,7 +860,12 @@ class BoardController extends AbstractController
         $content = "";
 
         if (!$board instanceof Board) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('board_not_found', ['id' => $id], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('board_not_found', ['id' => $id], 'errors')
+                ]
+            );
         }
 
         $boardSubscriber = $this->getDoctrine()->getRepository(BoardSubscriber::class)->findOneBy(
@@ -879,7 +901,8 @@ class BoardController extends AbstractController
      *
      * @return void
      */
-    public function addMemberAction(Request $request) {
+    public function addMemberAction(Request $request)
+    {
         $data = [];
         $boardMember = new BoardMember();
 
@@ -889,7 +912,9 @@ class BoardController extends AbstractController
 
         try {
             if (!empty($request->request->get('boardMemberId'))) {
-                $boardMember = $this->getDoctrine()->getRepository(BoardInvitation::class)->find($request->request->get('boardMemberId'));
+                $boardMember = $this->getDoctrine()->getRepository(BoardInvitation::class)->find(
+                    $request->request->get('boardMemberId')
+                );
                 $this->denyAccessUnlessGranted('edit', $boardMember);
                 $boardMember->addRole($request->request->get('userRole'));
                 $boardMember->setModifier($this->getUser());
@@ -928,7 +953,8 @@ class BoardController extends AbstractController
      *
      * @return void
      */
-    public function addTeamAction(Request $request) {
+    public function addTeamAction(Request $request)
+    {
         $data = [];
         $boardTeam = new BoardTeam();
 
@@ -961,7 +987,8 @@ class BoardController extends AbstractController
         return new JsonResponse($data);
     }
 
-    private function collectAllKnownBoards() {
+    private function collectAllKnownBoards()
+    {
         /*
         $boards = [];
         // select all boards where i in board_members as user
@@ -975,7 +1002,8 @@ class BoardController extends AbstractController
         return $this->getDoctrine()->getRepository(Board::class)->findAllKnownBoards($this->getUser());
     }
 
-    private function collectAllKnownTeams() {
+    private function collectAllKnownTeams()
+    {
         /*
         $teams = [];
         // select all boards where i in board_members as user
@@ -989,7 +1017,8 @@ class BoardController extends AbstractController
         return $this->getDoctrine()->getRepository(Board::class)->findAllKnownTeams($this->getUser());
     }
 
-    private function collectAllKnownMembers() {
+    private function collectAllKnownMembers()
+    {
         /*
         $users = [];
         // select all boards where i in board_members as user

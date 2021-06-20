@@ -51,7 +51,12 @@ class ArchiveColumn
     private $board;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveTicket", mappedBy="column", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="ArchiveTicket",
+     *  mappedBy="column",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      * @ORM\OrderBy({"created" = "ASC"})
      */
     private $tickets;
@@ -65,7 +70,7 @@ class ArchiveColumn
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -77,7 +82,7 @@ class ArchiveColumn
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(?int $id)
     {
         $this->id = $id;
@@ -89,7 +94,7 @@ class ArchiveColumn
      * Get the value of name
      *
      * @return  string
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -113,7 +118,7 @@ class ArchiveColumn
      * Get the value of priority
      *
      * @return  int|null
-     */ 
+     */
     public function getPriority()
     {
         return $this->priority;
@@ -125,7 +130,7 @@ class ArchiveColumn
      * @param  int|null  $priority
      *
      * @return  self
-     */ 
+     */
     public function setPriority($priority)
     {
         $this->priority = $priority;

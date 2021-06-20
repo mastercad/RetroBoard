@@ -67,17 +67,32 @@ class ArchiveBoard
     private $modifier;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveBoardInvitation", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="ArchiveBoardInvitation",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $invitations;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveBoardMember", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="ArchiveBoardMember",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArchiveColumn", mappedBy="board", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="ArchiveColumn",
+     *  mappedBy="board",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      * @ORM\OrderBy({"priority" = "ASC"})
      */
     private $columns;

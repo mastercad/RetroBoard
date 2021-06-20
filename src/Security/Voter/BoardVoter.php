@@ -46,7 +46,7 @@ class BoardVoter extends Voter
                 }
 
                 $resultMembers = $subject->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
+                    function ($boardMember) use ($user) {
                         return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
@@ -79,7 +79,8 @@ class BoardVoter extends Voter
                 $resultTeamMembers = $subject->getBoardTeams()->filter(
                     function ($boardTeam) use ($user) {
                             return $boardTeam->getTeam()->getTeamMembers()->filter(function($teamMember) use ($user) {
-                                echo "USER: ".$user->getId()." - TeamMember: ".$teamMember->getMember()->getId()."<br />";
+                                echo "USER: ".$user->getId()." - TeamMember: ".
+                                    $teamMember->getMember()->getId()."<br />";
                                 return $teamMember->getMember() === $user;
                             }
                         );
@@ -98,7 +99,7 @@ class BoardVoter extends Voter
                 return 0 < count($resultMembers) || 0 < count($resultTeamMembers);
             case 'archive':
                 $results = $subject->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
+                    function ($boardMember) use ($user) {
                         return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }

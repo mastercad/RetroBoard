@@ -48,13 +48,23 @@ class Column
      * @ORM\ManyToOne(targetEntity="Board", inversedBy="columns")
      * @ORM\OrderBy({"priority" = "ASC"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="board_fk", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(
+     *      name="board_fk",
+     *      columnDefinition="integer unsigned",
+     *      referencedColumnName="id",
+     *      nullable=false
+     *  )
      * })
      */
     private $board;
 
     /**
-     * @ORM\OneToMany(targetEntity="Ticket", mappedBy="column", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="Ticket",
+     *  mappedBy="column",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      * @ORM\OrderBy({"created" = "DESC"})
      */
     private $tickets;
@@ -68,7 +78,7 @@ class Column
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -80,7 +90,7 @@ class Column
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(?int $id)
     {
         $this->id = $id;
@@ -92,7 +102,7 @@ class Column
      * Get the value of name
      *
      * @return  string
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -116,7 +126,7 @@ class Column
      * Get the value of priority
      *
      * @return  int|null
-     */ 
+     */
     public function getPriority()
     {
         return $this->priority;
@@ -128,7 +138,7 @@ class Column
      * @param  int|null  $priority
      *
      * @return  self
-     */ 
+     */
     public function setPriority($priority)
     {
         $this->priority = $priority;
@@ -140,7 +150,7 @@ class Column
      * Get the value of board
      *
      * @return  Board
-     */ 
+     */
     public function getBoard()
     {
         return $this->board;
@@ -152,7 +162,7 @@ class Column
      * @param Board $board
      *
      * @return  self
-     */ 
+     */
     public function setBoard(?Board $board)
     {
         $this->board = $board;

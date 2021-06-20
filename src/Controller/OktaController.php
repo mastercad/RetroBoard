@@ -53,9 +53,19 @@ class OktaController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
         } catch (\Exception $exception) {
-            return new JsonResponse(['success' => false, 'content' => $this->translator->trans('error_delete_okta_connection', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => false,
+                    'content' => $this->translator->trans('error_delete_okta_connection', [], 'errors')
+                ]
+            );
         }
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('okta_connection_deleted', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('okta_connection_deleted', [], 'messages')
+            ]
+        );
     }
 
     /**

@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,10 +28,13 @@ class SecurityController extends AbstractController
     /**
      * @Route("/login", name="app_login", options={"permanent"=true, "keepRequestMethod"=true})
      */
-    public function login(Request $request, LoggerInterface $logger, AuthenticationUtils $authenticationUtils): Response
-    {
+    public function login(
+        Request $request,
+        LoggerInterface $logger,
+        AuthenticationUtils $authenticationUtils
+    ): Response {
         $redirectUri = null;
-        if (isset($_SERVER['HTTP_COOKIE']) 
+        if (isset($_SERVER['HTTP_COOKIE'])
             && preg_match('/sf_redirect=(.*)/', $_SERVER['HTTP_COOKIE'], $matches)
         ) {
             $redirectUri = $matches[1];
@@ -67,8 +71,12 @@ class SecurityController extends AbstractController
     /**
      * @Route("/reset-password-request", name="app_reset_password_request", methods={"POST"})
      */
-    public function resetPasswordRequest(EntityManagerInterface $entityManager, \Swift_Mailer $mailer, Request $request, ValidatorInterface $validator)
-    {
+    public function resetPasswordRequest(
+        EntityManagerInterface $entityManager,
+        \Swift_Mailer $mailer,
+        Request $request,
+        ValidatorInterface $validator
+    ) {
         $email = $request->get('email');
 
         $emailConstraint = new Email();
@@ -79,7 +87,7 @@ class SecurityController extends AbstractController
         if (0 < count($errorList)) {
             $errorMessage = $errorList[0]->getMessage();
             return $this->render(
-                'security/forgot-password.html.twig', 
+                'security/forgot-password.html.twig',
                 [
                     'error' => $errorMessage,
                     'email' => $email
@@ -157,8 +165,11 @@ class SecurityController extends AbstractController
     /**
      * @Route("/reset-password", name="app_new_password", methods={"POST"})
      */
-    public function newPassword(UserPasswordEncoderInterface $encoder, EntityManagerInterface $entityManager, Request $request)
-    {
+    public function newPassword(
+        UserPasswordHasherInterface $encoder,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ) {
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(
             [
                 'email' => $request->get('email'),
@@ -170,7 +181,7 @@ class SecurityController extends AbstractController
             return $this->render('security/error.html.twig');
         }
 
-        $password = $encoder->encodePassword($user, $request->get('password'));
+        $password = $encoder->hashPassword($user, $request->get('password'));
         $user->setPassword($password);
         $user->setModifier($this->getUser() ?: $this->getDoctrine()->getRepository(User::class)->find(1));
         $user->setModified(new \DateTime());

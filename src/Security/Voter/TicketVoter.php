@@ -39,8 +39,8 @@ class TicketVoter extends Voter
         switch ($attribute) {
             case 'archive':
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
-                        return $boardMember->getUser() === $user 
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
@@ -54,8 +54,8 @@ class TicketVoter extends Voter
                 }
 
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
-                        return $boardMember->getUser() === $user 
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
@@ -65,7 +65,7 @@ class TicketVoter extends Voter
                     return true;
                 }
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
+                    function ($boardMember) use ($user) {
                         return $boardMember->getUser() === $user;
                     }
                 );
@@ -83,8 +83,8 @@ class TicketVoter extends Voter
                 }
 
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
-                        return $boardMember->getUser() === $user 
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
@@ -94,7 +94,7 @@ class TicketVoter extends Voter
                     return true;
                 }
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
+                    function ($boardMember) use ($user) {
                         return $boardMember->getUser() === $user;
                     }
                 );

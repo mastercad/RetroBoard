@@ -90,7 +90,7 @@ class BoardInvitation
      * Get the value of id
      *
      * @return  int
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -102,7 +102,7 @@ class BoardInvitation
      * @param  int  $id
      *
      * @return  self
-     */ 
+     */
     public function setId(int $id)
     {
         $this->id = $id;
@@ -114,7 +114,7 @@ class BoardInvitation
      * Get the value of board
      *
      * @return  Board
-     */ 
+     */
     public function getBoard()
     {
         return $this->board;
@@ -126,7 +126,7 @@ class BoardInvitation
      * @param Board $board
      *
      * @return  self
-     */ 
+     */
     public function setBoard(?Board $board)
     {
         $this->board = $board;
@@ -138,7 +138,7 @@ class BoardInvitation
      * Get the value of email
      *
      * @return  string
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -150,7 +150,7 @@ class BoardInvitation
      * @param  string  $email
      *
      * @return  self
-     */ 
+     */
     public function setEmail(string $email)
     {
         $this->email = $email;
@@ -173,7 +173,7 @@ class BoardInvitation
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -185,7 +185,7 @@ class BoardInvitation
      * @param User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -197,7 +197,7 @@ class BoardInvitation
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -209,7 +209,7 @@ class BoardInvitation
      * @param \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -221,7 +221,7 @@ class BoardInvitation
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -233,7 +233,7 @@ class BoardInvitation
      * @param User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -245,7 +245,7 @@ class BoardInvitation
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -257,7 +257,7 @@ class BoardInvitation
      * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;

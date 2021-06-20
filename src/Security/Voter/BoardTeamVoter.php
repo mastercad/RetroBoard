@@ -44,7 +44,7 @@ class BoardTeamVoter extends Voter
                 }
 
                 $results = $subject->getBoard()->getBoardMembers()->filter(
-                    function($boardMember) use ($user) {
+                    function ($boardMember) use ($user) {
                         return $boardMember->getUser() === $user
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
@@ -57,8 +57,8 @@ class BoardTeamVoter extends Voter
                 }
 
                 $results = $subject->getBoard()->getBoardMembers()->filter(
-                        function ($boardMember) use ($user) {
-                            return $boardMember->getUser() === $user;
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user;
                     }
                 );
                 return 0 < count($results);

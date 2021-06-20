@@ -53,7 +53,8 @@ class TicketController extends AbstractController
         $board = $this->getDoctrine()->getRepository(Board::class)->findOneBy(['id' => 1]);
         $tickets = $this->getDoctrine()->getRepository(Ticket::class)->findAllTicketsByBoard($board);
 
-        return $this->render('ticket/index.html.twig', 
+        return $this->render(
+            'ticket/index.html.twig',
             [
                 'tickets' => $tickets
             ]
@@ -62,7 +63,7 @@ class TicketController extends AbstractController
 
     /**
     * @Route("/ticket/{id}", name="app_ticket_show", methods={"GET"}, requirements={"id"="\d+"})
-    * 
+    *
     */
     public function showTicket(int $id)
     {
@@ -70,10 +71,16 @@ class TicketController extends AbstractController
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
         if (! $ticket instanceof Ticket) {
-            return new JsonResponse(['sucess' => false, 'content' => $this->translator->trans('ticket_not_found', ['id' => $id], 'errors')]);
+            return new JsonResponse(
+                [
+                    'sucess' => false,
+                    'content' => $this->translator->trans('ticket_not_found', ['id' => $id], 'errors')
+                ]
+            );
         }
 
-        return $this->render('ticket/show.html.twig', 
+        return $this->render(
+            'ticket/show.html.twig',
             [
                 'ticket' => $ticket,
                 'archived' => 0
@@ -85,9 +92,9 @@ class TicketController extends AbstractController
      * Returns the Edit template, filled out, if id set
      *
      * @Route("/ticket/load_edit_template", name="app_ticket_load_edit_template", methods={"GET"})
-     * 
+     *
      * @param Request $request Request from Frontend.
-     * 
+     *
      * @return Response
      */
     public function loadEditTicketTemplate(Request $request)
@@ -117,11 +124,16 @@ class TicketController extends AbstractController
      * @Route("/ticket/save", name="app_ticket_save", methods={"POST"})
      *
      * @param Request $request
-     * 
+     *
      * @return JsonResponse
      */
-    public function createTicket(LoggerInterface $logger, \Swift_Mailer $mailer, Publisher $publisher, EntityManagerInterface $entityManager, Request $request)
-    {
+    public function createTicket(
+        LoggerInterface $logger,
+        \Swift_Mailer $mailer,
+        Publisher $publisher,
+        EntityManagerInterface $entityManager,
+        Request $request
+    ) {
         $column = $this->getDoctrine()->getRepository(Column::class)->find($request->get('column_id'));
         $user = $this->getDoctrine()->getRepository(User::class)->find($this->getUser());
 
@@ -228,7 +240,7 @@ class TicketController extends AbstractController
      * Undocumented function
      *
      * @Route("/ticket/delete/{id}", name="app_ticket_delete", methods={"DELETE"}, requirements={"id"="\d+"})
-     * 
+     *
      * @return JsonResponse
      */
     public function deleteTicket(Publisher $publisher, EntityManagerInterface $entityManager, int $id)
@@ -237,11 +249,21 @@ class TicketController extends AbstractController
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
         if (!$ticket instanceof Ticket) {
-            return new JsonResponse(['success' => 'false', 'content' => $this->translator->trans('ticket_not_found', ['id' => $id], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => 'false',
+                    'content' => $this->translator->trans('ticket_not_found', ['id' => $id], 'errors')
+                ]
+            );
         }
 
         if ($ticket->getCreator() != $this->getUser()) {
-            return new JsonResponse(['success' => 'false', 'content' => $this->translator->trans('ticket_deletion_not_allowed', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => 'false',
+                    'content' => $this->translator->trans('ticket_deletion_not_allowed', [], 'errors')
+                ]
+            );
         }
 
         $entityManager->remove($ticket);
@@ -261,7 +283,12 @@ class TicketController extends AbstractController
 
         $publisher($update);
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('ticket_removed', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('ticket_removed', [], 'messages')
+            ]
+        );
     }
 
     /**
@@ -275,7 +302,12 @@ class TicketController extends AbstractController
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
         if (!$ticket instanceof Ticket) {
-            return new JsonResponse(['success' => 'false', 'content' => $this->translator->trans('ticket_not_found', [], 'errors')]);
+            return new JsonResponse(
+                [
+                    'success' => 'false',
+                    'content' => $this->translator->trans('ticket_not_found', [], 'errors')
+                ]
+            );
         }
 
         $ticket->setArchived(true);
@@ -296,7 +328,12 @@ class TicketController extends AbstractController
 
         $publisher($publisherMessage);
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('ticket_archived', ['id' => $id], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('ticket_archived', ['id' => $id], 'messages')
+            ]
+        );
     }
 
     /**
@@ -306,7 +343,10 @@ class TicketController extends AbstractController
     {
         /** @TODO translate */
         $board = $ticket->getColumn()->getBoard();
-        $message = new \Swift_Message('New Entry from '.$ticket->getCreator()->getName().' for board "'.$board->getName().'" on https://retro.byte-artist.de');
+        $message = new \Swift_Message(
+            'New Entry from '.$ticket->getCreator()->getName().' for board "'.$board->getName().
+            '" on https://retro.byte-artist.de'
+        );
         $message->setFrom('no-reply@byte-artist.de')
             ->setBcc('andreas.kempe@byte-artist.de')
             ->setBody(

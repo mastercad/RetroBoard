@@ -45,7 +45,12 @@ class ArchiveBoardMember
      *
      * @ORM\ManyToOne(targetEntity="ArchiveBoard", inversedBy="members")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="archive_board", columnDefinition="integer unsigned", referencedColumnName="id", nullable=false)
+     *   @ORM\JoinColumn(
+     *      name="archive_board",
+     *      columnDefinition="integer unsigned",
+     *      referencedColumnName="id",
+     *      nullable=false
+     *  )
      * })
      */
     private $board;
@@ -181,7 +186,7 @@ class ArchiveBoardMember
      * Get the value of creator
      *
      * @return User
-     */ 
+     */
     public function getCreator()
     {
         return $this->creator;
@@ -193,7 +198,7 @@ class ArchiveBoardMember
      * @param User  $creator
      *
      * @return self
-     */ 
+     */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
@@ -205,7 +210,7 @@ class ArchiveBoardMember
      * Get the value of created
      *
      * @return \DateTime
-     */ 
+     */
     public function getCreated()
     {
         return $this->created;
@@ -217,7 +222,7 @@ class ArchiveBoardMember
      * @param \DateTime  $created
      *
      * @return  self
-     */ 
+     */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
@@ -229,7 +234,7 @@ class ArchiveBoardMember
      * Get the value of modifier
      *
      * @return User
-     */ 
+     */
     public function getModifier()
     {
         return $this->modifier;
@@ -241,7 +246,7 @@ class ArchiveBoardMember
      * @param User  $modifier
      *
      * @return  self
-     */ 
+     */
     public function setModifier(User $modifier)
     {
         $this->modifier = $modifier;
@@ -253,7 +258,7 @@ class ArchiveBoardMember
      * Get the value of modified
      *
      * @return \DateTime|null
-     */ 
+     */
     public function getModified()
     {
         return $this->modified;
@@ -265,7 +270,7 @@ class ArchiveBoardMember
      * @param \DateTime|null  $modified
      *
      * @return  self
-     */ 
+     */
     public function setModified($modified)
     {
         $this->modified = $modified;

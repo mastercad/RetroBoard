@@ -45,44 +45,44 @@ class BoardInvitationVoter extends Voter
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-        case 'edit':
-            $results = $subject->getBoard()->getBoardMembers()->filter(
-                function ($boardMember) use ($user) {
-                    return $boardMember->getUser() === $user 
-                        && in_array('ROLE_ADMIN', $boardMember->getRoles());
+            case 'edit':
+                $results = $subject->getBoard()->getBoardMembers()->filter(
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user
+                            && in_array('ROLE_ADMIN', $boardMember->getRoles());
+                    }
+                );
+                return 0 < count($results);
+            case 'accept':
+                if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
+                    return true;
                 }
-            );
-            return 0 < count($results);
-        case 'accept':
-            if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
-                return true;
-            }
-            break;
-        case 'delete':
-            if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
-                return true;
-            }
-            $results = $subject->getBoard()->getBoardMembers()->filter(
-                function ($boardMember) use ($user) {
-                    return $boardMember->getUser() === $user
-                        && in_array('ROLE_ADMIN', $boardMember->getRoles());
+                break;
+            case 'delete':
+                if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
+                    return true;
                 }
-            );
-            return 0 < count($results);
-        case 'create':
-            $results = $subject->getBoard()->getBoardMembers()->filter(
-                function ($boardMember) use ($user) {
-                    return $boardMember->getUser() === $user;
-                }
-            );
-            return 0 < count($results);
-        case 'show':
-            $results = $subject->getBoard()->getBoardMembers()->filter(
-                function ($boardMember) use ($user) {
-                    return $boardMember->getUser() === $user;
-                }
-            );
-            return 0 < count($results);
+                $results = $subject->getBoard()->getBoardMembers()->filter(
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user
+                            && in_array('ROLE_ADMIN', $boardMember->getRoles());
+                    }
+                );
+                return 0 < count($results);
+            case 'create':
+                $results = $subject->getBoard()->getBoardMembers()->filter(
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user;
+                    }
+                );
+                return 0 < count($results);
+            case 'show':
+                $results = $subject->getBoard()->getBoardMembers()->filter(
+                    function ($boardMember) use ($user) {
+                        return $boardMember->getUser() === $user;
+                    }
+                );
+                return 0 < count($results);
         }
 
         return false;

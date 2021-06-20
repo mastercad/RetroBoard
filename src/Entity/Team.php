@@ -9,7 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Teams
  *
- * @ORM\Table(name="teams", indexes={@ORM\Index(name="teams_creator_IDX", columns={"creator"}), @ORM\Index(name="teams_id_IDX", columns={"id"}), @ORM\Index(name="teams_modifier_IDX", columns={"modifier"})})
+ * @ORM\Table(
+ *  name="teams",
+ *  indexes={
+ *      @ORM\Index(name="teams_creator_IDX", columns={"creator"}),
+ *      @ORM\Index(name="teams_id_IDX", columns={"id"}),
+ *      @ORM\Index(name="teams_modifier_IDX", columns={"modifier"})
+ *  }
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\TeamRepository"))
  */
 class Team
@@ -17,7 +24,14 @@ class Team
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", length=11, columnDefinition="integer unsigned", nullable=false, options={"unsigned"=true})
+     * @ORM\Column(
+     *  name="id",
+     *  type="integer",
+     *  length=11,
+     *  columnDefinition="integer unsigned",
+     *  nullable=false,
+     *  options={"unsigned"=true}
+     * )
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -65,17 +79,32 @@ class Team
     private $modifier;
 
     /**
-     * @ORM\OneToMany(targetEntity="TeamInvitation", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="TeamInvitation",
+     *  mappedBy="team",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $invitations;
 
     /**
-     * @ORM\OneToMany(targetEntity="TeamMember", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="TeamMember",
+     *  mappedBy="team",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoardTeam", mappedBy="team", cascade={"refresh", "remove", "persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(
+     *  targetEntity="BoardTeam",
+     *  mappedBy="team",
+     *  cascade={"refresh", "remove", "persist"},
+     *  orphanRemoval=true
+     * )
      */
     private $boardTeams;
 

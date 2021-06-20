@@ -30,7 +30,9 @@ class BoardMemberController extends AbstractController
         $boardMember = $this->getDoctrine()->getRepository(BoardMember::class)->find($id);
 
         if (!$boardMember instanceof BoardMember) {
-            throw $this->createNotFoundException($this->translator->trans('board_member_not_found', ['id' => $id], 'errors'));
+            throw $this->createNotFoundException(
+                $this->translator->trans('board_member_not_found', ['id' => $id], 'errors')
+            );
         }
         $this->denyAccessUnlessGranted('edit_role', $boardMember);
 
@@ -41,6 +43,11 @@ class BoardMemberController extends AbstractController
         $entityManager->persist($boardMember);
         $entityManager->flush();
 
-        return new JsonResponse(['success' => true, 'content' => $this->translator->trans('board_member_saved', [], 'messages')]);
+        return new JsonResponse(
+            [
+                'success' => true,
+                'content' => $this->translator->trans('board_member_saved', [], 'messages')
+            ]
+        );
     }
 }

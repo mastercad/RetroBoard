@@ -19,7 +19,8 @@ final class Version20200214190228 extends AbstractMigration
 
     public function up(Schema $schema) : void
     {
-        $this->addSql('ALTER TABLE `users` ADD `avatar_path` VARCHAR(250) NULL AFTER `activity_token`, ADD `color` VARCHAR(7) NULL AFTER `avatar_path`;');
+        $this->addSql('ALTER TABLE `users` ADD `avatar_path` VARCHAR(250) NULL AFTER `activity_token`, ADD `color` '.
+            'VARCHAR(7) NULL AFTER `avatar_path`;');
     }
 
     public function down(Schema $schema) : void

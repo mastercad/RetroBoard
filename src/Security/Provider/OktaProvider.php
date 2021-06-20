@@ -13,20 +13,8 @@ use UnexpectedValueException;
 use WellingGuzman\OAuth2\Client\Provider\Exception\OktaIdentityProviderException;
 use WellingGuzman\OAuth2\Client\Provider\OktaResourceOwner;
 
-
-/** [accessToken:protected] => eyJraWQiOiJaTkRTRFdXTURkMW1La0YtYkFzSVZtS0IwWXRJS09JZTUzM1NwU3BUalE4IiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkYxMFB0UkM1aXNQeHRqaEprWDduWk10THlCVXlBWHp5ZVRDVTFPTnV1U1UiLCJpc3MiOiJodHRwczovL2Rldi0xNzk4NzEub2t0YS5jb20vb2F1dGgyL2RlZmF1bHQiLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNTg2NDIzODk5LCJleHAiOjE1ODY0Mjc0OTksImNpZCI6IjBvYTVmeDZsNXZKOW8xMDgxNHg2IiwidWlkIjoiMDB1NWZ4Y3hnckRWblNocFY0eDYiLCJzY3AiOlsiZW1haWxfdGVzdCJdLCJzdWIiOiJhbmRyZWFzLmtlbXBlQGJ5dGUtYXJ0aXN0LmRlIn0.QybLZRHWmi6UH0-MQgaMmhuqBlUuhmIMyBc3wJnMfDeDAu-qgJQ1Sj8CiJDZvaaN3aIDu8_xZ7cyX49fy4hIijIHq446vvVBTJx7cZmNLMm7DLGUc_xLoOWM7qXXvS2AWhySYEe5nRGe-0SDDso39rZQ5_BYgzN-YW6MPzfZzol7__EpERjd7AYBc6VJMrUS4RGvUBEck7h27CLN-GlV718QbnM1WHQQywaEkQ9kyJIInZ-MFy5e2y6lrsvyJCJzUqGKSQSyz6Ui-fsB3zaIY30NOSVUHZeTWHvCfFLkqqSfxRXOI8HP3y_CUJAHnhU2wuu212BmqaFBj_1KIQeTLw     
- *  [expires:protected] => 1586427499
- *  [refreshToken:protected] =>      [
- *      resourceOwnerId:protected] =>      [
- *          values:protected] => Array         (
- *              [token_type] => Bearer
- *              [scope] => email_test
- */
-
-/**
- * Response: Array (     [sub] => 00u5fxcxgrDVnShpV4x6     [name] => Andreas Kempe     [locale] => en-US     [email] => andreas.kempe@byte-artist.de     [preferred_username] => andreas.kempe@byte-artist.de     [given_name] => Andreas     [family_name] => Kempe     [zoneinfo] => America/Los_Angeles     [updated_at] => 1586411248     [email_verified] => 1 )  [] []
- */
-class OktaProvider extends AbstractProvider {
+class OktaProvider extends AbstractProvider
+{
 
     use BearerAuthorizationTrait;
 
@@ -45,10 +33,10 @@ class OktaProvider extends AbstractProvider {
         if (isset($options['scopes'])) {
             $this->scopes = $options['scopes'];
         }
-//        $this->grantFactory->setGrant('jwt_bearer', new JwtBearer());
     }
 
-    public function setLogger(LoggerInterface $logger) {
+    public function setLogger(LoggerInterface $logger)
+    {
         $this->logger = $logger;
     }
 
@@ -59,7 +47,8 @@ class OktaProvider extends AbstractProvider {
      *
      * @return string
      */
-    public function getBaseAuthorizationUrl() {
+    public function getBaseAuthorizationUrl()
+    {
         return $this->getBaseApiUrl().'/authorize';
     }
 
@@ -71,7 +60,8 @@ class OktaProvider extends AbstractProvider {
      * @param array $params
      * @return string
      */
-    public function getBaseAccessTokenUrl(array $params) {
+    public function getBaseAccessTokenUrl(array $params)
+    {
         return $this->getBaseApiUrl().'/token';
     }
 
@@ -81,7 +71,8 @@ class OktaProvider extends AbstractProvider {
      * @param AccessToken $token
      * @return string
      */
-    public function getResourceOwnerDetailsUrl(AccessToken $token) {
+    public function getResourceOwnerDetailsUrl(AccessToken $token)
+    {
         return $this->getBaseApiUrl().'/userinfo';
     }
 
@@ -153,7 +144,7 @@ class OktaProvider extends AbstractProvider {
         $response = $this->getParsedResponse($request);
 
         if (false === is_array($response)) {
-            throw new UnexpectedValueException ('Invalid response received from Authorization Server. Expected JSON.');
+            throw new UnexpectedValueException('Invalid response received from Authorization Server. Expected JSON.');
         }
 
         return $response;
@@ -167,7 +158,8 @@ class OktaProvider extends AbstractProvider {
      *
      * @return array
      */
-    protected function getDefaultScopes() {
+    protected function getDefaultScopes()
+    {
         return ['email profile openid'];
     }
 
@@ -179,7 +171,8 @@ class OktaProvider extends AbstractProvider {
      * @param  array|string $data Parsed response data
      * @return void
      */
-    protected function checkResponse(ResponseInterface $response, $data) {
+    protected function checkResponse(ResponseInterface $response, $data)
+    {
         if (isset($data['error'])) {
             throw OktaIdentityProviderException::oauthException($response, $data);
         }

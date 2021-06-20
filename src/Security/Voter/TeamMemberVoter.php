@@ -46,7 +46,7 @@ class TeamMemberVoter extends Voter
                 }
 
                 $results = $subject->getTeam()->getTeamMembers()->filter(
-                    function(TeamMember $teamMember) use ($user) {
+                    function (TeamMember $teamMember) use ($user) {
                         return $teamMember->getMember() === $user
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());
                     }
@@ -59,14 +59,14 @@ class TeamMemberVoter extends Voter
                 }
 
                 $results = $subject->getTeam()->getTeamMembers()->filter(
-                        function (TeamMember $teamMember) use ($user) {
-                            return $teamMember->getMember() === $user;
+                    function (TeamMember $teamMember) use ($user) {
+                        return $teamMember->getMember() === $user;
                     }
                 );
                 return 0 < count($results);
             case 'archive':
                 $results = $subject->getTeam()->getTeamMembers()->filter(
-                    function(TeamMember $teamMember) use ($user) {
+                    function (TeamMember $teamMember) use ($user) {
                         return $teamMember->getMember() === $user
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());
                     }

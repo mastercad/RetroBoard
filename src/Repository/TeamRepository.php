@@ -7,7 +7,8 @@ use Doctrine\ORM\Query\Expr\Join;
 
 class TeamRepository extends EntityRepository
 {
-    public function findAllTeamsForUser(User $user) {
+    public function findAllTeamsForUser(User $user)
+    {
         $query = $this->createQueryBuilder('teams')
         ->innerJoin('teams.boardTeams', 'boardTeams')
         ->where(':user MEMBER OF teams.members')
@@ -18,7 +19,8 @@ class TeamRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function findAllKnownTeams(User $user) {
+    public function findAllKnownTeams(User $user)
+    {
         return $this->createQueryBuilder('teams')
             ->where('member = :user')
             ->setParameter('user', $user)
