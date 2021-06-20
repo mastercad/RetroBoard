@@ -7,9 +7,14 @@
 /public/bundles/
 /var/
 /vendor/
+/build/reports
 /public/upload/
 .docker/data
 /werkstatt
+tmp-phpqa
+/build
+/bin
+.php_cs.cache
 ###< symfony/framework-bundle ###
 .vscode
 
@@ -17,3 +22,28 @@
 *.decrypt.private.php
 *.env.*.local
 ###< symfony/secrets ###
+
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/secret ###
+/config/secrets/dev/dev.decrypt.private.php
+/config/secrets/prod/prod.decrypt.private.php
+###< symfony/secret ###

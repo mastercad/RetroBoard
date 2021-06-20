@@ -47,7 +47,11 @@ services:
 #      - retro_board_net
 
   php:
-    build: .docker/php
+    build:
+      context: .docker/php
+      dockerfile: Dockerfile
+      args:
+        - HOST_IP=172.0.12.1
     container_name: retro_board_php
     volumes:
       - .:/var/www/retro_board

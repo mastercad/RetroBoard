@@ -1,4 +1,6 @@
-FROM php:7.3.7-fpm
+FROM php:7.4.7-fpm
+
+ARG HOST_IP
 
 RUN apt-get update && \
    apt-get install -yqq --no-install-recommends apt-utils
@@ -9,6 +11,13 @@ RUN apt-get update \
    gnupg gnupg1 gnupg2
 
 RUN docker-php-ext-install pdo pdo_mysql zip
+
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.start_with_request=trigger" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.client_host=${HOST_IP}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.discover_client_host=true" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 #COPY php.ini /etc/php/7.3.7/php.ini
 COPY php.ini /usr/local/etc/php/conf.d/php.ini
