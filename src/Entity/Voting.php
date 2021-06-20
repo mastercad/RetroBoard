@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Voting
+ * Voting.
  *
  * @ORM\Table(
  *  name="votings",
@@ -85,9 +85,9 @@ class Voting
     private $modified;
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -95,11 +95,9 @@ class Voting
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -109,9 +107,9 @@ class Voting
     }
 
     /**
-     * Get the value of points
+     * Get the value of points.
      *
-     * @return  int
+     * @return int
      */
     public function getPoints()
     {
@@ -119,9 +117,9 @@ class Voting
     }
 
     /**
-     * Get the value of ticket
+     * Get the value of ticket.
      *
-     * @return  Ticket
+     * @return Ticket
      */
     public function getTicket()
     {
@@ -129,11 +127,9 @@ class Voting
     }
 
     /**
-     * Set the value of ticket
+     * Set the value of ticket.
      *
-     * @param  Ticket  $ticket
-     *
-     * @return  self
+     * @return self
      */
     public function setTicket(Ticket $ticket)
     {
@@ -143,11 +139,9 @@ class Voting
     }
 
     /**
-     * Set the value of points
+     * Set the value of points.
      *
-     * @param  int  $points
-     *
-     * @return  self
+     * @return self
      */
     public function setPoints(int $points)
     {
@@ -157,9 +151,9 @@ class Voting
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
-     * @return  User
+     * @return User
      */
     public function getCreator()
     {
@@ -167,11 +161,9 @@ class Voting
     }
 
     /**
-     * Set the value of creator
+     * Set the value of creator.
      *
-     * @param  User  $creator
-     *
-     * @return  self
+     * @return self
      */
     public function setCreator(User $creator)
     {
@@ -181,9 +173,9 @@ class Voting
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
-     * @return  \DateTime
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -191,11 +183,9 @@ class Voting
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param  \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -205,9 +195,9 @@ class Voting
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
-     * @return  User
+     * @return User
      */
     public function getModifier()
     {
@@ -215,11 +205,9 @@ class Voting
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param  User  $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {
@@ -229,9 +217,9 @@ class Voting
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
-     * @return  \DateTime|null
+     * @return \DateTime|null
      */
     public function getModified()
     {
@@ -239,11 +227,11 @@ class Voting
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param  \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {

@@ -1,10 +1,10 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\Board;
-use App\Entity\User;
 use App\Entity\Column;
-use Doctrine\DBAL\FetchMode;
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 class BoardRepository extends EntityRepository
@@ -25,7 +25,7 @@ class BoardRepository extends EntityRepository
     public function findAllKnownMembers(User $user)
     {
         $statement = $this->getEntityManager()->getConnection()->prepare(
-            "SELECT DISTINCT users_show.id, users_show.name
+            'SELECT DISTINCT users_show.id, users_show.name
             FROM users
             INNER JOIN team_members ON team_members.`member`  =  users.id
             INNER JOIN board_teams ON board_teams.team  = team_members.team
@@ -39,7 +39,7 @@ class BoardRepository extends EntityRepository
             INNER JOIN board_members ON board_members.`user` = users.id
             INNER JOIN board_members as board_members_show ON board_members_show.board = board_members.board
             INNER JOIN users as users_show ON users_show.id = board_members_show.`user`
-            WHERE users.id = :userId"
+            WHERE users.id = :userId'
         );
 
         $result = $statement->executeQuery(['userId' => $user->getId()]);
@@ -50,14 +50,14 @@ class BoardRepository extends EntityRepository
     public function findAllKnownBoards(User $user)
     {
         $statement = $this->getEntityManager()->getConnection()->prepare(
-            "SELECT boards.id, boards.name
+            'SELECT boards.id, boards.name
                 FROM boards
                 LEFT JOIN board_members ON boards.id = board_members.board
                 LEFT JOIN board_teams ON board_teams.board = boards.id
                 LEFT JOIN teams ON teams.id = board_teams.team
                 LEFT JOIN team_members ON team_members.team = teams.id
                 WHERE boards.id IS NOT NULL AND (board_members.user = :userId OR team_members.member = :userId)
-                GROUP BY boards.id, boards.name"
+                GROUP BY boards.id, boards.name'
         );
 
         $result = $statement->executeQuery(['userId' => $user->getId()]);
@@ -68,7 +68,7 @@ class BoardRepository extends EntityRepository
     public function findAllKnownTeams(User $user)
     {
         $statement = $this->getEntityManager()->getConnection()->prepare(
-            "SELECT teams.id, teams.name
+            'SELECT teams.id, teams.name
             FROM users
             INNER JOIN team_members ON team_members.`member`  =  users.id
             INNER JOIN board_teams ON board_teams.team  = team_members.team
@@ -82,7 +82,7 @@ class BoardRepository extends EntityRepository
 
             SELECT teams.id, teams.name FROM teams
             INNER JOIN team_members ON team_members.team = teams.id
-            WHERE team_members.member = :userId"
+            WHERE team_members.member = :userId'
         );
 
         $result = $statement->executeQuery(['userId' => $user->getId()]);

@@ -3,21 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\HttpFoundation\Response;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use League\OAuth2\Client\Provider\GenericResourceOwner;
 use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
+use League\OAuth2\Client\Provider\GenericResourceOwner;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 // &error=invalid_scope&error_description=The+authorization+server+resource+does+not+have+any+configured+default+scopes%2C+'scope'+must+be+provided.
 // -> https://support.okta.com/help/s/article/How-do-I-create-a-scope-for-my-Authorization-Server
@@ -39,7 +39,7 @@ class OktaAuthenticator extends SocialAuthenticator
     private $em;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var LoggerInterface
      */
@@ -47,8 +47,6 @@ class OktaAuthenticator extends SocialAuthenticator
 
     /**
      * GoogleAuthenticator constructor.
-     * @param ClientRegistry $clientRegistry
-     * @param EntityManagerInterface $em
      */
     public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em)
     {
@@ -62,7 +60,6 @@ class OktaAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @return bool
      */
     public function supports(Request $request)
@@ -72,22 +69,22 @@ class OktaAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @return \League\OAuth2\Client\Token\AccessToken|mixed
      */
     public function getCredentials(Request $request)
     {
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            "OKTA_SESSION_USER"
+            'OKTA_SESSION_USER'
         );
+
         return $this->fetchAccessToken($this->getOktaClient());
     }
 
     /**
      * @param mixed $credentials
-     * @param UserProviderInterface $userProvider
-     * @return User|null|object|\Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @return User|object|\Symfony\Component\Security\Core\User\UserInterface|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -107,7 +104,7 @@ class OktaAuthenticator extends SocialAuthenticator
                 // 2) do we have a matching user by email?
                 $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
             } else {
-                $email = uniqid("__OKTA_RANDOM_EMAIL_")."@byte-artist.de";
+                $email = uniqid('__OKTA_RANDOM_EMAIL_').'@byte-artist.de';
             }
             $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
@@ -126,15 +123,15 @@ class OktaAuthenticator extends SocialAuthenticator
                     && (isset($oktaResponse['given_name'])
                         || isset($oktaResponse['family_name']))
                 ) {
-                    $name = trim($oktaResponse['given_name']." ".$oktaResponse['family_name']);
+                    $name = trim($oktaResponse['given_name'].' '.$oktaResponse['family_name']);
                 }
 
                 /** @var User $user */
                 $systemUser = $this->em->getRepository(User::class)->find(1);
-                $user = new User;
+                $user = new User();
                 $user->setEmail($email);
                 $user->setName($name);
-                $user->setPassword("");
+                $user->setPassword('');
                 $user->setCreator($systemUser);
                 $user->setCreated(new \DateTime());
             }
@@ -163,15 +160,15 @@ class OktaAuthenticator extends SocialAuthenticator
             $this->saveUserInfoToSession($request, $exception);
 
 //            $registrationUrl = $this->router->generate('connect_google_registration');
-#            return new RedirectResponse("/login-failure");
-            return new RedirectResponse("/login");
+//            return new RedirectResponse("/login-failure");
+            return new RedirectResponse('/login');
         }
 
         $this->saveAuthenticationErrorToSession($request, $exception);
 
 //        $loginUrl = $this->router->generate('security_login');
-#        return new RedirectResponse("/login-secure");
-        return new RedirectResponse("/login");
+//        return new RedirectResponse("/login-secure");
+        return new RedirectResponse('/login');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -180,15 +177,12 @@ class OktaAuthenticator extends SocialAuthenticator
 //            return new RedirectResponse($targetPath);
 //        }
 
-        return new RedirectResponse("/");
+        return new RedirectResponse('/');
     }
 
     /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
-     *
-     * @param Request $request
-     * @param AuthenticationException|null $authException
      *
      * @return RedirectResponse
      */

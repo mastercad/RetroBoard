@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Board;
-use App\Entity\BoardMember;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Team;
 use App\Entity\TeamInvitation;
 use App\Entity\TeamMember;
@@ -14,6 +12,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -76,8 +75,6 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/team/create", name="team_create", methods={"GET"})
-     *
-     * @param EntityManagerInterface $entityManager
      */
     public function create(EntityManagerInterface $entityManager)
     {
@@ -127,13 +124,11 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/team/save", name="team_save", methods={"POST"})
-     *
-     * @param EntityManagerInterface $entityManager
      */
     public function save(EntityManagerInterface $entityManager, Request $request)
     {
         $teamRequestData = $request->request->get('team');
-        $id = (int)$teamRequestData['id'];
+        $id = (int) $teamRequestData['id'];
 
         $team = null;
         $teamMember = null;
@@ -202,6 +197,7 @@ class TeamController extends AbstractController
                     }
                 }
             }
+
             return new JsonResponse(['success' => false, 'data' => $teamRequestData]);
         }
 
@@ -246,14 +242,9 @@ class TeamController extends AbstractController
 
     /**
      * Manage given member for team membership.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function manageTeamMember(Request $request, Team $team) : bool
+    private function manageTeamMember(Request $request, Team $team): bool
     {
-
         $success = true;
         $teamRequestData = $request->request->get('team');
         if (!isset($teamRequestData['members'])) {
@@ -264,7 +255,7 @@ class TeamController extends AbstractController
             $teamMember = null;
             $user = $this->getDoctrine()->getRepository(User::class)->find($member['userId']);
             if (empty($member['teamMemberId'])) {
-                $teamMember = new TeamMember;
+                $teamMember = new TeamMember();
                 $teamMember->setMember($user);
                 $teamMember->setCreator($this->getUser());
                 $teamMember->setCreated(new \DateTime());
@@ -281,19 +272,15 @@ class TeamController extends AbstractController
         }
 
         $request->request->set('team', $teamRequestData);
+
         return $success;
     }
 
     /**
      * Manage given invitations for team membership.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function manageTeamInvitations(Request $request, Team $team) : bool
+    private function manageTeamInvitations(Request $request, Team $team): bool
     {
-
         $success = true;
 
         $teamRequestData = $request->request->get('team');
@@ -313,6 +300,7 @@ class TeamController extends AbstractController
         }
 
         $request->request->set('team', $teamRequestData);
+
         return $success;
     }
 
@@ -320,7 +308,6 @@ class TeamController extends AbstractController
      * @Route("/team/invite", name="team_invite", methods={"POST"})
      *
      * @param \Swift_Mailer          $mailer
-     * @param Request                $request
      * @param EntityManagerInterface $entityManager
      *
      * @return JsonResponse
@@ -339,18 +326,16 @@ class TeamController extends AbstractController
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param Team $team
      * @param string $email
-     * @param int $invitationId
-     * @param boolean $postProcessed
+     * @param int    $invitationId
+     * @param bool   $postProcessed
      *
      * @return void
      */
     private function handleTeamInvitation(Team $team, $email, $invitationId = null, $postProcessed = false)
     {
-
         $teamInvitation = new TeamInvitation();
         $token = sha1(random_bytes(20));
 
@@ -403,7 +388,6 @@ class TeamController extends AbstractController
             $data['id'] = $teamInvitation->getId();
             $data['token'] = $teamInvitation->getToken();
 
-
             if (!$postProcessed) {
                 $this->entityManager->flush();
                 $this->sendInvitationEmail($teamInvitation);
@@ -424,15 +408,12 @@ class TeamController extends AbstractController
     }
 
     /**
-     * Undocumented function
-     *
-     * @param TeamInvitation $teamInvitation
+     * Undocumented function.
      *
      * @return void
      */
     private function sendInvitationEmail(TeamInvitation $teamInvitation)
     {
-
         /** @TODO translate */
         $message = new \Swift_Message(
             'Invitation request team "'.$teamInvitation->getTeam()->getName().'" on https://retro.byte-artist.de'
@@ -471,9 +452,6 @@ class TeamController extends AbstractController
     /**
      * @Route("/team/invitation/{id}", name="team_invite_delete", methods={"DELETE"})
      *
-     * @param EntityManagerInterface $entityManager
-     * @param integer $id
-     *
      * @return void
      */
     public function deleteInvitationAction(EntityManagerInterface $entityManager, int $id)
@@ -504,8 +482,6 @@ class TeamController extends AbstractController
     /**
      * @Route("/team/{id}", name="team_delete", methods={"DELETE"})
      *
-     * @param integer $id
-     *
      * @return void
      */
     public function deleteAction(int $id)
@@ -535,9 +511,6 @@ class TeamController extends AbstractController
 
     /**
      * @Route("/team/member", name="team_add_member", methods={"POST"})
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param Request                $request
      *
      * @return void
      */
@@ -585,23 +558,21 @@ class TeamController extends AbstractController
             $data['content'] = $this->translator->trans('member_already_added', [], 'errors');
             $data['id'] = $teamMember->getId();
         }
+
         return new JsonResponse($data);
     }
 
     /**
      * @Route("/team/member/{token}", name="team_member", methods={"GET"})
      *
-     * @param Request                $request
-     * @param EntityManagerInterface $entityManager
+     * @param Request $request
      */
     public function memberAction(string $token, EntityManagerInterface $entityManager)
     {
         $teamInvitation = $this->getDoctrine()->getRepository(TeamInvitation::class)->findOneBy(['token' => $token]);
 
         if (!$teamInvitation instanceof TeamInvitation) {
-            throw $this->createNotFoundException(
-                $this->translator->trans('invitation_not_found', ['id' => $token], 'errors')
-            );
+            throw $this->createNotFoundException($this->translator->trans('invitation_not_found', ['id' => $token], 'errors'));
         }
 
         $this->denyAccessUnlessGranted('accept', $teamInvitation);
@@ -611,7 +582,7 @@ class TeamController extends AbstractController
         $teamMember->setMember($this->getUser());
         $teamMember->setCreator($this->getUser());
         $teamMember->setCreated(new \DateTime());
-        $teamMember->setRoles(["ROLE_USER"]);
+        $teamMember->setRoles(['ROLE_USER']);
 
         try {
             $entityManager->persist($teamMember);
@@ -621,14 +592,12 @@ class TeamController extends AbstractController
             // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig
             // ablief ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
         }
-        return $this->redirectToRoute("team_show", ['id' => $teamMember->getTeam()->getId()]);
+
+        return $this->redirectToRoute('team_show', ['id' => $teamMember->getTeam()->getId()]);
     }
 
     /**
      * @Route("/team/member/{id}", name="team_member_delete", methods={"DELETE"})
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param integer $id
      *
      * @return void
      */

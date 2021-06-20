@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ArchiveColumn
+ * ArchiveColumn.
  *
  * @ORM\Table(
  *  name="columns_archive"
@@ -67,9 +67,9 @@ class ArchiveColumn
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -77,11 +77,11 @@ class ArchiveColumn
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
+     * @param int $id
      *
-     * @return  self
+     * @return self
      */
     public function setId(?int $id)
     {
@@ -91,9 +91,9 @@ class ArchiveColumn
     }
 
     /**
-     * Get the value of name
+     * Get the value of name.
      *
-     * @return  string
+     * @return string
      */
     public function getName()
     {
@@ -101,11 +101,9 @@ class ArchiveColumn
     }
 
     /**
-     * Set the value of name
+     * Set the value of name.
      *
-     * @param  string  $name
-     *
-     * @return  self
+     * @return self
      */
     public function setName(string $name)
     {
@@ -115,9 +113,9 @@ class ArchiveColumn
     }
 
     /**
-     * Get the value of priority
+     * Get the value of priority.
      *
-     * @return  int|null
+     * @return int|null
      */
     public function getPriority()
     {
@@ -125,11 +123,11 @@ class ArchiveColumn
     }
 
     /**
-     * Set the value of priority
+     * Set the value of priority.
      *
-     * @param  int|null  $priority
+     * @param int|null $priority
      *
-     * @return  self
+     * @return self
      */
     public function setPriority($priority)
     {
@@ -139,7 +137,7 @@ class ArchiveColumn
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
      * @return ArchiveBoard
      */
@@ -149,11 +147,11 @@ class ArchiveColumn
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param ArchiveBoard $board
      *
-     * @return  self
+     * @return self
      */
     public function setBoard(?ArchiveBoard $board)
     {
@@ -179,7 +177,7 @@ class ArchiveColumn
 
         return $this;
     }
-    
+
     public function removeTicket(ArchiveTicket $ticket): self
     {
         if ($this->tickets->contains($ticket)) {

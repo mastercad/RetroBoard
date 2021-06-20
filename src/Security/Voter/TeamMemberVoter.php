@@ -54,7 +54,7 @@ class TeamMemberVoter extends Voter
 
                 return 0 < count($results);
             case 'show':
-                if ("Demo Board" === $subject->getName()) {
+                if ('Demo Board' === $subject->getName()) {
                     return true;
                 }
 
@@ -63,6 +63,7 @@ class TeamMemberVoter extends Voter
                         return $teamMember->getMember() === $user;
                     }
                 );
+
                 return 0 < count($results);
             case 'archive':
                 $results = $subject->getTeam()->getTeamMembers()->filter(
@@ -71,6 +72,7 @@ class TeamMemberVoter extends Voter
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
         }
 

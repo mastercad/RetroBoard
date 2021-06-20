@@ -28,11 +28,11 @@ class BoardMemberVoter extends Voter
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param  [type]         $attribute
-     * @param  BoardMember    $subject
-     * @param  TokenInterface $token
+     * @param [type]      $attribute
+     * @param BoardMember $subject
+     *
      * @return void
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -53,6 +53,7 @@ class BoardMemberVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'delete':
                 $results = $subject->getBoard()->getBoardMembers()->filter(
@@ -61,6 +62,7 @@ class BoardMemberVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'create':
                 if (in_array('ROLE_USER', $user->getRoles())
@@ -68,6 +70,7 @@ class BoardMemberVoter extends Voter
                 ) {
                     return true;
                 }
+
                 return false;
             case 'show':
                 $results = $subject->getBoard()->getBoardMembers()->filter(
@@ -75,6 +78,7 @@ class BoardMemberVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
+
                 return 0 < count($results);
         }
 

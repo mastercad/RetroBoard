@@ -30,7 +30,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $passwordEncoder;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var LoggerInterface
      */

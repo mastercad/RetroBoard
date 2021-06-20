@@ -28,11 +28,11 @@ class BoardInvitationVoter extends Voter
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param  [type]          $attribute
-     * @param  BoardInvitation $subject
-     * @param  TokenInterface  $token
+     * @param [type]          $attribute
+     * @param BoardInvitation $subject
+     *
      * @return void
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -52,6 +52,7 @@ class BoardInvitationVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'accept':
                 if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
@@ -68,6 +69,7 @@ class BoardInvitationVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'create':
                 $results = $subject->getBoard()->getBoardMembers()->filter(
@@ -75,6 +77,7 @@ class BoardInvitationVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
+
                 return 0 < count($results);
             case 'show':
                 $results = $subject->getBoard()->getBoardMembers()->filter(
@@ -82,6 +85,7 @@ class BoardInvitationVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
+
                 return 0 < count($results);
         }
 

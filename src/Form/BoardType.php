@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Board;
-use App\Entity\BoardMember;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -50,6 +49,6 @@ class BoardType extends AbstractType
 
     public function getAlias()
     {
-        return "BoardTypeFormClassDingsBums";
+        return 'BoardTypeFormClassDingsBums';
     }
 }

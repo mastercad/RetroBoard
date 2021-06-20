@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,7 +34,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @Route("/user/show/{id}", name="user_profile", methods={"GET"}, requirements={"id"="\d+"})
      */
@@ -87,14 +87,14 @@ class UserController extends AbstractController
 
         /* Upload file */
         if (move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
-            $src = "default.png";
+            $src = 'default.png';
 
             // checking file is image or not
             if (is_array(getimagesize($location))) {
                 $src = $location;
             }
 
-            $returnArray = ["name" => $filename,"size" => $filesize, "src"=> $publicPathName];
+            $returnArray = ['name' => $filename, 'size' => $filesize, 'src' => $publicPathName];
         }
 
         return new JsonResponse($returnArray);

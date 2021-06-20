@@ -66,7 +66,7 @@ class BoardVoter extends Voter
 
                 return 0 < count($resultMembers) || 0 < count($resultTeamMembers);
             case 'show':
-                if ("Demo Board" === $subject->getName()) {
+                if ('Demo Board' === $subject->getName()) {
                     return true;
                 }
 
@@ -104,6 +104,7 @@ class BoardVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
         }
 

@@ -12,12 +12,12 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20200309204925 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return 'create Teams and Team_members tables';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE `teams` (
               `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -109,11 +109,11 @@ final class Version20200309204925 extends AbstractMigration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
-        $this->addSql("DROP TABLE board_teans");
-        $this->addSql("DROP TABLE team_invitations");
-        $this->addSql("DROP TABLE team_members");
-        $this->addSql("DROP TABLE teams");
+        $this->addSql('DROP TABLE board_teans');
+        $this->addSql('DROP TABLE team_invitations');
+        $this->addSql('DROP TABLE team_members');
+        $this->addSql('DROP TABLE teams');
     }
 }

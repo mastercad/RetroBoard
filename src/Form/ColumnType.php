@@ -28,6 +28,6 @@ class ColumnType extends AbstractType
 
     public function getAlias()
     {
-        return "ColumnTypeFORMClassDingsBums";
+        return 'ColumnTypeFORMClassDingsBums';
     }
 }

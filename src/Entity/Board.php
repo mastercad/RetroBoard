@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints;
 
 /**
- * Board
+ * Board.
  *
  * @ORM\Table(
  *  name="boards",
@@ -148,9 +148,9 @@ class Board
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -158,11 +158,9 @@ class Board
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -172,9 +170,9 @@ class Board
     }
 
     /**
-     * Get the value of name
+     * Get the value of name.
      *
-     * @return  string
+     * @return string
      */
     public function getName()
     {
@@ -182,11 +180,9 @@ class Board
     }
 
     /**
-     * Set the value of name
+     * Set the value of name.
      *
-     * @param  string  $name
-     *
-     * @return  self
+     * @return self
      */
     public function setName(string $name)
     {
@@ -196,7 +192,7 @@ class Board
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -206,11 +202,9 @@ class Board
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param \DateTime $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -220,7 +214,7 @@ class Board
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -230,11 +224,11 @@ class Board
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {
@@ -244,7 +238,7 @@ class Board
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -254,11 +248,9 @@ class Board
     }
 
     /**
-     * Set the value of creator
+     * Set the value of creator.
      *
-     * @param User $creator
-     *
-     * @return  self
+     * @return self
      */
     public function setCreator(User $creator)
     {
@@ -268,7 +260,7 @@ class Board
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -278,11 +270,9 @@ class Board
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param User $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {

@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ArchiveTicket
+ * ArchiveTicket.
  *
  * @ORM\Table(name="archive_tickets")
  * @ORM\Entity
@@ -74,9 +74,9 @@ class ArchiveTicket
     private $modified;
 
     /**
-     * @var ArchiveVoting
+     * @var archiveVoting
      *
-     * One user has Many tickets.
+     * One user has Many tickets
      * @ORM\OneToMany(
      *  targetEntity="ArchiveVoting",
      *  mappedBy="ticket",
@@ -92,7 +92,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
      * @return int
      */
@@ -102,9 +102,7 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of id
-     *
-     * @param int $id
+     * Set the value of id.
      *
      * @return self
      */
@@ -116,7 +114,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of content
+     * Get the value of content.
      *
      * @return string
      */
@@ -126,9 +124,7 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of content
-     *
-     * @param string $content
+     * Set the value of content.
      *
      * @return self
      */
@@ -140,7 +136,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of column
+     * Get the value of column.
      *
      * @return Column
      */
@@ -150,11 +146,9 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of column
+     * Set the value of column.
      *
      * @param Column $column
-     *
-     * @return self
      */
     public function setColumn(?ArchiveColumn $column): self
     {
@@ -164,9 +158,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of creator
-     *
-     * @return User
+     * Get the value of creator.
      */
     public function getCreator(): User
     {
@@ -174,9 +166,7 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -188,7 +178,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -198,9 +188,7 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of created
-     *
-     * @param \DateTime $created
+     * Set the value of created.
      *
      * @return self
      */
@@ -212,7 +200,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -222,9 +210,7 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of modifier
-     *
-     * @param User $modifier
+     * Set the value of modifier.
      *
      * @return self
      */
@@ -236,7 +222,7 @@ class ArchiveTicket
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -246,7 +232,7 @@ class ArchiveTicket
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
      * @param \DateTime|null $modified
      *
@@ -269,8 +255,6 @@ class ArchiveTicket
 
     /**
      * Set one user has Many tickets.
-     *
-     * @return self
      */
     public function setVotings($votings): self
     {

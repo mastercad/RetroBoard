@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BoardTeam
+ * BoardTeam.
  *
  * @ORM\Table(
  *  name="board_teams",
@@ -85,7 +84,7 @@ class BoardTeam
     private $modified;
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
      * @return int
      */
@@ -95,9 +94,7 @@ class BoardTeam
     }
 
     /**
-     * Set the value of id
-     *
-     * @param int $id
+     * Set the value of id.
      *
      * @return self
      */
@@ -109,7 +106,7 @@ class BoardTeam
     }
 
     /**
-     * Get the value of Team
+     * Get the value of Team.
      *
      * @return Team
      */
@@ -119,7 +116,7 @@ class BoardTeam
     }
 
     /**
-     * Set the value of team
+     * Set the value of team.
      *
      * @param Team $team
      *
@@ -133,7 +130,7 @@ class BoardTeam
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
      * @return Board
      */
@@ -143,7 +140,7 @@ class BoardTeam
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param Board $board
      *
@@ -157,7 +154,7 @@ class BoardTeam
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -167,9 +164,7 @@ class BoardTeam
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -181,7 +176,7 @@ class BoardTeam
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -191,9 +186,7 @@ class BoardTeam
     }
 
     /**
-     * Set the value of created
-     *
-     * @param \DateTime $created
+     * Set the value of created.
      *
      * @return self
      */
@@ -205,7 +198,7 @@ class BoardTeam
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -215,9 +208,7 @@ class BoardTeam
     }
 
     /**
-     * Set the value of modifier
-     *
-     * @param User $modifier
+     * Set the value of modifier.
      *
      * @return self
      */
@@ -229,7 +220,7 @@ class BoardTeam
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -239,9 +230,9 @@ class BoardTeam
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
      * @return self
      */

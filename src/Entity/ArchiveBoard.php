@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ArchiveBoard
+ * ArchiveBoard.
  *
  * @ORM\Table(
  *  name="boards_archive"
@@ -105,9 +105,9 @@ class ArchiveBoard
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -115,11 +115,9 @@ class ArchiveBoard
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -129,9 +127,9 @@ class ArchiveBoard
     }
 
     /**
-     * Get the value of name
+     * Get the value of name.
      *
-     * @return  string
+     * @return string
      */
     public function getName()
     {
@@ -139,11 +137,9 @@ class ArchiveBoard
     }
 
     /**
-     * Set the value of name
+     * Set the value of name.
      *
-     * @param  string  $name
-     *
-     * @return  self
+     * @return self
      */
     public function setName(string $name)
     {
@@ -153,9 +149,9 @@ class ArchiveBoard
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
-     * @return  \DateTime
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -163,11 +159,9 @@ class ArchiveBoard
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param  \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -177,9 +171,9 @@ class ArchiveBoard
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
-     * @return  \DateTime|null
+     * @return \DateTime|null
      */
     public function getModified()
     {
@@ -187,11 +181,11 @@ class ArchiveBoard
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param  \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {
@@ -201,7 +195,7 @@ class ArchiveBoard
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -211,11 +205,9 @@ class ArchiveBoard
     }
 
     /**
-     * Set the value of creator
+     * Set the value of creator.
      *
-     * @param User $creator
-     *
-     * @return  self
+     * @return self
      */
     public function setCreator(User $creator)
     {
@@ -225,7 +217,7 @@ class ArchiveBoard
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -235,11 +227,9 @@ class ArchiveBoard
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param User $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {
@@ -279,7 +269,7 @@ class ArchiveBoard
         return $this;
     }
 
-    public function setMembers(Collection $archiveBoardMembers) : self
+    public function setMembers(Collection $archiveBoardMembers): self
     {
         $this->members = $archiveBoardMembers;
 
@@ -317,7 +307,7 @@ class ArchiveBoard
         return $this;
     }
 
-    public function setBoardInvitations(Collection $archiveBoardInvitations) : self
+    public function setBoardInvitations(Collection $archiveBoardInvitations): self
     {
         $this->invitations = $archiveBoardInvitations;
 

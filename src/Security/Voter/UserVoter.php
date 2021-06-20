@@ -46,6 +46,7 @@ class UserVoter extends Voter
             case 'edit':
             case 'show':
                 return true;
+
                 return $user === $subject;
         }
 

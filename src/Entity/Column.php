@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Column
+ * Column.
  *
  * @ORM\Table(
  *  name="columns",
@@ -75,9 +75,9 @@ class Column
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -85,11 +85,11 @@ class Column
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
+     * @param int $id
      *
-     * @return  self
+     * @return self
      */
     public function setId(?int $id)
     {
@@ -99,9 +99,9 @@ class Column
     }
 
     /**
-     * Get the value of name
+     * Get the value of name.
      *
-     * @return  string
+     * @return string
      */
     public function getName()
     {
@@ -109,11 +109,9 @@ class Column
     }
 
     /**
-     * Set the value of name
+     * Set the value of name.
      *
-     * @param  string  $name
-     *
-     * @return  self
+     * @return self
      */
     public function setName(string $name)
     {
@@ -123,9 +121,9 @@ class Column
     }
 
     /**
-     * Get the value of priority
+     * Get the value of priority.
      *
-     * @return  int|null
+     * @return int|null
      */
     public function getPriority()
     {
@@ -133,11 +131,11 @@ class Column
     }
 
     /**
-     * Set the value of priority
+     * Set the value of priority.
      *
-     * @param  int|null  $priority
+     * @param int|null $priority
      *
-     * @return  self
+     * @return self
      */
     public function setPriority($priority)
     {
@@ -147,9 +145,9 @@ class Column
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
-     * @return  Board
+     * @return Board
      */
     public function getBoard()
     {
@@ -157,11 +155,11 @@ class Column
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param Board $board
      *
-     * @return  self
+     * @return self
      */
     public function setBoard(?Board $board)
     {
@@ -187,7 +185,7 @@ class Column
 
         return $this;
     }
-    
+
     public function removeTicket(Ticket $ticket): self
     {
         if ($this->tickets->contains($ticket)) {

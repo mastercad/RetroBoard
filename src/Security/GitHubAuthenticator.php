@@ -3,21 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\HttpFoundation\Response;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\GithubResourceOwner;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
+use League\OAuth2\Client\Provider\GithubResourceOwner;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class GitHubAuthenticator extends SocialAuthenticator
 {
@@ -34,7 +34,7 @@ class GitHubAuthenticator extends SocialAuthenticator
     private $em;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var LoggerInterface
      */
@@ -42,8 +42,6 @@ class GitHubAuthenticator extends SocialAuthenticator
 
     /**
      * GoogleAuthenticator constructor.
-     * @param ClientRegistry $clientRegistry
-     * @param EntityManagerInterface $em
      */
     public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em)
     {
@@ -57,25 +55,23 @@ class GitHubAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @return bool
      */
     public function supports(Request $request)
     {
-        $this->logger->info("GitHub Auth Supports: ".$request->attributes->get('_route'));
+        $this->logger->info('GitHub Auth Supports: '.$request->attributes->get('_route'));
         // continue ONLY if the current ROUTE matches the check ROUTE
         return 'connect_github_check' === $request->attributes->get('_route');
     }
 
     /**
-     * @param Request $request
      * @return \League\OAuth2\Client\Token\AccessToken|mixed
      */
     public function getCredentials(Request $request)
     {
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            "GITHUB_SESSION_USER"
+            'GITHUB_SESSION_USER'
         );
 
         return $this->fetchAccessToken($this->getGitHubClient());
@@ -83,24 +79,24 @@ class GitHubAuthenticator extends SocialAuthenticator
 
     /**
      * @param mixed $credentials
-     * @param UserProviderInterface $userProvider
-     * @return User|null|object|\Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @return User|object|\Symfony\Component\Security\Core\User\UserInterface|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         /** @var GithubResourceOwner $googleUser */
         $gitHubUser = $this->getGitHubClient()->fetchUserFromToken($credentials);
-        $this->logger->info("GitHub User Email: ".$gitHubUser->getEmail());
+        $this->logger->info('GitHub User Email: '.$gitHubUser->getEmail());
         $email = $gitHubUser->getEmail();
         $user = null;
-        $this->logger->info("Email: ".$gitHubUser->getEmail());
-        $this->logger->info("Id: ".$gitHubUser->getId());
-        $this->logger->info("Name: ".$gitHubUser->getName());
-        $this->logger->info("NickName: ".$gitHubUser->getNickName());
-        $this->logger->info("Url: ".$gitHubUser->getUrl());
+        $this->logger->info('Email: '.$gitHubUser->getEmail());
+        $this->logger->info('Id: '.$gitHubUser->getId());
+        $this->logger->info('Name: '.$gitHubUser->getName());
+        $this->logger->info('NickName: '.$gitHubUser->getNickName());
+        $this->logger->info('Url: '.$gitHubUser->getUrl());
         $gitHubResponse = $gitHubUser->toArray();
 
-        $this->logger->info("Response: ".print_r($gitHubResponse, true));
+        $this->logger->info('Response: '.print_r($gitHubResponse, true));
 
         $name = $gitHubUser->getName();
 
@@ -118,18 +114,18 @@ class GitHubAuthenticator extends SocialAuthenticator
                 // 2) do we have a matching user by email?
                 $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
             } else {
-                $email = uniqid("__GITHUB_RANDOM_EMAIL_");
+                $email = uniqid('__GITHUB_RANDOM_EMAIL_');
             }
 
             if (!$user) {
                 /** @var User $user */
                 $systemUser = $this->em->getRepository(User::class)->find(1);
-                $user = new User;
+                $user = new User();
                 $user->setEmail($email);
                 $user->setCreator($systemUser);
                 $user->setCreated(new \DateTime());
                 $user->setName($name);
-                $user->setPassword("");
+                $user->setPassword('');
             }
         }
 
@@ -157,11 +153,13 @@ class GitHubAuthenticator extends SocialAuthenticator
     {
         if ($exception instanceof FinishRegistrationException) {
             $this->saveUserInfoToSession($request, $exception);
-            return new RedirectResponse("/login-failure");
+
+            return new RedirectResponse('/login-failure');
         }
 
         $this->saveAuthenticationErrorToSession($request, $exception);
-        return new RedirectResponse("/login-secure");
+
+        return new RedirectResponse('/login-secure');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -170,15 +168,12 @@ class GitHubAuthenticator extends SocialAuthenticator
 //            return new RedirectResponse($targetPath);
 //        }
 
-        return new RedirectResponse("/");
+        return new RedirectResponse('/');
     }
 
     /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
-     *
-     * @param Request $request
-     * @param AuthenticationException|null $authException
      *
      * @return RedirectResponse
      */

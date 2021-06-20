@@ -20,8 +20,7 @@ class GitHubController extends AbstractController
     }
 
     /**
-     * Link to this controller to start the "connect" process
-     * @param ClientRegistry $clientRegistry
+     * Link to this controller to start the "connect" process.
      *
      * @Route("/connect/github", name="connect_github_start", methods={"GET"})
      *
@@ -36,8 +35,6 @@ class GitHubController extends AbstractController
     }
 
     /**
-     * @param EntityManagerInterface $entityManager
-     *
      * @Route("/connect/github", name="connect_github_delete", methods={"DELETE"})
      *
      * @return JsonResponse
@@ -60,6 +57,7 @@ class GitHubController extends AbstractController
                 ]
             );
         }
+
         return new JsonResponse(
             [
                 'success' => true,
@@ -71,12 +69,10 @@ class GitHubController extends AbstractController
     /**
      * After going to Github, you're redirected back here
      * because this is the "redirect_route" you configured
-     * in config/packages/knpu_oauth2_client.yaml
-     *
-     * @param Request $request
-     * @param ClientRegistry $clientRegistry
+     * in config/packages/knpu_oauth2_client.yaml.
      *
      * @Route("/connect/github/check", name="connect_github_check")
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)

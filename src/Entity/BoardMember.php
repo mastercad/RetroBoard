@@ -4,11 +4,10 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * BoardMember
+ * BoardMember.
  *
  * @ORM\Table(
  *  name="board_members",
@@ -102,14 +101,14 @@ class BoardMember
 //        var_dump("UserName: ".$user->getId());
 //        $this->tokenStorage = $tokenStorage;
 //        $this->creator = $tokenStorage->getToken()->getUser();
-        $this->created = new \DateTime("now");
+        $this->created = new \DateTime('now');
         $this->roles = ['ROLE_USER'];
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -117,11 +116,9 @@ class BoardMember
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -131,7 +128,7 @@ class BoardMember
     }
 
     /**
-     * Get the value of User
+     * Get the value of User.
      *
      * @return User
      */
@@ -141,11 +138,9 @@ class BoardMember
     }
 
     /**
-     * Set the value of user
+     * Set the value of user.
      *
-     * @param User  $user
-     *
-     * @return  self
+     * @return self
      */
     public function setUser(User $user)
     {
@@ -155,9 +150,9 @@ class BoardMember
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
-     * @return  Board
+     * @return Board
      */
     public function getBoard()
     {
@@ -165,11 +160,11 @@ class BoardMember
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param Board $board
      *
-     * @return  self
+     * @return self
      */
     public function setBoard(?Board $board)
     {
@@ -194,12 +189,14 @@ class BoardMember
             $roles = [$roles];
         }
         $this->roles = $roles;
+
         return $this;
     }
 
     public function addRole(string $role)
     {
         $this->roles[] = $role;
+
         return $this;
     }
 
@@ -209,11 +206,12 @@ class BoardMember
             $index = array_search($role, $this->roles);
             unset($this->roles[$index]);
         }
+
         return $this;
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -227,9 +225,7 @@ class BoardMember
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User  $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -241,7 +237,7 @@ class BoardMember
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -251,11 +247,9 @@ class BoardMember
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -265,7 +259,7 @@ class BoardMember
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -275,11 +269,9 @@ class BoardMember
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param User  $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {
@@ -289,7 +281,7 @@ class BoardMember
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -299,11 +291,11 @@ class BoardMember
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {

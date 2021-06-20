@@ -3,21 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use League\OAuth2\Client\Provider\GoogleUser;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\HttpFoundation\Response;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
+use League\OAuth2\Client\Provider\GoogleUser;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class GoogleAuthenticator extends SocialAuthenticator
 {
@@ -34,7 +34,7 @@ class GoogleAuthenticator extends SocialAuthenticator
     private $em;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var LoggerInterface
      */
@@ -42,8 +42,6 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     /**
      * GoogleAuthenticator constructor.
-     * @param ClientRegistry $clientRegistry
-     * @param EntityManagerInterface $em
      */
     public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em)
     {
@@ -57,7 +55,6 @@ class GoogleAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @return bool
      */
     public function supports(Request $request)
@@ -67,14 +64,13 @@ class GoogleAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @return \League\OAuth2\Client\Token\AccessToken|mixed
      */
     public function getCredentials(Request $request)
     {
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            "GOOGLE_SESSION_USER"
+            'GOOGLE_SESSION_USER'
         );
         // this method is only called if supports() returns true
         return $this->fetchAccessToken($this->getGoogleClient());
@@ -82,8 +78,8 @@ class GoogleAuthenticator extends SocialAuthenticator
 
     /**
      * @param mixed $credentials
-     * @param UserProviderInterface $userProvider
-     * @return User|null|object|\Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @return User|object|\Symfony\Component\Security\Core\User\UserInterface|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
@@ -102,19 +98,19 @@ class GoogleAuthenticator extends SocialAuthenticator
                 // 2) do we have a matching user by email?
                 $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
             } else {
-                $email = uniqid("__GOOGLE_RANDOM_EMAIL_");
+                $email = uniqid('__GOOGLE_RANDOM_EMAIL_');
             }
             $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
 
             if (!$user) {
                 /** @var User $user */
                 $systemUser = $this->em->getRepository(User::class)->find(1);
-                $user = new User;
+                $user = new User();
                 $user->setEmail($email);
                 $user->setCreator($systemUser);
                 $user->setCreated(new \DateTime());
                 $user->setName($googleUser->getName());
-                $user->setPassword("");
+                $user->setPassword('');
             }
         }
 
@@ -138,10 +134,10 @@ class GoogleAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @param TokenInterface $token
-     * @param string $providerKey
-     * @return null|Response
+     * @param string         $providerKey
+     *
+     * @return Response|null
      */
     /*
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -156,9 +152,7 @@ class GoogleAuthenticator extends SocialAuthenticator
     }
 */
     /**
-     * @param Request $request
-     * @param AuthenticationException $exception
-     * @return null|Response
+     * @return Response|null
      */
     /*
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -175,13 +169,13 @@ class GoogleAuthenticator extends SocialAuthenticator
             $this->saveUserInfoToSession($request, $exception);
 
 //            $registrationUrl = $this->router->generate('connect_google_registration');
-            return new RedirectResponse("/login-failure");
+            return new RedirectResponse('/login-failure');
         }
 
         $this->saveAuthenticationErrorToSession($request, $exception);
 
 //        $loginUrl = $this->router->generate('security_login');
-        return new RedirectResponse("/login-secure");
+        return new RedirectResponse('/login-secure');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -190,15 +184,12 @@ class GoogleAuthenticator extends SocialAuthenticator
 //            return new RedirectResponse($targetPath);
 //        }
 
-        return new RedirectResponse("/");
+        return new RedirectResponse('/');
     }
 
     /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
-     *
-     * @param Request $request
-     * @param AuthenticationException|null $authException
      *
      * @return RedirectResponse
      */

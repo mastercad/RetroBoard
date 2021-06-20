@@ -2,26 +2,25 @@
 
 namespace App\Security\Provider;
 
-use Psr\Log\LoggerInterface;
-use Psr\Http\Message\ResponseInterface;
-use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Provider\AbstractProvider;
-use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use League\OAuth2\Client\Provider\ResourceOwnerInterface;
+use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 use UnexpectedValueException;
 use WellingGuzman\OAuth2\Client\Provider\Exception\OktaIdentityProviderException;
 use WellingGuzman\OAuth2\Client\Provider\OktaResourceOwner;
 
 class OktaProvider extends AbstractProvider
 {
-
     use BearerAuthorizationTrait;
 
     private $baseUrl;
     private $logger;
     protected $scopes;
-    private $apiVersion="v1";
+    private $apiVersion = 'v1';
 
     public function __construct(array $options = [], array $collaborators = [])
     {
@@ -57,7 +56,6 @@ class OktaProvider extends AbstractProvider
      *
      * Eg. https://oauth.service.com/token
      *
-     * @param array $params
      * @return string
      */
     public function getBaseAccessTokenUrl(array $params)
@@ -68,7 +66,6 @@ class OktaProvider extends AbstractProvider
     /**
      * Returns the URL for requesting the resource owner's details.
      *
-     * @param AccessToken $token
      * @return string
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token)
@@ -79,31 +76,30 @@ class OktaProvider extends AbstractProvider
     /**
      * Requests an access token using a specified grant and option set.
      *
-     * @param  mixed $grant
-     * @param  array $options
+     * @param mixed $grant
+     *
      * @throws IdentityProviderException
+     *
      * @return AccessTokenInterface
      */
     public function getAccessToken($grant, array $options = [])
     {
         $grant = $this->verifyGrant($grant);
         $params = [
-            'client_id'     => $this->clientId,
+            'client_id' => $this->clientId,
             'client_secret' => $this->clientSecret,
-            'redirect_uri'  => $this->redirectUri,
+            'redirect_uri' => $this->redirectUri,
         ];
 
-        $params   = $grant->prepareRequestParameters($params, $options);
-        $request  = $this->getAccessTokenRequest($params);
+        $params = $grant->prepareRequestParameters($params, $options);
+        $request = $this->getAccessTokenRequest($params);
         $response = $this->getParsedResponse($request);
 
         if (false === is_array($response)) {
-            throw new UnexpectedValueException(
-                'Invalid response received from Authorization Server. Expected JSON.'
-            );
+            throw new UnexpectedValueException('Invalid response received from Authorization Server. Expected JSON.');
         }
         $prepared = $this->prepareAccessTokenResponse($response);
-        $token    = $this->createAccessToken($prepared, $grant);
+        $token = $this->createAccessToken($prepared, $grant);
 
         return $token;
     }
@@ -111,8 +107,6 @@ class OktaProvider extends AbstractProvider
     /**
      * Redirects the client for authorization.
      *
-     * @param  array $options
-     * @param  callable|null $redirectHandler
      * @return mixed
      */
     public function authorize(
@@ -125,7 +119,7 @@ class OktaProvider extends AbstractProvider
         }
 
         // @codeCoverageIgnoreStart
-        header('Location: ' . $url);
+        header('Location: '.$url);
         exit;
         // @codeCoverageIgnoreEnd
     }
@@ -133,7 +127,6 @@ class OktaProvider extends AbstractProvider
     /**
      * Requests resource owner details.
      *
-     * @param  AccessToken $token
      * @return mixed
      */
     protected function fetchResourceOwnerDetails(AccessToken $token)
@@ -167,8 +160,9 @@ class OktaProvider extends AbstractProvider
      * Checks a provider response for errors.
      *
      * @throws IdentityProviderException
-     * @param  ResponseInterface $response
-     * @param  array|string $data Parsed response data
+     *
+     * @param array|string $data Parsed response data
+     *
      * @return void
      */
     protected function checkResponse(ResponseInterface $response, $data)
@@ -181,9 +175,6 @@ class OktaProvider extends AbstractProvider
     /**
      * Generate a user object from a successful user details request.
      *
-     * @param array $response
-     * @param AccessToken $token
-     *
      * @return ResourceOwnerInterface
      */
     protected function createResourceOwner(array $response, AccessToken $token)
@@ -194,7 +185,7 @@ class OktaProvider extends AbstractProvider
     }
 
     /**
-     * Gets the api base url
+     * Gets the api base url.
      *
      * @return string
      */

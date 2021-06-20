@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Teams
+ * Teams.
  *
  * @ORM\Table(
  *  name="teams",
@@ -125,11 +125,13 @@ class Team
 
     /**
      * @param int $id
+     *
      * @return Team
      */
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
@@ -143,11 +145,13 @@ class Team
 
     /**
      * @param string $name
+     *
      * @return Team
      */
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -161,11 +165,13 @@ class Team
 
     /**
      * @param \DateTime $created
+     *
      * @return Team
      */
     public function setCreated($created)
     {
         $this->created = $created;
+
         return $this;
     }
 
@@ -179,11 +185,13 @@ class Team
 
     /**
      * @param \DateTime|null $modified
+     *
      * @return Team
      */
     public function setModified($modified)
     {
         $this->modified = $modified;
+
         return $this;
     }
 
@@ -197,11 +205,13 @@ class Team
 
     /**
      * @param User $creator
+     *
      * @return Team
      */
     public function setCreator($creator)
     {
         $this->creator = $creator;
+
         return $this;
     }
 
@@ -215,11 +225,13 @@ class Team
 
     /**
      * @param User $modifier
+     *
      * @return Team
      */
     public function setModifier($modifier)
     {
         $this->modifier = $modifier;
+
         return $this;
     }
 

@@ -33,6 +33,6 @@ class TeamType extends AbstractType
 
     public function getAlias()
     {
-        return "TeamTypeFormClassDingsBums";
+        return 'TeamTypeFormClassDingsBums';
     }
 }

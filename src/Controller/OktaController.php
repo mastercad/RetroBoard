@@ -3,11 +3,11 @@
 namespace App\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class OktaController extends AbstractController
@@ -20,8 +20,7 @@ class OktaController extends AbstractController
     }
 
     /**
-     * Link to this controller to start the "connect" process
-     * @param ClientRegistry $clientRegistry
+     * Link to this controller to start the "connect" process.
      *
      * @Route("/connect/okta", name="connect_okta_start", methods={"GET"})
      *
@@ -36,8 +35,6 @@ class OktaController extends AbstractController
     }
 
     /**
-     * @param EntityManagerInterface $entityManager
-     *
      * @Route("/connect/okta", name="connect_okta_delete", methods={"DELETE"})
      *
      * @return JsonResponse
@@ -60,6 +57,7 @@ class OktaController extends AbstractController
                 ]
             );
         }
+
         return new JsonResponse(
             [
                 'success' => true,
@@ -71,10 +69,7 @@ class OktaController extends AbstractController
     /**
      * After going to okta, you're redirected back here
      * because this is the "redirect_route" you configured
-     * in config/packages/knpu_oauth2_client.yaml
-     *
-     * @param Request $request
-     * @param ClientRegistry $clientRegistry
+     * in config/packages/knpu_oauth2_client.yaml.
      *
      * @Route("/connect/okta/check", name="connect_okta_check")
      *

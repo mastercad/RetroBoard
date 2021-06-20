@@ -7,7 +7,6 @@ use Twig\TwigFilter;
 
 class UuidExtension extends AbstractExtension
 {
-
     public function getFilters()
     {
         return [
@@ -21,9 +20,10 @@ class UuidExtension extends AbstractExtension
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#_-';
         $charactersLength = strlen($characters);
 
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $uuid .= substr($characters, rand(0, $charactersLength), 1);
         }
+
         return $uuid;
     }
 }

@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BoardInvitation
+ * BoardInvitation.
  *
  * @ORM\Table(
  *  name="board_invitations",
@@ -87,9 +87,9 @@ class BoardInvitation
     private $modified;
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -97,11 +97,9 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -111,9 +109,9 @@ class BoardInvitation
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
-     * @return  Board
+     * @return Board
      */
     public function getBoard()
     {
@@ -121,11 +119,11 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param Board $board
      *
-     * @return  self
+     * @return self
      */
     public function setBoard(?Board $board)
     {
@@ -135,9 +133,9 @@ class BoardInvitation
     }
 
     /**
-     * Get the value of email
+     * Get the value of email.
      *
-     * @return  string
+     * @return string
      */
     public function getEmail()
     {
@@ -145,11 +143,9 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of email
+     * Set the value of email.
      *
-     * @param  string  $email
-     *
-     * @return  self
+     * @return self
      */
     public function setEmail(string $email)
     {
@@ -166,11 +162,12 @@ class BoardInvitation
     public function setToken(?string $token)
     {
         $this->token = $token;
+
         return $this;
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -180,9 +177,7 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User  $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -194,7 +189,7 @@ class BoardInvitation
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -204,11 +199,9 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -218,7 +211,7 @@ class BoardInvitation
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -228,11 +221,9 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param User  $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {
@@ -242,7 +233,7 @@ class BoardInvitation
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -252,11 +243,11 @@ class BoardInvitation
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {

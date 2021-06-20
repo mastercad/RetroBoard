@@ -2,21 +2,21 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Ticket;
 use App\Entity\Board;
-use App\Form\TicketFormType;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use App\Entity\User;
 use App\Entity\Column;
+use App\Entity\Ticket;
+use App\Entity\User;
+use App\Form\TicketFormType;
 use Countable;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mercure\Publisher;
 use Symfony\Component\Mercure\Update;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TicketController extends AbstractController
@@ -62,15 +62,14 @@ class TicketController extends AbstractController
     }
 
     /**
-    * @Route("/ticket/{id}", name="app_ticket_show", methods={"GET"}, requirements={"id"="\d+"})
-    *
-    */
+     * @Route("/ticket/{id}", name="app_ticket_show", methods={"GET"}, requirements={"id"="\d+"})
+     */
     public function showTicket(int $id)
     {
         /** @var Ticket $ticket */
         $ticket = $this->getDoctrine()->getRepository(Ticket::class)->find($id);
 
-        if (! $ticket instanceof Ticket) {
+        if (!$ticket instanceof Ticket) {
             return new JsonResponse(
                 [
                     'sucess' => false,
@@ -89,17 +88,17 @@ class TicketController extends AbstractController
     }
 
     /**
-     * Returns the Edit template, filled out, if id set
+     * Returns the Edit template, filled out, if id set.
      *
      * @Route("/ticket/load_edit_template", name="app_ticket_load_edit_template", methods={"GET"})
      *
-     * @param Request $request Request from Frontend.
+     * @param Request $request request from Frontend
      *
      * @return Response
      */
     public function loadEditTicketTemplate(Request $request)
     {
-        $ticketId = (int)$request->get('id');
+        $ticketId = (int) $request->get('id');
         $ticket = null;
 
         if (0 < $ticketId) {
@@ -119,11 +118,9 @@ class TicketController extends AbstractController
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @Route("/ticket/save", name="app_ticket_save", methods={"POST"})
-     *
-     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -181,11 +178,9 @@ class TicketController extends AbstractController
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @Route("/ticket/save/{id}", name="app_ticket_update", methods={"POST"}, requirements={"id"="\d+"})
-     *
-     * @param Request $request
      *
      * @return JsonResponse
      */
@@ -237,7 +232,7 @@ class TicketController extends AbstractController
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
      * @Route("/ticket/delete/{id}", name="app_ticket_delete", methods={"DELETE"}, requirements={"id"="\d+"})
      *
@@ -292,7 +287,6 @@ class TicketController extends AbstractController
     }
 
     /**
-     *
      * @Route("/ticket/archive/{id}", name="app_ticket_archive", methods={"POST"}, requirements={"id"="\d+"})
      *
      * @return JsonResponse
@@ -337,7 +331,7 @@ class TicketController extends AbstractController
     }
 
     /**
-     * Send notification to all board subscribers
+     * Send notification to all board subscribers.
      */
     private function informSubscribers(LoggerInterface $logger, \Swift_Mailer $mailer, $ticket)
     {

@@ -4,14 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -24,7 +23,7 @@ class SecurityController extends AbstractController
     {
         $this->translator = $translator;
     }
-    
+
     /**
      * @Route("/login", name="app_login", options={"permanent"=true, "keepRequestMethod"=true})
      */
@@ -86,6 +85,7 @@ class SecurityController extends AbstractController
 
         if (0 < count($errorList)) {
             $errorMessage = $errorList[0]->getMessage();
+
             return $this->render(
                 'security/forgot-password.html.twig',
                 [
@@ -134,6 +134,7 @@ class SecurityController extends AbstractController
                 $mailer->send($message);
             }
         }
+
         return $this->render('security/reset-password-request.html.twig');
     }
 

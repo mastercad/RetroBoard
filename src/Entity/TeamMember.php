@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TeamMembers
+ * TeamMembers.
  *
  * @ORM\Table(
  *     name="team_members",
@@ -119,11 +119,12 @@ class TeamMember
     public function setId($id)
     {
         $this->id = $id;
+
         return $this;
     }
 
     /**
-     * Get the value of team
+     * Get the value of team.
      *
      * @return Team
      */
@@ -133,11 +134,11 @@ class TeamMember
     }
 
     /**
-     * Set the value of team
+     * Set the value of team.
      *
      * @param Team $team
      *
-     * @return  self
+     * @return self
      */
     public function setTeam(?Team $team)
     {
@@ -162,6 +163,7 @@ class TeamMember
     public function setMember(?User $member)
     {
         $this->member = $member;
+
         return $this;
     }
 
@@ -181,6 +183,7 @@ class TeamMember
             $roles = [$roles];
         }
         $this->roles = $roles;
+
         return $this;
     }
 
@@ -193,13 +196,12 @@ class TeamMember
     }
 
     /**
-     * @param \DateTime $created
-     *
      * @return TeamMember
      */
     public function setCreated(\DateTime $created)
     {
         $this->created = $created;
+
         return $this;
     }
 
@@ -212,12 +214,12 @@ class TeamMember
     }
 
     /**
-     * @param \DateTime|null $modified
      * @return TeamMember
      */
     public function setModified(?\DateTime $modified)
     {
         $this->modified = $modified;
+
         return $this;
     }
 
@@ -230,12 +232,12 @@ class TeamMember
     }
 
     /**
-     * @param User $creator
      * @return TeamMember
      */
     public function setCreator(User $creator)
     {
         $this->creator = $creator;
+
         return $this;
     }
 
@@ -249,11 +251,13 @@ class TeamMember
 
     /**
      * @param User $modifier
+     *
      * @return TeamMember
      */
     public function setModifier(?User $modifier)
     {
         $this->modifier = $modifier;
+
         return $this;
     }
 }

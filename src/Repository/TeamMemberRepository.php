@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -9,25 +10,19 @@ use Doctrine\ORM\Query\Expr\Join;
 class TeamMemberRepository extends EntityRepository
 {
     /**
-     * SELECT team_members.member, team_members.team, users.name FROM
-        (SELECT team_members.team FROM team_members WHERE team_members.member = 2) AS known_teams
-       INNER JOIN team_members ON team_members.team IN (known_teams.team)
-       INNER JOIN users ON users.id = team_members.member
-
-       GROUP BY team_members.member, team_members.team, users.name
+     * SELECT team_members.member, team_members.team, users.name FROM.
      *
-     * @param User $user
      * @return void
      */
     public function findAllKnownMembers(User $user)
     {
         $statement = $this->getEntityManager()->getConnection()->prepare(
-            "SELECT team_members.member, team_members.team, users.id, users.name FROM
+            'SELECT team_members.member, team_members.team, users.id, users.name FROM
                 (SELECT team_members.team FROM team_members WHERE team_members.member = :userId) AS known_teams
             INNER JOIN team_members ON team_members.team IN (known_teams.team)
             INNER JOIN users ON users.id = team_members.member AND users.id != :userId
 
-            GROUP BY team_members.member, team_members.team, users.id, users.name"
+            GROUP BY team_members.member, team_members.team, users.id, users.name'
         );
 
         $statement->execute(['userId' => $user->getId()]);

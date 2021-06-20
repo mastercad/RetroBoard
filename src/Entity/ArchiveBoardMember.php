@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ArchiveBoardMember
+ * ArchiveBoardMember.
  *
  * @ORM\Table(
  *  name="board_members_achive"
@@ -95,9 +95,9 @@ class ArchiveBoardMember
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -105,11 +105,9 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -119,7 +117,7 @@ class ArchiveBoardMember
     }
 
     /**
-     * Get the value of User
+     * Get the value of User.
      *
      * @return User
      */
@@ -129,11 +127,9 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of user
+     * Set the value of user.
      *
-     * @param User $user
-     *
-     * @return  self
+     * @return self
      */
     public function setUser(User $user)
     {
@@ -143,7 +139,7 @@ class ArchiveBoardMember
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
      * @return ArchiveBoard
      */
@@ -153,11 +149,11 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param ArchiveBoard $archiveBoard
      *
-     * @return  self
+     * @return self
      */
     public function setBoard(?ArchiveBoard $archiveBoard)
     {
@@ -172,18 +168,19 @@ class ArchiveBoardMember
         $roles = $this->roles;
         // damit mindestens eine Rolle gesetzt wird
         $roles[] = 'ROLE_USER';
-    
+
         return array_unique($roles);
     }
 
     public function setRoles($roles)
     {
         $this->roles = $roles;
+
         return $this;
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -193,9 +190,7 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User  $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -207,7 +202,7 @@ class ArchiveBoardMember
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -217,11 +212,9 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -231,7 +224,7 @@ class ArchiveBoardMember
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -241,11 +234,9 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param User  $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {
@@ -255,7 +246,7 @@ class ArchiveBoardMember
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -265,11 +256,11 @@ class ArchiveBoardMember
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {

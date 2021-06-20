@@ -1,9 +1,10 @@
 <?php
+
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use App\Entity\Board;
 use App\Entity\Column;
+use Doctrine\ORM\EntityRepository;
 
 class TicketsRepository extends EntityRepository
 {

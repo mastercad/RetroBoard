@@ -47,15 +47,15 @@ class Archivist
 
     public function archiveColumn(Column $column, $archiveBoard = null)
     {
-        /** kein Board übergeben */
+        /* kein Board übergeben */
         if (null === $archiveBoard) {
-            /** aber board in der column */
+            /* aber board in der column */
             if (null !== $column->getBoard()) {
                 $archiveBoard = $this->getDoctrine()->getRepository(ArchiveBoard::class)->find(
                     $column->getBoard()->getId()
                 );
 
-                /** board an column noch nicht archiviert */
+                /* board an column noch nicht archiviert */
                 if (null === $archiveBoard) {
                     $archiveBoard = new ArchiveBoard();
                     $archiveBoard->setCreator($column->getBoard()->getCreator());
@@ -65,9 +65,9 @@ class Archivist
                     $archiveBoard->setModifier($column->getBoard()->getModifier());
                     $archiveBoard->setModified($column->getBoard()->getModified());
                 }
-            /** column hat auch kein board */
+                /* column hat auch kein board */
             } else {
-                throw new InvalidArgumentException("Board in Column not exists!");
+                throw new InvalidArgumentException('Board in Column not exists!');
             }
         }
 
@@ -116,7 +116,7 @@ class Archivist
                     $archiveColumn->setBoard($archiveBoard);
                 }
             } else {
-                throw new InvalidArgumentException("Column of Ticket not exists!");
+                throw new InvalidArgumentException('Column of Ticket not exists!');
             }
         }
         $archiveTicket = new ArchiveTicket();
@@ -137,7 +137,7 @@ class Archivist
 
     public function archiveVoting(Voting $voting, $archiveTicket = null)
     {
-        /** archive ticket nicht übergeben */
+        /* archive ticket nicht übergeben */
         if (null === $archiveTicket) {
             if (null !== $voting->getTicket()) {
                 $archiveTicket = $this->getDoctrine()->getRepository(ArchiveTicket::class)->find(

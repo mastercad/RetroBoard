@@ -19,7 +19,7 @@ class TeamInvitationVoter extends Voter
         $this->security = $security;
         $this->logger = $logger;
     }
-    
+
     protected function supports($attribute, $subject)
     {
         // replace with your own logic
@@ -29,11 +29,11 @@ class TeamInvitationVoter extends Voter
     }
 
     /**
-     * Undocumented function
+     * Undocumented function.
      *
-     * @param  [type]          $attribute
-     * @param  TeamInvitation $subject
-     * @param  TokenInterface  $token
+     * @param [type]         $attribute
+     * @param TeamInvitation $subject
+     *
      * @return void
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
@@ -53,6 +53,7 @@ class TeamInvitationVoter extends Voter
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'accept':
                 if (strtolower($subject->getEmail()) == strtolower($user->getEmail())) {
@@ -69,6 +70,7 @@ class TeamInvitationVoter extends Voter
                             && in_array('ROLE_ADMIN', $teamMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'create':
                 $results = $subject->getTeam()->getTeamMembers()->filter(
@@ -76,6 +78,7 @@ class TeamInvitationVoter extends Voter
                         return $teamMember->getMember() === $user;
                     }
                 );
+
                 return 0 < count($results);
             case 'show':
                 $results = $subject->getTeam()->getTeamMembers()->filter(
@@ -83,6 +86,7 @@ class TeamInvitationVoter extends Voter
                         return $teamMember->getMember() === $user;
                     }
                 );
+
                 return 0 < count($results);
         }
 

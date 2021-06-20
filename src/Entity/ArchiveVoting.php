@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ArchiveVoting
+ * ArchiveVoting.
  *
  * @ORM\Table(
  *  name="votings_archive"
@@ -75,7 +75,7 @@ class ArchiveVoting
     private $modified;
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
      * @return int
      */
@@ -85,9 +85,7 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of id
-     *
-     * @param int  $id
+     * Set the value of id.
      *
      * @return self
      */
@@ -99,7 +97,7 @@ class ArchiveVoting
     }
 
     /**
-     * Get the value of points
+     * Get the value of points.
      *
      * @return int
      */
@@ -109,7 +107,7 @@ class ArchiveVoting
     }
 
     /**
-     * Get the value of ticket
+     * Get the value of ticket.
      *
      * @return ArchiveTicket
      */
@@ -119,9 +117,9 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of ticket
+     * Set the value of ticket.
      *
-     * @param ArchiveTicket  $ticket
+     * @param ArchiveTicket $ticket
      *
      * @return self
      */
@@ -133,9 +131,7 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of points
-     *
-     * @param  int  $points
+     * Set the value of points.
      *
      * @return self
      */
@@ -147,7 +143,7 @@ class ArchiveVoting
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -157,9 +153,7 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param  User  $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -171,7 +165,7 @@ class ArchiveVoting
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -181,9 +175,7 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of created
-     *
-     * @param \DateTime  $created
+     * Set the value of created.
      *
      * @return self
      */
@@ -195,7 +187,7 @@ class ArchiveVoting
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -205,9 +197,7 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of modifier
-     *
-     * @param  User  $modifier
+     * Set the value of modifier.
      *
      * @return self
      */
@@ -219,7 +209,7 @@ class ArchiveVoting
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -229,9 +219,9 @@ class ArchiveVoting
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
      * @return self
      */

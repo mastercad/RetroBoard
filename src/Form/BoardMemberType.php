@@ -21,7 +21,7 @@ class BoardMemberType extends AbstractType
                 'created',
                 HiddenType::class,
                 [
-                    'data' => new \DateTime("now")
+                    'data' => new \DateTime('now')
                 ]
             )
         ;
@@ -37,6 +37,6 @@ class BoardMemberType extends AbstractType
 
     public function getAlias()
     {
-        return "BoardMemberTypeFORMClassDingsBums";
+        return 'BoardMemberTypeFORMClassDingsBums';
     }
 }

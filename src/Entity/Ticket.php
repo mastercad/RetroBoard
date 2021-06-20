@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Ticket
+ * Ticket.
  *
  * @ORM\Table(
  *  name="tickets",
@@ -88,9 +88,9 @@ class Ticket
     private $modified;
 
     /**
-     * @var Voting
+     * @var voting
      *
-     * One user has Many tickets.
+     * One user has Many tickets
      * @ORM\OneToMany(
      *  targetEntity="Voting",
      *  mappedBy="ticket",
@@ -106,7 +106,7 @@ class Ticket
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
      * @return int
      */
@@ -116,9 +116,7 @@ class Ticket
     }
 
     /**
-     * Set the value of id
-     *
-     * @param int $id
+     * Set the value of id.
      *
      * @return self
      */
@@ -130,7 +128,7 @@ class Ticket
     }
 
     /**
-     * Get the value of content
+     * Get the value of content.
      *
      * @return string
      */
@@ -140,9 +138,7 @@ class Ticket
     }
 
     /**
-     * Set the value of content
-     *
-     * @param string $content
+     * Set the value of content.
      *
      * @return self
      */
@@ -154,9 +150,7 @@ class Ticket
     }
 
     /**
-     * Undocumented function
-     *
-     * @return boolean
+     * Undocumented function.
      */
     public function isArchived(): bool
     {
@@ -164,20 +158,17 @@ class Ticket
     }
 
     /**
-     * Undocumented function
-     *
-     * @param boolean $archived
-     *
-     * @return self
+     * Undocumented function.
      */
     public function setArchived(bool $archived): self
     {
         $this->archived = $archived;
+
         return $this;
     }
 
     /**
-     * Get the value of column
+     * Get the value of column.
      *
      * @return Column
      */
@@ -187,9 +178,7 @@ class Ticket
     }
 
     /**
-     * Set the value of column
-     *
-     * @param Column $column
+     * Set the value of column.
      *
      * @return self
      */
@@ -201,7 +190,7 @@ class Ticket
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -211,9 +200,7 @@ class Ticket
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -225,7 +212,7 @@ class Ticket
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -235,9 +222,7 @@ class Ticket
     }
 
     /**
-     * Set the value of created
-     *
-     * @param \DateTime $created
+     * Set the value of created.
      *
      * @return self
      */
@@ -249,7 +234,7 @@ class Ticket
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -259,9 +244,7 @@ class Ticket
     }
 
     /**
-     * Set the value of modifier
-     *
-     * @param User $modifier
+     * Set the value of modifier.
      *
      * @return self
      */
@@ -273,7 +256,7 @@ class Ticket
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -283,7 +266,7 @@ class Ticket
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
      * @param \DateTime|null $modified
      *

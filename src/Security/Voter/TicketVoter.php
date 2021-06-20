@@ -44,6 +44,7 @@ class TicketVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'delete':
 //                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
@@ -59,9 +60,10 @@ class TicketVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'create':
-                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
+                if ('Demo Board' === $subject->getColumn()->getBoard()->getName()) {
                     return true;
                 }
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
@@ -69,6 +71,7 @@ class TicketVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
+
                 return 0 < count($results);
             case 'edit':
 //                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
@@ -88,9 +91,10 @@ class TicketVoter extends Voter
                             && in_array('ROLE_ADMIN', $boardMember->getRoles());
                     }
                 );
+
                 return 0 < count($results);
             case 'show':
-                if ("Demo Board" === $subject->getColumn()->getBoard()->getName()) {
+                if ('Demo Board' === $subject->getColumn()->getBoard()->getName()) {
                     return true;
                 }
                 $results = $subject->getColumn()->getBoard()->getBoardMembers()->filter(
@@ -98,6 +102,7 @@ class TicketVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
+
                 return 0 < count($results);
         }
 

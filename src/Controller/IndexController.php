@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Board;
 use App\Entity\BoardMember;
 use App\Entity\BoardTeam;
-use App\Entity\Team;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

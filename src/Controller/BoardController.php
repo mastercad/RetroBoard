@@ -2,24 +2,24 @@
 
 namespace App\Controller;
 
-use App\Entity\BoardTeam;
-use App\Entity\User;
-use App\Entity\Team;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Board;
 use App\Entity\BoardInvitation;
 use App\Entity\BoardMember;
 use App\Entity\BoardSubscriber;
+use App\Entity\BoardTeam;
 use App\Entity\Column;
+use App\Entity\Team;
+use App\Entity\User;
 use App\Form\BoardType;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BoardController extends AbstractController
 {
@@ -198,7 +198,7 @@ class BoardController extends AbstractController
     public function saveAction(Request $request)
     {
         $boardRequestData = $request->request->get('board');
-        $id = (int)$boardRequestData['id'];
+        $id = (int) $boardRequestData['id'];
 
         /** Board $board */
         $board = null;
@@ -294,6 +294,7 @@ class BoardController extends AbstractController
                     }
                 }
             }
+
             return new JsonResponse(['success' => false, 'data' => $boardRequestData]);
         }
 
@@ -377,14 +378,9 @@ class BoardController extends AbstractController
 
     /**
      * Manage given member for board membership.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function manageBoardMember(Request $request, Board $board) : bool
+    private function manageBoardMember(Request $request, Board $board): bool
     {
-
         $success = true;
         $boardRequestData = $request->request->get('board');
         if (!isset($boardRequestData['members'])) {
@@ -395,7 +391,7 @@ class BoardController extends AbstractController
             $boardMember = null;
             $user = $this->getDoctrine()->getRepository(User::class)->find($member['userId']);
             if (empty($member['boardMemberId'])) {
-                $boardMember = new BoardMember;
+                $boardMember = new BoardMember();
                 $boardMember->setUser($user);
                 $boardMember->setCreator($this->getUser());
                 $boardMember->setCreated(new \DateTime());
@@ -412,19 +408,15 @@ class BoardController extends AbstractController
         }
 
         $request->request->set('board', $boardRequestData);
+
         return $success;
     }
 
     /**
      * Manage given teams for board.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function manageBoardTeams(Request $request, Board $board) : bool
+    private function manageBoardTeams(Request $request, Board $board): bool
     {
-
         $success = true;
 
         $boardRequestData = $request->request->get('board');
@@ -436,7 +428,7 @@ class BoardController extends AbstractController
             $boardTeam = null;
             $team = $this->getDoctrine()->getRepository(Team::class)->find($currentTeam['teamId']);
             if (empty($currentTeam['boardTeamId'])) {
-                $boardTeam = new BoardTeam;
+                $boardTeam = new BoardTeam();
                 $boardTeam->setTeam($team);
                 $boardTeam->setBoard($board);
                 $boardTeam->setCreator($this->getUser());
@@ -451,19 +443,15 @@ class BoardController extends AbstractController
         }
 
         $request->request->set('board', $boardRequestData);
+
         return $success;
     }
 
     /**
      * Manage given invitations for board membership.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function manageBoardInvitations(Request $request, Board $board) : bool
+    private function manageBoardInvitations(Request $request, Board $board): bool
     {
-
         $success = true;
 
         $boardRequestData = $request->request->get('board');
@@ -488,19 +476,15 @@ class BoardController extends AbstractController
         }
 
         $request->request->set('board', $boardRequestData);
+
         return $success;
     }
 
     /**
      * Manage given columns for board membership.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
-    private function manageBoardColumns(Request $request, Board $board) : bool
+    private function manageBoardColumns(Request $request, Board $board): bool
     {
-
         $success = true;
 
         $boardRequestData = $request->request->get('board');
@@ -513,7 +497,7 @@ class BoardController extends AbstractController
             $priority = $currentColumn['priority'];
 
             if (empty($currentColumn['id'])) {
-                $column = new Column;
+                $column = new Column();
                 $column->setBoard($board);
                 $currentColumn['id'] = $column;
             } else {
@@ -530,6 +514,7 @@ class BoardController extends AbstractController
         }
 
         $request->request->set('board', $boardRequestData);
+
         return $success;
     }
 
@@ -537,7 +522,6 @@ class BoardController extends AbstractController
      * @Route("/board/invite", name="board_invite", methods={"POST"})
      *
      * @param \Swift_Mailer          $mailer
-     * @param Request                $request
      * @param EntityManagerInterface $entityManager
      *
      * @return JsonResponse
@@ -557,7 +541,6 @@ class BoardController extends AbstractController
 
     private function handleBoardInvitation($board, $email, $invitationId = null, $postProcessed = false)
     {
-
         $boardInvitation = new BoardInvitation();
         $token = sha1(random_bytes(20));
         $data = [];
@@ -634,19 +617,16 @@ class BoardController extends AbstractController
     }
 
     /**
-     * Undocumented function
-     *
-     * @param BoardInvitation $boardInvitation
+     * Undocumented function.
      *
      * @return void
      */
     private function sendInvitationEmail(BoardInvitation $boardInvitation)
     {
-
-            $message = new \Swift_Message(
+        $message = new \Swift_Message(
                 'Invitation request board "'.$boardInvitation->getBoard()->getName().'" on https://retro.byte-artist.de'
             );
-            $message->setFrom('no-reply@byte-artist.de')
+        $message->setFrom('no-reply@byte-artist.de')
                 ->setTo($boardInvitation->getEmail())
                 ->setBcc('andreas.kempe@byte-artist.de')
                 ->setBody(
@@ -672,15 +652,13 @@ class BoardController extends AbstractController
                     'text/plain'
                 );
 
-            $this->mailer->send($message);
+        $this->mailer->send($message);
 
         return $this;
     }
 
     /**
      * @Route("/board/invitation/{id}", name="board_invite_delete", methods={"DELETE"})
-     *
-     * @param integer $id
      *
      * @return void
      */
@@ -716,8 +694,6 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/{id}", name="board_delete", methods={"DELETE"})
      *
-     * @param integer $id
-     *
      * @return void
      */
     public function deleteAction(int $id)
@@ -748,7 +724,7 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/invitation/{token}", name="board_invitation", methods={"GET"})
      *
-     * @param Request                $request
+     * @param Request $request
      */
     public function memberAction(string $token)
     {
@@ -765,7 +741,7 @@ class BoardController extends AbstractController
         $boardMember->setUser($this->getUser());
         $boardMember->setCreator($this->getUser());
         $boardMember->setCreated(new \DateTime());
-        $boardMember->setRoles(["ROLE_USER"]);
+        $boardMember->setRoles(['ROLE_USER']);
 
         $boardSubscriber = new BoardSubscriber();
         $boardSubscriber->setBoard($boardInvitation->getBoard());
@@ -782,13 +758,12 @@ class BoardController extends AbstractController
             // dürfte eigentlich nicht passieren da invitations gelöscht werden, wenn die subscribtion vollständig
             // ablief ist im grunde egal, da der user schon member ist und daher kann weiter geleitet werden.
         }
-        return $this->redirectToRoute("board_show", ['id' => $boardMember->getBoard()->getId()]);
+
+        return $this->redirectToRoute('board_show', ['id' => $boardMember->getBoard()->getId()]);
     }
 
     /**
      * @Route("/board/team/{id}", name="board_team_delete", methods={"DELETE"})
-     *
-     * @param integer $id
      *
      * @return void
      */
@@ -819,8 +794,6 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/member/{id}", name="board_member_delete", methods={"DELETE"})
      *
-     * @param integer $id
-     *
      * @return void
      */
     public function deleteMemberAction(int $id)
@@ -850,14 +823,12 @@ class BoardController extends AbstractController
     /**
      * @Route("/board/subscribe/{id}", name="board_subscribe", methods={"GET"})
      *
-     * @param integer $id
-     *
      * @return void
      */
     public function subscribeAction(int $id)
     {
         $board = $this->getDoctrine()->getRepository(Board::class)->find($id);
-        $content = "";
+        $content = '';
 
         if (!$board instanceof Board) {
             return new JsonResponse(
@@ -896,8 +867,6 @@ class BoardController extends AbstractController
 
     /**
      * @Route("/board/member", name="board_add_member", methods={"POST"})
-     *
-     * @param Request $request
      *
      * @return void
      */
@@ -943,13 +912,12 @@ class BoardController extends AbstractController
             $data['content'] = $this->translator->trans('member_already_added', [], 'errors');
             $data['id'] = $boardMember->getId();
         }
+
         return new JsonResponse($data);
     }
 
     /**
      * @Route("/board/team", name="board_add_team", methods={"POST"})
-     *
-     * @param Request $request
      *
      * @return void
      */
@@ -984,6 +952,7 @@ class BoardController extends AbstractController
             $data['content'] = $this->translator->trans('team_already_added', [], 'errors');
             $data['id'] = $boardTeam->getId();
         }
+
         return new JsonResponse($data);
     }
 

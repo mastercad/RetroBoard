@@ -3,21 +3,21 @@
 namespace App\Security;
 
 use App\Entity\User;
-use Psr\Log\LoggerInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\HttpFoundation\Response;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use KnpU\OAuth2ClientBundle\Client\Provider\MicrosoftClient;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Stevenmaguire\OAuth2\Client\Provider\MicrosoftResourceOwner;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use KnpU\OAuth2ClientBundle\Security\Exception\FinishRegistrationException;
+use Psr\Log\LoggerInterface;
+use Stevenmaguire\OAuth2\Client\Provider\MicrosoftResourceOwner;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class MicrosoftAuthenticator extends SocialAuthenticator
 {
@@ -34,7 +34,7 @@ class MicrosoftAuthenticator extends SocialAuthenticator
     private $em;
 
     /**
-     * Undocumented variable
+     * Undocumented variable.
      *
      * @var LoggerInterface
      */
@@ -42,8 +42,6 @@ class MicrosoftAuthenticator extends SocialAuthenticator
 
     /**
      * GoogleAuthenticator constructor.
-     * @param ClientRegistry $clientRegistry
-     * @param EntityManagerInterface $em
      */
     public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em)
     {
@@ -57,25 +55,23 @@ class MicrosoftAuthenticator extends SocialAuthenticator
     }
 
     /**
-     * @param Request $request
      * @return bool
      */
     public function supports(Request $request)
     {
-        $this->logger->info("Microsoft Auth Supports: ".$request->attributes->get('_route'));
+        $this->logger->info('Microsoft Auth Supports: '.$request->attributes->get('_route'));
         // continue ONLY if the current ROUTE matches the check ROUTE
         return 'connect_microsoft_check' === $request->attributes->get('_route');
     }
 
     /**
-     * @param Request $request
      * @return \League\OAuth2\Client\Token\AccessToken|mixed
      */
     public function getCredentials(Request $request)
     {
         $request->getSession()->set(
             Security::LAST_USERNAME,
-            "MICROSOFT_SESSION_USER"
+            'MICROSOFT_SESSION_USER'
         );
         // this method is only called if supports() returns true
         return $this->fetchAccessToken($this->getMicrosoftClient());
@@ -83,27 +79,27 @@ class MicrosoftAuthenticator extends SocialAuthenticator
 
     /**
      * @param mixed $credentials
-     * @param UserProviderInterface $userProvider
-     * @return User|null|object|\Symfony\Component\Security\Core\User\UserInterface
+     *
+     * @return User|object|\Symfony\Component\Security\Core\User\UserInterface|null
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         /** @var MicrosoftResourceOwner $microsoftUser */
         $microsoftUser = $this->getMicrosoftClient()->fetchUserFromToken($credentials);
-        $this->logger->info("Microsoft User Email: ".$microsoftUser->getEmail());
+        $this->logger->info('Microsoft User Email: '.$microsoftUser->getEmail());
         $email = $microsoftUser->getEmail();
         $user = null;
-        $this->logger->info("Email: ".$microsoftUser->getEmail());
-        $this->logger->info("Id: ".$microsoftUser->getId());
-        $this->logger->info("Name: ".$microsoftUser->getName());
+        $this->logger->info('Email: '.$microsoftUser->getEmail());
+        $this->logger->info('Id: '.$microsoftUser->getId());
+        $this->logger->info('Name: '.$microsoftUser->getName());
         $microsoftResponse = $microsoftUser->toArray();
 
-        $this->logger->info("Response: ".print_r($microsoftResponse, true));
+        $this->logger->info('Response: '.print_r($microsoftResponse, true));
 
         $name = $microsoftUser->getName();
 
         if (empty($name)) {
-            $name = $microsoftUser->getFirstname()." ".$microsoftUser->getLastname();
+            $name = $microsoftUser->getFirstname().' '.$microsoftUser->getLastname();
         }
 
         // 1) have they logged in with Google before? Easy!
@@ -116,18 +112,18 @@ class MicrosoftAuthenticator extends SocialAuthenticator
                 // 2) do we have a matching user by email?
                 $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
             } else {
-                $email = uniqid("__MICROSOFT_RANDOM_EMAIL_");
+                $email = uniqid('__MICROSOFT_RANDOM_EMAIL_');
             }
 
             if (!$user) {
                 /** @var User $user */
                 $systemUser = $this->em->getRepository(User::class)->find(1);
-                $user = new User;
+                $user = new User();
                 $user->setEmail($email);
                 $user->setCreator($systemUser);
                 $user->setCreated(new \DateTime());
                 $user->setName($name);
-                $user->setPassword("");
+                $user->setPassword('');
             }
         }
 
@@ -155,11 +151,13 @@ class MicrosoftAuthenticator extends SocialAuthenticator
     {
         if ($exception instanceof FinishRegistrationException) {
             $this->saveUserInfoToSession($request, $exception);
-            return new RedirectResponse("/login-failure");
+
+            return new RedirectResponse('/login-failure');
         }
 
         $this->saveAuthenticationErrorToSession($request, $exception);
-        return new RedirectResponse("/login-secure");
+
+        return new RedirectResponse('/login-secure');
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
@@ -168,15 +166,12 @@ class MicrosoftAuthenticator extends SocialAuthenticator
 //            return new RedirectResponse($targetPath);
 //        }
 
-        return new RedirectResponse("/");
+        return new RedirectResponse('/');
     }
 
     /**
      * Called when authentication is needed, but it's not sent.
      * This redirects to the 'login'.
-     *
-     * @param Request $request
-     * @param AuthenticationException|null $authException
      *
      * @return RedirectResponse
      */

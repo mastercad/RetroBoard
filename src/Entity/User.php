@@ -4,13 +4,13 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
 use Serializable;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * User
+ * User.
  *
  * @ORM\Table(name="users", options={"auto_increment": 1}, indexes={
  *     @ORM\Index(name="retro_modifier_fk", columns={"modifier"}),
@@ -149,9 +149,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     private $modified;
 
     /**
-     * @var User
+     * @var user
      *
-     * One user has Many tickets.
+     * One user has Many tickets
      * @ORM\OneToMany(
      *  targetEntity="User",
      *  mappedBy="modifier",
@@ -162,9 +162,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     private $modifications;
 
     /**
-     * @var User
+     * @var user
      *
-     * One user has Many tickets.
+     * One user has Many tickets
      * @ORM\OneToMany(
      *  targetEntity="User",
      *  mappedBy="creator",
@@ -189,11 +189,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of password
+     * Set the value of password.
      *
-     * @param  string  $password
-     *
-     * @return  self
+     * @return self
      */
     public function setPassword(string $password)
     {
@@ -215,6 +213,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function setRoles($roles)
     {
         $this->roles = $roles;
+
         return $this;
     }
 
@@ -226,6 +225,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function setSalt($salt)
     {
         $this->salt = $salt;
+
         return $this;
     }
 
@@ -237,19 +237,20 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function setUsername($username)
     {
         $this->name = $username;
+
         return $this;
     }
 
     public function eraseCredentials()
     {
-#        $this->password = null;
-#        $this->salt = null;
+//        $this->password = null;
+//        $this->salt = null;
     }
 
     /**
-     * Get the value of name
+     * Get the value of name.
      *
-     * @return  string
+     * @return string
      */
     public function getName()
     {
@@ -257,9 +258,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of name
-     *
-     * @param string  $name
+     * Set the value of name.
      *
      * @return self
      */
@@ -271,9 +270,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -281,11 +280,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -335,7 +332,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Get the value of email
+     * Get the value of email.
      *
      * @return string
      */
@@ -345,11 +342,11 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of email
+     * Set the value of email.
      *
      * @param string $email
      *
-     * @return  self
+     * @return self
      */
     public function setEmail($email)
     {
@@ -366,6 +363,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function setActivityToken(?string $activityToken)
     {
         $this->activityToken = $activityToken;
+
         return $this;
     }
 
@@ -377,6 +375,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function setAvatarPath($avatarPath)
     {
         $this->avatarPath = $avatarPath;
+
         return $this;
     }
 
@@ -388,11 +387,12 @@ class User implements UserInterface, EquatableInterface, Serializable
     public function setColor($color)
     {
         $this->color = $color;
+
         return $this;
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -402,9 +402,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User  $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -416,7 +414,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -426,11 +424,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -440,7 +436,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -450,7 +446,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
      * @param User $modifier
      *
@@ -464,7 +460,7 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -474,11 +470,9 @@ class User implements UserInterface, EquatableInterface, Serializable
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
-     *
-     * @return  self
+     * @return self
      */
     public function setModified(?\DateTime $modified)
     {
@@ -500,27 +494,27 @@ class User implements UserInterface, EquatableInterface, Serializable
         if ($this->name !== $user->getUsername()) {
             return false;
         }
+
         return true;
     }
 
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->id,
             $this->password,
             $this->email,
             $this->name,
-        ));
+        ]);
     }
 
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->password,
             $this->email,
-            $this->name,
-        ) = unserialize($serialized, array('allowed_classes' => false));
+            $this->name) = unserialize($serialized, ['allowed_classes' => false]);
     }
 
     /**
@@ -611,6 +605,6 @@ class User implements UserInterface, EquatableInterface, Serializable
 
     public function __toString()
     {
-        return (string)$this->getId();
+        return (string) $this->getId();
     }
 }

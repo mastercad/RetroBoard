@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -23,12 +24,12 @@ class BoardMemberRepository extends EntityRepository
         */
 
         $statement = $this->getEntityManager()->getConnection()->prepare(
-            "SELECT board_members.user, board_members.board, users.id, users.name FROM
+            'SELECT board_members.user, board_members.board, users.id, users.name FROM
                 (SELECT board_members.board FROM board_members WHERE board_members.user = :userId) AS known_boards
             INNER JOIN board_members ON board_members.board IN (known_boards.board)
             INNER JOIN users ON users.id = board_members.user AND users.id != :userId
 
-            GROUP BY board_members.user, board_members.board, users.id, users.name"
+            GROUP BY board_members.user, board_members.board, users.id, users.name'
         );
 
         $statement->execute(['userId' => $user->getId()]);

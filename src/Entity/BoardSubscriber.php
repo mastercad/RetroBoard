@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BoardSubscriber
+ * BoardSubscriber.
  *
  * @ORM\Table(
  *  name="board_subscribers",
@@ -89,9 +89,9 @@ class BoardSubscriber
     private $modified;
 
     /**
-     * Get the value of id
+     * Get the value of id.
      *
-     * @return  int
+     * @return int
      */
     public function getId()
     {
@@ -99,11 +99,9 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of id
+     * Set the value of id.
      *
-     * @param  int  $id
-     *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -113,7 +111,7 @@ class BoardSubscriber
     }
 
     /**
-     * Get the value of User
+     * Get the value of User.
      *
      * @return User
      */
@@ -123,11 +121,9 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of subscriber
+     * Set the value of subscriber.
      *
-     * @param User  $subscriber
-     *
-     * @return  self
+     * @return self
      */
     public function setSubscriber(User $subscriber)
     {
@@ -137,9 +133,9 @@ class BoardSubscriber
     }
 
     /**
-     * Get the value of board
+     * Get the value of board.
      *
-     * @return  Board
+     * @return Board
      */
     public function getBoard()
     {
@@ -147,11 +143,11 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of board
+     * Set the value of board.
      *
      * @param Board $board
      *
-     * @return  self
+     * @return self
      */
     public function setBoard(?Board $board)
     {
@@ -161,7 +157,7 @@ class BoardSubscriber
     }
 
     /**
-     * Get the value of creator
+     * Get the value of creator.
      *
      * @return User
      */
@@ -171,9 +167,7 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of creator
-     *
-     * @param User  $creator
+     * Set the value of creator.
      *
      * @return self
      */
@@ -185,7 +179,7 @@ class BoardSubscriber
     }
 
     /**
-     * Get the value of created
+     * Get the value of created.
      *
      * @return \DateTime
      */
@@ -195,11 +189,9 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of created
+     * Set the value of created.
      *
-     * @param \DateTime  $created
-     *
-     * @return  self
+     * @return self
      */
     public function setCreated(\DateTime $created)
     {
@@ -209,7 +201,7 @@ class BoardSubscriber
     }
 
     /**
-     * Get the value of modifier
+     * Get the value of modifier.
      *
      * @return User
      */
@@ -219,11 +211,9 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of modifier
+     * Set the value of modifier.
      *
-     * @param User  $modifier
-     *
-     * @return  self
+     * @return self
      */
     public function setModifier(User $modifier)
     {
@@ -233,7 +223,7 @@ class BoardSubscriber
     }
 
     /**
-     * Get the value of modified
+     * Get the value of modified.
      *
      * @return \DateTime|null
      */
@@ -243,11 +233,11 @@ class BoardSubscriber
     }
 
     /**
-     * Set the value of modified
+     * Set the value of modified.
      *
-     * @param \DateTime|null  $modified
+     * @param \DateTime|null $modified
      *
-     * @return  self
+     * @return self
      */
     public function setModified($modified)
     {

@@ -20,8 +20,7 @@ class MicrosoftController extends AbstractController
     }
 
     /**
-     * Link to this controller to start the "connect" process
-     * @param ClientRegistry $clientRegistry
+     * Link to this controller to start the "connect" process.
      *
      * @Route("/connect/microsoft", name="connect_microsoft_start", methods={"GET"})
      *
@@ -36,8 +35,6 @@ class MicrosoftController extends AbstractController
     }
 
     /**
-     * @param EntityManagerInterface $entityManager
-     *
      * @Route("/connect/microsoft", name="connect_microsoft_delete", methods={"DELETE"})
      *
      * @return JsonResponse
@@ -60,6 +57,7 @@ class MicrosoftController extends AbstractController
                 ]
             );
         }
+
         return new JsonResponse(
             [
                 'success' => true,
@@ -71,12 +69,10 @@ class MicrosoftController extends AbstractController
     /**
      * After going to Microsoft, you're redirected back here
      * because this is the "redirect_route" you configured
-     * in config/packages/knpu_oauth2_client.yaml
-     *
-     * @param Request $request
-     * @param ClientRegistry $clientRegistry
+     * in config/packages/knpu_oauth2_client.yaml.
      *
      * @Route("/connect/microsoft/check", name="connect_microsoft_check")
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function connectCheckAction(Request $request, ClientRegistry $clientRegistry)

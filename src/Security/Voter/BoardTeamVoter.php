@@ -2,7 +2,6 @@
 
 namespace App\Security\Voter;
 
-use App\Entity\Board;
 use App\Entity\BoardTeam;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -52,7 +51,7 @@ class BoardTeamVoter extends Voter
 
                 return 0 < count($results);
             case 'show':
-                if ("Demo Board" === $subject->getName()) {
+                if ('Demo Board' === $subject->getName()) {
                     return true;
                 }
 
@@ -61,6 +60,7 @@ class BoardTeamVoter extends Voter
                         return $boardMember->getUser() === $user;
                     }
                 );
+
                 return 0 < count($results);
         }
 
