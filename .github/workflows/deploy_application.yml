@@ -182,6 +182,7 @@ jobs:
           port: ${{ matrix.server.port }}
           envs: GITHUB_SHA,RELEASE_PATH,ACTIVE_RELEASE_PATH,BASE_PATH,ENV_PATH
           script: |
+            rm -r "$ACTIVE_RELEASE_PATH"
             ln -s -n -f "$RELEASE_PATH" "$ACTIVE_RELEASE_PATH"
             ln -s -n -f "$RELEASE_PATH/var/log" "$ACTIVE_RELEASE_PATH/var/"
             ln -s -n -f "$RELEASE_PATH/public/images" "$ACTIVE_RELEASE_PATH/public/"
