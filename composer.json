@@ -4,7 +4,7 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "composer/package-versions-deprecated": "1.11.99.2",
+        "composer/package-versions-deprecated": "dev-master",
         "doctrine/annotations": "^1.10",
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/doctrine-migrations-bundle": "^2.2",
