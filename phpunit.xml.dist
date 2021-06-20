@@ -7,6 +7,7 @@
     </include>
     <exclude>
       <directory>vendor</directory>
+      <directory>config</directory>
       <directory>var</directory>
       <directory>tests</directory>
       <directory>translations</directory>
