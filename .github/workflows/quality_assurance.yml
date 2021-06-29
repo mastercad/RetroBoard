@@ -161,8 +161,8 @@ jobs:
     - name: Cleanup Report Results
       shell: bash
       run: |
-         sed -i 's/\(.*file="\).*RetroBoard\/\(.*"\)/\1\2/g' build/reports/junit.xml
-         sed -i 's/\(.*name="\).*RetroBoard\/\(.*"\)/\1\2/g' build/reports/coverage-clover.xml
+         sed -i 's/\(.*file="\).*retro-board\/\(.*"\)/\1\2/g' build/reports/junit.xml
+         sed -i 's/\(.*name="\).*retro-board\/\(.*"\)/\1\2/g' build/reports/coverage-clover.xml
 
     - name: Upload Unit Test Results
       if: always()

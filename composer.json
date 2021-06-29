@@ -51,8 +51,8 @@
         ]
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.32",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "enlightn/security-checker": "^1.9",
         "friendsofphp/php-cs-fixer": "^3.0",
         "mikey179/vfsstream": "^1.6",
         "phpstan/extension-installer": "^1.1",
@@ -64,6 +64,7 @@
         "squizlabs/php_codesniffer": "^3.6",
         "symfony/browser-kit": "^5.3",
         "symfony/css-selector": "^5.3",
+        "symfony/maker-bundle": "^1.32",
         "symfony/phpunit-bridge": "^5.3",
         "symfony/stopwatch": "^5.3",
         "symfony/web-profiler-bundle": "^5.3"

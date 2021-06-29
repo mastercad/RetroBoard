@@ -103,6 +103,9 @@
     "egulias/email-validator": {
         "version": "3.1.1"
     },
+    "enlightn/security-checker": {
+        "version": "v1.9.0"
+    },
     "foxworth42/oauth2-okta": {
         "version": "v1.0.2"
     },
